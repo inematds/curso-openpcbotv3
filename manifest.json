@@ -1,0 +1,77 @@
+{
+  "course": "curso-openpcbotv3",
+  "tracks": [
+    {
+      "n": "1",
+      "title": "Fundamentos",
+      "modules": [
+        {
+          "id": "1-1",
+          "title": "O que é o openpcbot v3",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-1.html"
+        },
+        {
+          "id": "1-2",
+          "title": "O caminho de uma mensagem",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-2.html"
+        }
+      ]
+    },
+    {
+      "n": "2",
+      "title": "Instalar e operar",
+      "modules": [
+        {
+          "id": "2-1",
+          "title": "Subir o v3",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-1.html"
+        },
+        {
+          "id": "2-2",
+          "title": "Operar no dia a dia",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-2.html"
+        }
+      ]
+    },
+    {
+      "n": "3",
+      "title": "Usar no dia a dia",
+      "modules": [
+        {
+          "id": "3-1",
+          "title": "Comandos e conversa",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-1.html"
+        },
+        {
+          "id": "3-2",
+          "title": "Cérebro e conectores",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-2.html"
+        }
+      ]
+    },
+    {
+      "n": "4",
+      "title": "Configurar e estender",
+      "modules": [
+        {
+          "id": "4-1",
+          "title": "Controle da conversa",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-1.html"
+        },
+        {
+          "id": "4-2",
+          "title": "Agentes, skills, custo e o que vem",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-2.html"
+        }
+      ]
+    }
+  ]
+}

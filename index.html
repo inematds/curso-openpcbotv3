@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="inema-course" content="curso-openpcbotv3">
+  <script>
+(function () {
+  try {
+    var html = document.documentElement;
+    var DEF = { theme: 'inema-dark', font: 'inter', fontScale: 100, lineWidth: 68, leading: 1.7, accent: 'emerald' };
+    function clone(o) { var r = {}; for (var x in o) r[x] = o[x]; return r; }
+    var p = clone(DEF);
+    try {
+      var raw = localStorage.getItem('inema.prefs');
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          for (var k in DEF) if (parsed[k] != null) p[k] = parsed[k];
+        }
+      } else {
+        var legacy = localStorage.getItem('theme');
+        if (legacy === 'light') p.theme = 'claro';
+        else if (legacy === 'dark') p.theme = 'inema-dark';
+      }
+    } catch (e) { p = clone(DEF); }
+    var THEMES = {
+      'inema-dark': { dark: true,  attr: null,        cs: 'dark'  },
+      'claro':      { dark: false, attr: null,        cs: 'light' },
+      'sepia':      { dark: false, attr: 'sepia',     cs: 'light' },
+      'foco':       { dark: null,  attr: 'foco',      cs: null    },
+      'contraste':  { dark: true,  attr: 'contraste', cs: 'dark'  }
+    };
+    var t = THEMES[p.theme] || THEMES['inema-dark'];
+    if (t.dark === true) html.classList.add('dark');
+    else if (t.dark === false) html.classList.remove('dark');
+    if (t.attr) html.setAttribute('data-theme', t.attr);
+    else html.removeAttribute('data-theme');
+    html.style.colorScheme = (t.cs ? t.cs : (html.classList.contains('dark') ? 'dark' : 'light'));
+    html.setAttribute('data-font', p.font || 'inter');
+    html.setAttribute('data-accent', p.accent || 'emerald');
+    var s = html.style;
+    var scale = (+p.fontScale || 100);
+    s.setProperty('--inema-font-scale', (scale / 100).toString());
+    s.setProperty('font-size', scale + '%');
+    s.setProperty('--measure', (+p.lineWidth || 68) + 'ch');
+    s.setProperty('--lh-body', (+p.leading || 1.7).toString());
+    var fam = p.font === 'system'
+      ? 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+      : (p.font === 'leitura'
+        ? '"Atkinson Hyperlegible", "Inter", system-ui, sans-serif'
+        : '"Inter", system-ui, sans-serif');
+    s.setProperty('--font-body', fam);
+    var ACC = {
+      emerald: [152, 76, 45], blue: [217, 91, 60], purple: [258, 90, 66],
+      amber: [38, 92, 50], teal: [174, 72, 41], rose: [350, 89, 60]
+    };
+    var a = ACC[p.accent] || ACC.emerald;
+    s.setProperty('--accent-h', a[0] + '');
+    s.setProperty('--accent-s', a[1] + '%');
+    s.setProperty('--accent-l', a[2] + '%');
+    s.setProperty('--accent', 'hsl(' + a[0] + ' ' + a[1] + '% ' + a[2] + '%)');
+  } catch (err) {
+    try { document.documentElement.classList.add('dark'); document.documentElement.style.colorScheme = 'dark'; } catch (e) {}
+  }
+})();
+</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <script type="application/json" data-inema-manifest>
+{
+  "course": "curso-openpcbotv3",
+  "tracks": [
+    {
+      "n": "1",
+      "title": "Fundamentos",
+      "modules": [
+        {
+          "id": "1-1",
+          "title": "O que é o openpcbot v3",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-1.html"
+        },
+        {
+          "id": "1-2",
+          "title": "O caminho de uma mensagem",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-2.html"
+        }
+      ]
+    },
+    {
+      "n": "2",
+      "title": "Instalar e operar",
+      "modules": [
+        {
+          "id": "2-1",
+          "title": "Subir o v3",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-1.html"
+        },
+        {
+          "id": "2-2",
+          "title": "Operar no dia a dia",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-2.html"
+        }
+      ]
+    },
+    {
+      "n": "3",
+      "title": "Usar no dia a dia",
+      "modules": [
+        {
+          "id": "3-1",
+          "title": "Comandos e conversa",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-1.html"
+        },
+        {
+          "id": "3-2",
+          "title": "Cérebro e conectores",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-2.html"
+        }
+      ]
+    },
+    {
+      "n": "4",
+      "title": "Configurar e estender",
+      "modules": [
+        {
+          "id": "4-1",
+          "title": "Controle da conversa",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-1.html"
+        },
+        {
+          "id": "4-2",
+          "title": "Agentes, skills, custo e o que vem",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-2.html"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>openpcbot v3: seu Jarvis local | INEMA.CLUB</title>
+  <style>
+body { font-family: 'Inter', sans-serif; }
+.dark body { background-color: #111827; }
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 100;
+  padding: .75rem 1rem;
+  background: #111827;
+  color: #facc15;
+  border: 1px solid #4b5563;
+  border-radius: .5rem;
+}
+.skip:focus { left: .75rem; top: .75rem; }
+.topic-explanation { display: none; }
+.topic-explanation.active { display: block; }
+.dark .border-dark-600 { border-color: #374151; }
+.dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+html:not(.dark) body { background-color: #f8fafc; }
+html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+html:not(.dark) .bg-dark-800\/50 { background-color: rgba(249, 250, 251, 0.88); }
+html:not(.dark) .bg-dark-800\/70 { background-color: rgba(249, 250, 251, 0.94); }
+html:not(.dark) .bg-dark-900\/40 { background-color: rgba(255, 255, 255, 0.72); }
+html:not(.dark) .bg-dark-700\/30 { background-color: rgba(243, 244, 246, 0.72); }
+html:not(.dark) .bg-dark-700\/50 { background-color: rgba(243, 244, 246, 0.86); }
+html:not(.dark) .text-neutral-100 { color: #111827; }
+html:not(.dark) .text-neutral-200 { color: #1f2937; }
+html:not(.dark) .text-neutral-300 { color: #4b5563; }
+html:not(.dark) .text-neutral-400 { color: #6b7280; }
+html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+html:not(.dark) .text-white { color: #111827; }
+html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+html:not(.dark) .text-emerald-400 { color: #059669; }
+html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .text-blue-400 { color: #2563eb; }
+html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .text-purple-400 { color: #7c3aed; }
+html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .text-amber-400 { color: #92400e; }
+html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+html:not(.dark) .group:hover .group-hover\:text-amber-400 { color: #92400e; }
+html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) .bg-amber-900\/20 { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(217, 119, 6, 0.18); }
+html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+html:not(.dark) .text-primary { color: #a16207; }
+html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+html:not(.dark) .border-primary\/30,
+html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+html:not(.dark) .text-sky-400 { color: #0369a1; }
+html:not(.dark) .text-yellow-400 { color: #a16207; }
+html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+html:not(.dark) .text-blue-400 { color: #2563eb; }
+html:not(.dark) .bg-red-900\/20 { background-color: rgba(220, 38, 38, 0.08); }
+html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.24); }
+html:not(.dark) .text-red-400 { color: #b91c1c; }
+html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+@keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+@media (prefers-reduced-motion: no-preference) {
+  .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+  .wf-a:nth-child(2){animation-delay:.25s}
+  .wf-a:nth-child(3){animation-delay:.5s}
+  .wf-a:nth-child(4){animation-delay:.75s}
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+.module-shell { scroll-margin-top: 5rem; }
+.topic-section { scroll-margin-top: 5rem; }
+.course-meter .inema-bar { margin-top: .75rem; }
+  </style>
+  <link rel="stylesheet" href="./assets/learn.css">
+  
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-wrap justify-between items-center min-h-14 gap-3 py-2">
+      <div class="flex items-center space-x-4 min-w-0">
+        <a href="index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🧠</span>
+          <span class="font-bold text-lg hidden sm:inline">openpcbot v3</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        <span class="text-neutral-600">-</span>
+        <a href="https://inema.pro" target="_blank" class="text-amber-700 dark:text-slate-300 hover:opacity-80 text-sm font-medium">PRO</a>
+      </div>
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href="curso/trilha1/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+        <span class="sm:hidden">T1</span>
+        <span class="hidden sm:inline">Fundamentos</span>
+      </a>
+<a href="curso/trilha2/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+        <span class="sm:hidden">T2</span>
+        <span class="hidden sm:inline">Instalar e operar</span>
+      </a>
+<a href="curso/trilha3/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+        <span class="sm:hidden">T3</span>
+        <span class="hidden sm:inline">Usar no dia a dia</span>
+      </a>
+<a href="curso/trilha4/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+        <span class="sm:hidden">T4</span>
+        <span class="hidden sm:inline">Configurar e estender</span>
+      </a>
+        <button type="button" data-inema-journey-open class="inline-flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 transition-colors">
+          <span aria-hidden="true">◷</span>
+          <span class="hidden lg:inline">Minha jornada</span>
+          <span class="inema-journey-badge hidden" data-inema-journey-badge data-count="0" aria-hidden="true"></span>
+        </button>
+        <div class="relative">
+          <button type="button" class="inema-appearance-trigger" data-inema-appearance-toggle="[data-inema-appearance]" aria-expanded="false" aria-label="Aparência">
+            <span aria-hidden="true">◑</span>
+            <span class="hidden lg:inline">Aparência</span>
+          </button>
+          <div data-inema-appearance class="inema-appearance-pop right-0">
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Tema</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-theme="inema-dark">Escuro</button>
+      <button type="button" data-inema-set-theme="claro">Claro</button>
+      <button type="button" data-inema-set-theme="sepia">Sépia</button>
+      <button type="button" data-inema-set-theme="foco">Foco</button>
+      <button type="button" data-inema-set-theme="contraste">Contraste</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Fonte</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-font="inter">Inter</button>
+      <button type="button" data-inema-set-font="system">Sistema</button>
+      <button type="button" data-inema-set-font="leitura">Leitura</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Texto</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-fontscale="100">A</button>
+      <button type="button" data-inema-set-fontscale="112">A+</button>
+      <button type="button" data-inema-set-fontscale="125">A++</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Linha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-linewidth="60">60</button>
+      <button type="button" data-inema-set-linewidth="68">68</button>
+      <button type="button" data-inema-set-linewidth="75">75</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Entrelinha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-leading="1.45">Compacta</button>
+      <button type="button" data-inema-set-leading="1.7">Confortável</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Acento</span>
+    <div class="inema-accent-grid">
+      <button type="button" data-inema-set-accent="emerald" data-accent="emerald" aria-label="Acento emerald"></button>
+<button type="button" data-inema-set-accent="blue" data-accent="blue" aria-label="Acento blue"></button>
+<button type="button" data-inema-set-accent="purple" data-accent="purple" aria-label="Acento purple"></button>
+<button type="button" data-inema-set-accent="amber" data-accent="amber" aria-label="Acento amber"></button>
+<button type="button" data-inema-set-accent="teal" data-accent="teal" aria-label="Acento teal"></button>
+<button type="button" data-inema-set-accent="rose" data-accent="rose" aria-label="Acento rose"></button>
+    </div>
+  </div>
+</div>
+        </div>
+        <button id="theme-toggle" type="button" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors" aria-label="Alternar tema claro e escuro">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          </svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+  <header class="bg-gradient-to-br from-primary/10 via-dark-800 to-dark-900 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <span class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full mb-4">CURSO V2</span>
+    <h1 class="text-4xl sm:text-5xl font-bold mb-4">🤖 openpcbot v3: seu Jarvis local</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Curso prático do <code class="text-primary">openpcbotv3</code>: um assistente pessoal multicanal (Telegram, CLI, HTTP) com fila durável em SQLite, gestor do Ollama com preflight de RAM, custo por chamada com orçamento e um cérebro que lembra do que você disse. Você aprende o que ele é, como colocar no ar, como usar todo dia e como deixá-lo com a sua cara.</p>
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-8 max-w-4xl">
+      <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600"><div class="text-xl font-bold text-primary">4</div><div class="text-xs text-neutral-400">Trilhas</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600"><div class="text-xl font-bold text-primary">8</div><div class="text-xs text-neutral-400">Módulos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600"><div class="text-xl font-bold text-primary">48</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600"><div class="text-xl font-bold text-primary">~6h</div><div class="text-xs text-neutral-400">Duração</div></div>
+    </div>
+    <div class="mt-8 max-w-xl"><div data-inema-meter="curso" class="course-meter p-5 rounded-xl bg-dark-800/70 border border-dark-600" aria-label="Progresso do curso">
+  <div class="flex items-center justify-between gap-4">
+    <span class="text-sm text-neutral-400">Progresso do curso</span>
+    <span class="text-sm font-semibold text-primary" data-inema-meter-pct>0%</span>
+  </div>
+  <div class="flex items-center justify-between gap-4 mt-1">
+    <span class="text-xs text-neutral-500" data-inema-meter-frac>0 de 0</span>
+  </div>
+  <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+</div></div>
+    <div class="flex justify-start gap-3 mt-8">
+      <a href="curso/trilha1/index.html" class="px-5 py-3 bg-primary text-dark-900 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">Começar pela Trilha 1</a>
+      <button type="button" data-inema-journey-open class="px-5 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">Minha jornada</button>
+    </div>
+  </div>
+</header>
+<main id="conteudo" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-6">Mapa do curso</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <a href="curso/trilha1/index.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 p-6 transition-colors">
+  <div class="flex items-center justify-between mb-4">
+    <span class="text-3xl">🧠</span>
+    <span class="text-emerald-400 font-bold">T1</span>
+  </div>
+  <h2 class="text-2xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Fundamentos</h2>
+  <p class="text-neutral-400 mb-4">Você sai entendendo as seis camadas do bot (canais, fila, orquestrador, cérebro, Ollama, custo) e o caminho exato que uma mensagem percorre do Telegram ao resultado.</p>
+  <div class="flex items-center justify-between text-sm">
+    <span class="text-neutral-500">~80 min</span>
+    <span class="text-emerald-400">Entenda o que roda</span>
+  </div>
+</a>
+<a href="curso/trilha2/index.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 p-6 transition-colors">
+  <div class="flex items-center justify-between mb-4">
+    <span class="text-3xl">🚀</span>
+    <span class="text-blue-400 font-bold">T2</span>
+  </div>
+  <h2 class="text-2xl font-bold mb-2 group-hover:text-blue-400 transition-colors">Instalar e operar</h2>
+  <p class="text-neutral-400 mb-4">Você sai com o v3 no ar como serviço systemd, bot próprio no Telegram, doctor verde e sabendo ler logs, dashboard e alertas quando algo quebra.</p>
+  <div class="flex items-center justify-between text-sm">
+    <span class="text-neutral-500">~90 min</span>
+    <span class="text-blue-400">Coloque no ar e mantenha</span>
+  </div>
+</a>
+<a href="curso/trilha3/index.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 p-6 transition-colors">
+  <div class="flex items-center justify-between mb-4">
+    <span class="text-3xl">💬</span>
+    <span class="text-purple-400 font-bold">T3</span>
+  </div>
+  <h2 class="text-2xl font-bold mb-2 group-hover:text-purple-400 transition-colors">Usar no dia a dia</h2>
+  <p class="text-neutral-400 mb-4">Você sai dominando os comandos, a fila, as tarefas e o cron, e sabendo como o cérebro guarda memória, propõe fatos pro vault e ingere e-mails, agendas e grupos.</p>
+  <div class="flex items-center justify-between text-sm">
+    <span class="text-neutral-500">~90 min</span>
+    <span class="text-purple-400">Converse, delegue, lembre</span>
+  </div>
+</a>
+<a href="curso/trilha4/index.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 p-6 transition-colors">
+  <div class="flex items-center justify-between mb-4">
+    <span class="text-3xl">🎛️</span>
+    <span class="text-amber-400 font-bold">T4</span>
+  </div>
+  <h2 class="text-2xl font-bold mb-2 group-hover:text-amber-400 transition-colors">Configurar e estender</h2>
+  <p class="text-neutral-400 mb-4">Você sai sabendo parar, priorizar e dar personalidade ao bot, medir o custo fixo do prompt, criar agentes e skills, ajustar orçamento e Ollama, e o que vem nas fases 8 e 10.</p>
+  <div class="flex items-center justify-between text-sm">
+    <span class="text-neutral-500">~100 min</span>
+    <span class="text-amber-400">Deixe com a sua cara</span>
+  </div>
+</a>
+    </div>
+  </section>
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+      <h2 class="text-xl font-bold mb-3 text-primary">O problema</h2>
+      <p class="text-neutral-300">O v2 virou um monólito de 145 KB, sem medir custo, sem fila durável, e travou por falta de memória duas vezes em agosto. Assistente pessoal que cai de madrugada não é assistente.</p>
+    </div>
+    <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+      <h2 class="text-xl font-bold mb-3 text-primary">A resposta</h2>
+      <p class="text-neutral-300">O v3 nasce ao lado do v2, por estrangulamento: fila SQLite com lease e heartbeat, um só gateway de custo, Ollama com preflight de RAM, memória com consolidação noturna. Nada é apagado até a paridade.</p>
+    </div>
+    <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+      <h2 class="text-xl font-bold mb-3 text-primary">O resultado</h2>
+      <p class="text-neutral-300">Um Jarvis local que responde no Telegram, delega trabalho a agentes, lembra do que importa, avisa quando algo quebra e mostra quanto custou. Tudo em cerca de 8 mil linhas de TypeScript com 187 testes.</p>
+    </div>
+  </section>
+</main>
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>openpcbot v3: seu Jarvis local · INEMA.CLUB · 2026</p>
+    </div>
+  </footer>
+  <script>
+function toggleTopic(button) {
+  var panelId = button.getAttribute('aria-controls');
+  var explanation = panelId ? document.getElementById(panelId) : null;
+  if (!explanation) return;
+  var moduleCard = button.closest('[data-inema-module]') || button.closest('.module-shell') || document;
+  moduleCard.querySelectorAll('.topic-explanation.active').forEach(function (exp) {
+    if (exp !== explanation) {
+      exp.classList.remove('active');
+      var other = moduleCard.querySelector('[aria-controls="' + exp.id + '"]');
+      if (other) other.setAttribute('aria-expanded', 'false');
+    }
+  });
+  var next = !explanation.classList.contains('active');
+  explanation.classList.toggle('active', next);
+  button.setAttribute('aria-expanded', next ? 'true' : 'false');
+}
+function openModal(modalId) {
+  var modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    var close = modal.querySelector('[data-modal-close]');
+    if (close) close.focus();
+  }
+}
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(function (modal) {
+    modal.classList.add('hidden');
+  });
+  document.body.style.overflow = 'auto';
+}
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+<script src="./assets/learn.js"></script>
+<script>
+if (window.INEMA && typeof window.INEMA.init === 'function') {
+  window.INEMA.init();
+}
+document.addEventListener('click', function (e) {
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var nav = t.closest('nav');
+  if (!nav) return;
+  var journey = t.closest('[data-inema-journey-open]');
+  if (journey && window.INEMA && INEMA.openJourney) {
+    e.preventDefault();
+    INEMA.openJourney();
+    return;
+  }
+  var toggle = t.closest('[data-inema-appearance-toggle]');
+  if (toggle) {
+    var targetSel = toggle.getAttribute('data-inema-appearance-toggle');
+    var panel = targetSel ? document.querySelector(targetSel) : document.querySelector('[data-inema-appearance]');
+    if (panel) {
+      var open = panel.getAttribute('data-open') !== 'true';
+      panel.setAttribute('data-open', open ? 'true' : 'false');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    return;
+  }
+  var pairs = [
+    ['data-inema-set-theme', 'theme'],
+    ['data-inema-set-font', 'font'],
+    ['data-inema-set-fontscale', 'fontScale'],
+    ['data-inema-set-linewidth', 'lineWidth'],
+    ['data-inema-set-leading', 'leading'],
+    ['data-inema-set-accent', 'accent']
+  ];
+  for (var i = 0; i < pairs.length; i++) {
+    var btn = t.closest('[' + pairs[i][0] + ']');
+    if (btn && window.INEMA && INEMA.setPref) {
+      var raw = btn.getAttribute(pairs[i][0]);
+      var key = pairs[i][1];
+      var value = key === 'fontScale' || key === 'lineWidth' ? parseInt(raw, 10) : (key === 'leading' ? parseFloat(raw) : raw);
+      INEMA.setPref(key, value);
+      return;
+    }
+  }
+  var theme = t.closest('#theme-toggle');
+  if (theme) {
+    var html = document.documentElement;
+    var next = html.classList.contains('dark') ? 'claro' : 'inema-dark';
+    if (window.INEMA && INEMA.setPref) {
+      INEMA.setPref('theme', next);
+    } else {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    }
+  }
+});
+</script>
+</body>
+</html>

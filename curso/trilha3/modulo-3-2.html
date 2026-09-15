@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="inema-course" content="curso-openpcbotv3">
+  <script>
+(function () {
+  try {
+    var html = document.documentElement;
+    var DEF = { theme: 'inema-dark', font: 'inter', fontScale: 100, lineWidth: 68, leading: 1.7, accent: 'emerald' };
+    function clone(o) { var r = {}; for (var x in o) r[x] = o[x]; return r; }
+    var p = clone(DEF);
+    try {
+      var raw = localStorage.getItem('inema.prefs');
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          for (var k in DEF) if (parsed[k] != null) p[k] = parsed[k];
+        }
+      } else {
+        var legacy = localStorage.getItem('theme');
+        if (legacy === 'light') p.theme = 'claro';
+        else if (legacy === 'dark') p.theme = 'inema-dark';
+      }
+    } catch (e) { p = clone(DEF); }
+    var THEMES = {
+      'inema-dark': { dark: true,  attr: null,        cs: 'dark'  },
+      'claro':      { dark: false, attr: null,        cs: 'light' },
+      'sepia':      { dark: false, attr: 'sepia',     cs: 'light' },
+      'foco':       { dark: null,  attr: 'foco',      cs: null    },
+      'contraste':  { dark: true,  attr: 'contraste', cs: 'dark'  }
+    };
+    var t = THEMES[p.theme] || THEMES['inema-dark'];
+    if (t.dark === true) html.classList.add('dark');
+    else if (t.dark === false) html.classList.remove('dark');
+    if (t.attr) html.setAttribute('data-theme', t.attr);
+    else html.removeAttribute('data-theme');
+    html.style.colorScheme = (t.cs ? t.cs : (html.classList.contains('dark') ? 'dark' : 'light'));
+    html.setAttribute('data-font', p.font || 'inter');
+    html.setAttribute('data-accent', p.accent || 'emerald');
+    var s = html.style;
+    var scale = (+p.fontScale || 100);
+    s.setProperty('--inema-font-scale', (scale / 100).toString());
+    s.setProperty('font-size', scale + '%');
+    s.setProperty('--measure', (+p.lineWidth || 68) + 'ch');
+    s.setProperty('--lh-body', (+p.leading || 1.7).toString());
+    var fam = p.font === 'system'
+      ? 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+      : (p.font === 'leitura'
+        ? '"Atkinson Hyperlegible", "Inter", system-ui, sans-serif'
+        : '"Inter", system-ui, sans-serif');
+    s.setProperty('--font-body', fam);
+    var ACC = {
+      emerald: [152, 76, 45], blue: [217, 91, 60], purple: [258, 90, 66],
+      amber: [38, 92, 50], teal: [174, 72, 41], rose: [350, 89, 60]
+    };
+    var a = ACC[p.accent] || ACC.emerald;
+    s.setProperty('--accent-h', a[0] + '');
+    s.setProperty('--accent-s', a[1] + '%');
+    s.setProperty('--accent-l', a[2] + '%');
+    s.setProperty('--accent', 'hsl(' + a[0] + ' ' + a[1] + '% ' + a[2] + '%)');
+  } catch (err) {
+    try { document.documentElement.classList.add('dark'); document.documentElement.style.colorScheme = 'dark'; } catch (e) {}
+  }
+})();
+</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <script type="application/json" data-inema-manifest>
+{
+  "course": "curso-openpcbotv3",
+  "tracks": [
+    {
+      "n": "1",
+      "title": "Fundamentos",
+      "modules": [
+        {
+          "id": "1-1",
+          "title": "O que é o openpcbot v3",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-1.html"
+        },
+        {
+          "id": "1-2",
+          "title": "O caminho de uma mensagem",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-2.html"
+        }
+      ]
+    },
+    {
+      "n": "2",
+      "title": "Instalar e operar",
+      "modules": [
+        {
+          "id": "2-1",
+          "title": "Subir o v3",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-1.html"
+        },
+        {
+          "id": "2-2",
+          "title": "Operar no dia a dia",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-2.html"
+        }
+      ]
+    },
+    {
+      "n": "3",
+      "title": "Usar no dia a dia",
+      "modules": [
+        {
+          "id": "3-1",
+          "title": "Comandos e conversa",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-1.html"
+        },
+        {
+          "id": "3-2",
+          "title": "Cérebro e conectores",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-2.html"
+        }
+      ]
+    },
+    {
+      "n": "4",
+      "title": "Configurar e estender",
+      "modules": [
+        {
+          "id": "4-1",
+          "title": "Controle da conversa",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-1.html"
+        },
+        {
+          "id": "4-2",
+          "title": "Agentes, skills, custo e o que vem",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-2.html"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Módulo 3.2: Cérebro e conectores | openpcbot v3: seu Jarvis local</title>
+  <style>
+body { font-family: 'Inter', sans-serif; }
+.dark body { background-color: #111827; }
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 100;
+  padding: .75rem 1rem;
+  background: #111827;
+  color: #facc15;
+  border: 1px solid #4b5563;
+  border-radius: .5rem;
+}
+.skip:focus { left: .75rem; top: .75rem; }
+.topic-explanation { display: none; }
+.topic-explanation.active { display: block; }
+.dark .border-dark-600 { border-color: #374151; }
+.dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+html:not(.dark) body { background-color: #f8fafc; }
+html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+html:not(.dark) .bg-dark-800\/50 { background-color: rgba(249, 250, 251, 0.88); }
+html:not(.dark) .bg-dark-800\/70 { background-color: rgba(249, 250, 251, 0.94); }
+html:not(.dark) .bg-dark-900\/40 { background-color: rgba(255, 255, 255, 0.72); }
+html:not(.dark) .bg-dark-700\/30 { background-color: rgba(243, 244, 246, 0.72); }
+html:not(.dark) .bg-dark-700\/50 { background-color: rgba(243, 244, 246, 0.86); }
+html:not(.dark) .text-neutral-100 { color: #111827; }
+html:not(.dark) .text-neutral-200 { color: #1f2937; }
+html:not(.dark) .text-neutral-300 { color: #4b5563; }
+html:not(.dark) .text-neutral-400 { color: #6b7280; }
+html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+html:not(.dark) .text-white { color: #111827; }
+html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+html:not(.dark) .text-emerald-400 { color: #059669; }
+html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .text-blue-400 { color: #2563eb; }
+html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .text-purple-400 { color: #7c3aed; }
+html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .text-amber-400 { color: #92400e; }
+html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+html:not(.dark) .group:hover .group-hover\:text-amber-400 { color: #92400e; }
+html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) .bg-amber-900\/20 { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(217, 119, 6, 0.18); }
+html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+html:not(.dark) .text-primary { color: #a16207; }
+html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+html:not(.dark) .border-primary\/30,
+html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+html:not(.dark) .text-sky-400 { color: #0369a1; }
+html:not(.dark) .text-yellow-400 { color: #a16207; }
+html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+html:not(.dark) .text-blue-400 { color: #2563eb; }
+html:not(.dark) .bg-red-900\/20 { background-color: rgba(220, 38, 38, 0.08); }
+html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.24); }
+html:not(.dark) .text-red-400 { color: #b91c1c; }
+html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+@keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+@media (prefers-reduced-motion: no-preference) {
+  .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+  .wf-a:nth-child(2){animation-delay:.25s}
+  .wf-a:nth-child(3){animation-delay:.5s}
+  .wf-a:nth-child(4){animation-delay:.75s}
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+.module-shell { scroll-margin-top: 5rem; }
+.inema-prose pre, .inema-prose .mock { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
+article[data-inema-module] > .inema-prose { width: 100%; min-width: 0; }
+.topic-section { scroll-margin-top: 5rem; }
+.course-meter .inema-bar { margin-top: .75rem; }
+.tbl { width: 100%; border-collapse: collapse; font-size: .875rem; }
+.tbl th, .tbl td { text-align: left; vertical-align: top; padding: .5rem .75rem; border-bottom: 1px solid #374151; }
+html:not(.dark) .tbl th, html:not(.dark) .tbl td { border-bottom-color: #e5e7eb; }
+.tbl th { color: #c084fc; font-weight: 600; }
+html:not(.dark) .tbl th { color: #7c3aed; }
+.mock { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .8rem; line-height: 1.5; white-space: pre-wrap; }
+  </style>
+  <link rel="stylesheet" href="../../assets/learn.css">
+
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-wrap justify-between items-center min-h-14 gap-3 py-2">
+      <div class="flex items-center space-x-4 min-w-0">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🧠</span>
+          <span class="font-bold text-lg hidden sm:inline">openpcbot v3</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        <span class="text-neutral-600">-</span>
+        <a href="https://inema.pro" target="_blank" class="text-amber-700 dark:text-slate-300 hover:opacity-80 text-sm font-medium">PRO</a>
+      </div>
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href="../trilha1/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+        <span class="sm:hidden">T1</span>
+        <span class="hidden sm:inline">Fundamentos</span>
+      </a>
+<a href="../trilha2/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+        <span class="sm:hidden">T2</span>
+        <span class="hidden sm:inline">Instalar e operar</span>
+      </a>
+<a href="index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10" aria-current="page">
+        <span class="sm:hidden">T3</span>
+        <span class="hidden sm:inline">Usar no dia a dia</span>
+      </a>
+<a href="../trilha4/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+        <span class="sm:hidden">T4</span>
+        <span class="hidden sm:inline">Configurar e estender</span>
+      </a>
+        <button type="button" data-inema-journey-open class="inline-flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 transition-colors">
+          <span aria-hidden="true">◷</span>
+          <span class="hidden lg:inline">Minha jornada</span>
+          <span class="inema-journey-badge hidden" data-inema-journey-badge data-count="0" aria-hidden="true"></span>
+        </button>
+        <div class="relative">
+          <button type="button" class="inema-appearance-trigger" data-inema-appearance-toggle="[data-inema-appearance]" aria-expanded="false" aria-label="Aparência">
+            <span aria-hidden="true">◑</span>
+            <span class="hidden lg:inline">Aparência</span>
+          </button>
+          <div data-inema-appearance class="inema-appearance-pop right-0">
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Tema</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-theme="inema-dark">Escuro</button>
+      <button type="button" data-inema-set-theme="claro">Claro</button>
+      <button type="button" data-inema-set-theme="sepia">Sépia</button>
+      <button type="button" data-inema-set-theme="foco">Foco</button>
+      <button type="button" data-inema-set-theme="contraste">Contraste</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Fonte</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-font="inter">Inter</button>
+      <button type="button" data-inema-set-font="system">Sistema</button>
+      <button type="button" data-inema-set-font="leitura">Leitura</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Texto</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-fontscale="100">A</button>
+      <button type="button" data-inema-set-fontscale="112">A+</button>
+      <button type="button" data-inema-set-fontscale="125">A++</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Linha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-linewidth="60">60</button>
+      <button type="button" data-inema-set-linewidth="68">68</button>
+      <button type="button" data-inema-set-linewidth="75">75</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Entrelinha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-leading="1.45">Compacta</button>
+      <button type="button" data-inema-set-leading="1.7">Confortável</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Acento</span>
+    <div class="inema-accent-grid">
+      <button type="button" data-inema-set-accent="emerald" data-accent="emerald" aria-label="Acento emerald"></button>
+<button type="button" data-inema-set-accent="blue" data-accent="blue" aria-label="Acento blue"></button>
+<button type="button" data-inema-set-accent="purple" data-accent="purple" aria-label="Acento purple"></button>
+<button type="button" data-inema-set-accent="amber" data-accent="amber" aria-label="Acento amber"></button>
+<button type="button" data-inema-set-accent="teal" data-accent="teal" aria-label="Acento teal"></button>
+<button type="button" data-inema-set-accent="rose" data-accent="rose" aria-label="Acento rose"></button>
+    </div>
+  </div>
+</div>
+        </div>
+        <button id="theme-toggle" type="button" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors" aria-label="Alternar tema claro e escuro">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          </svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Breadcrumb">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-purple-400">Início</a>
+    <span>/</span>
+    <a href="index.html" class="hover:text-purple-400">Trilha 3</a>
+    <span>/</span>
+    <span class="text-purple-400">Módulo 3.2</span>
+  </div>
+</nav>
+<header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-y border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MÓDULO 3.2</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🧬 Cérebro e conectores</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Memória que aprende com você: o que o cérebro guarda, como buscar, salvar e corrigir, o vault que só grava com a sua aprovação, a consolidação da madrugada e os conectores que trazem Gmail, agendas e grupos do Telegram para dentro da memória.</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-3xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">75</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Prático</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Mão na massa</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+    <div class="mt-8 max-w-xl"><div data-inema-meter="modulo:3-2" class="course-meter p-5 rounded-xl bg-dark-800/70 border border-dark-600" aria-label="Progresso do módulo 3.2">
+  <div class="flex items-center justify-between gap-4">
+    <span class="text-sm text-neutral-400">Progresso do módulo 3.2</span>
+    <span class="text-sm font-semibold text-primary" data-inema-meter-pct>0%</span>
+  </div>
+  <div class="flex items-center justify-between gap-4 mt-1">
+    <span class="text-xs text-neutral-500" data-inema-meter-frac>0 de 0</span>
+  </div>
+  <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+</div></div>
+  </div>
+</header>
+<main id="conteudo" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <article id="modulo-3-2" data-inema-module="3-2" data-inema-track="3" class="grid grid-cols-1 lg:grid-cols-[1fr_16rem] gap-10">
+    <div class="inema-prose max-w-none min-w-0">
+      <section id="topico-1" data-inema-topic="modulo-3-2#topico-1" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">🧠 O que o cérebro guarda</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m3-2-t1-p1">O cérebro do v3 mora em <code>src/cerebro/</code> e no banco <code>store/openpcbotv3.db</code>. Ele não é uma coisa só: são <strong class="text-purple-400">quatro depósitos</strong> com regras diferentes. A tabela <code>memories</code> guarda fatos; o vetor <code>bge-m3</code> guarda o significado desses fatos; o <code>conversation_log</code> guarda os turnos da conversa; e os insights guardam o que a consolidação percebeu sozinha. Entender qual é qual é o que evita procurar no lugar errado.</p>
+  <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 260" class="w-full h-auto" role="img" aria-label="Sua mensagem alimenta quatro depósitos do cérebro: a tabela memories com o texto e a saliência, o vetor bge-m3 com o significado, o conversation_log com os turnos da conversa e os insights gerados pela consolidação. Os quatro voltam juntos como contexto na próxima resposta."><defs><linearGradient id="m32a-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#a855f7"/></linearGradient><filter id="m32a-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><pattern id="m32a-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#a855f7" opacity="0.12"/></pattern><marker id="m32a-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"/></marker><marker id="m32a-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker></defs><rect x="0" y="0" width="1000" height="260" fill="url(#m32a-grid)"/><g fill="none" stroke="#c084fc" stroke-width="1.8" opacity="0.55"><path d="M196,130 C260,130 260,40 330,40" marker-end="url(#m32a-ah)"/><path d="M196,130 C260,130 260,100 330,100" marker-end="url(#m32a-ah)"/><path d="M196,130 C260,130 260,160 330,160" marker-end="url(#m32a-ah)"/><path d="M196,130 C260,130 260,220 330,220" marker-end="url(#m32a-ah)"/></g><g fill="none" stroke="#38bdf8" stroke-width="1.8" opacity="0.6" stroke-dasharray="6 5"><path d="M640,40 C740,40 740,130 812,130" marker-end="url(#m32a-ahc)"/><path d="M640,100 C740,100 740,130 812,130" marker-end="url(#m32a-ahc)"/><path d="M640,160 C740,160 740,130 812,130" marker-end="url(#m32a-ahc)"/><path d="M640,220 C740,220 740,130 812,130" marker-end="url(#m32a-ahc)"/></g><g filter="url(#m32a-glow)"><rect x="30" y="94" width="166" height="72" rx="14" fill="#1a1230" stroke="url(#m32a-grad)" stroke-width="2"/></g><text x="113" y="124" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-weight="600" font-size="17">sua mensagem</text><text x="113" y="146" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="11">mais de 20 caracteres</text><g font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#bfe6ff"><g class="wf-a"><rect x="330" y="18" width="310" height="44" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="346" y="38">memories</text><text x="346" y="54" font-weight="400" font-size="11" fill="#9ad6ff">texto, setor, origem, saliência, FTS5</text></g><g class="wf-a"><rect x="330" y="78" width="310" height="44" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="346" y="98">vetor bge-m3</text><text x="346" y="114" font-weight="400" font-size="11" fill="#9ad6ff">1024 floats em BLOB, cosseno em JS</text></g><g class="wf-a"><rect x="330" y="138" width="310" height="44" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="346" y="158">conversation_log</text><text x="346" y="174" font-weight="400" font-size="11" fill="#9ad6ff">turnos do chat e dos chats observados</text></g><g class="wf-a"><rect x="330" y="198" width="310" height="44" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="346" y="218">insights</text><text x="346" y="234" font-weight="400" font-size="11" fill="#9ad6ff">até 3 por chat, da consolidação das 4h</text></g></g><g filter="url(#m32a-glow)"><rect x="812" y="98" width="158" height="64" rx="14" fill="#1a1230" stroke="url(#m32a-grad)" stroke-width="2"/></g><text x="891" y="124" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-weight="600" font-size="15">contexto</text><text x="891" y="146" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="11">teto de 600 tokens</text></svg>
+</div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t1-p2">Legenda: as setas roxas são a escrita, que acontece a cada mensagem sua. As setas cianas tracejadas são a leitura, que acontece no começo da resposta seguinte. Nada disso sai da máquina.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-4 mb-3 overflow-x-auto">
+  <table class="tbl"><thead><tr><th>Depósito</th><th>O que entra</th><th>Quem escreve</th><th>Quando some</th></tr></thead><tbody>
+    <tr><td><code>memories</code> setor <code>semantic</code></td><td>frase durável: "meu", "prefiro", "sempre", "nunca", "lembra", "moro em", "meu nome"</td><td>cada mensagem sua com mais de 20 caracteres; <code>/memoria salvar</code>; a ingestão</td><td>decai 0,5 % por dia sem uso</td></tr>
+    <tr><td><code>memories</code> setor <code>episodic</code></td><td>o resto da conversa que não bateu na regra de durável</td><td>o mesmo classificador por regex, em PT-BR e inglês</td><td>decai 2 % por dia sem uso</td></tr>
+    <tr><td>Vetor <code>bge-m3</code></td><td>1024 floats por memória, num BLOB</td><td>o cron <code>indexar-memoria</code>, a cada 15 min</td><td>junto com a memória</td></tr>
+    <tr><td><code>conversation_log</code></td><td>turnos do seu chat e dos chats observados (<code>agent_id = 'observado'</code>)</td><td>o orquestrador, a cada turno</td><td><code>/novo</code> apaga os do chat</td></tr>
+    <tr><td>Insights</td><td>até 3 por chat, texto curto</td><td>a consolidação das 4h, no Ollama</td><td>gerados na consolidação das 4h</td></tr>
+  </tbody></table>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t1-p3">Legenda: pergunta nunca vira fato. E frase repetida não duplica: existe dedupe por hash da frase normalizada.</p>
+  <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">▦</span> Novo aqui? Saliência</h3>
+  <p class="text-neutral-300" data-inema-block="m3-2-t1-p4">Saliência é o "peso" de uma memória. Toda memória nasce com <code>1.0</code>. Cada vez que ela é usada numa resposta, ganha <code>+0.1</code>. Cada dia sem uso, perde: memória semântica 0,5 %, episódica 2 %. Quando cai abaixo de <code>0.05</code> e não é acessada há 30 dias, o cron <code>decaimento</code> (3h30) apaga. O efeito prático: o que você repete fica; o que foi só do momento se dissolve sozinho, sem você limpar nada.</p>
+</div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6"><h4 class="font-bold text-emerald-400 mb-4">✓ O que vira memória boa</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>"Prefiro reunião de manhã, nunca depois das 17h." Frase afirmativa, durável, curta.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>"Meu servidor de casa chama <code>&lt;nome-da-sua-maquina&gt;</code> e roda Ubuntu." Dado de fato, com nome.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><code>/memoria salvar &lt;texto&gt;</code> quando você quer garantir: entra como <code>semantic</code>, origem <code>manual</code>.</span></li>
+    </ul></div>
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6"><h4 class="font-bold text-red-400 mb-4">✗ O que não vira (ou vira ruim)</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Pergunta. "Qual meu horário preferido?" nunca vira fato, por desenho.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Mensagem com 20 caracteres ou menos: passa direto, não é registrada como memória.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Parágrafo de dez linhas: a memória guarda a frase inteira, então o trecho inteiro vai junto (tópico 6).</span></li>
+    </ul></div>
+  </div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+<section id="topico-2" data-inema-topic="modulo-3-2#topico-2" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">🔎 /memoria e o retrieval em 3 camadas</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m3-2-t2-p1">O comando <code>/memoria</code> é a porta de entrada do cérebro. Sem subcomando, ele assume <code>lista</code>. Cada subcomando tem uma forma de resposta fixa, e conhecer essa forma poupa tempo: é nela que está o <code>#id</code> que você usa para esquecer, aprovar ou descartar.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-4 mb-3 overflow-x-auto">
+  <table class="tbl"><thead><tr><th>Subcomando</th><th>O que faz</th><th>Forma da resposta</th></tr></thead><tbody>
+    <tr><td><code>/memoria lista</code></td><td>as mais recentes deste chat</td><td>cabeçalho com total e quantas são semânticas, depois até 15 linhas <code>#id [setor·saliência] texto</code>, texto cortado em 90 caracteres</td></tr>
+    <tr><td><code>/memoria buscar &lt;termo&gt;</code></td><td>busca no cérebro deste chat</td><td>até 8 linhas <code>#id texto</code> cortado em 120 caracteres, ou "Nada encontrado."</td></tr>
+    <tr><td><code>/memoria salvar &lt;texto&gt;</code></td><td>grava à mão como <code>semantic</code>, origem <code>manual</code></td><td>"Guardado." e o convite para levar também ao vault, com o id da proposta</td></tr>
+    <tr><td><code>/memoria esquecer &lt;id&gt;</code></td><td>apaga uma memória</td><td>confirma o id apagado, ou "Não encontrei."</td></tr>
+    <tr><td><code>/memoria propostas|aprovar &lt;id&gt;|descartar &lt;id&gt;</code></td><td>fila do vault</td><td>tópico 3</td></tr>
+  </tbody></table>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t2-p2">Legenda: o setor aparece pela primeira letra (<code>s</code> de semântica, <code>e</code> de episódica) e a saliência com duas casas. Um <code>[s·1.00]</code> é memória durável nova; um <code>[e·0.31]</code> é conversa antiga a caminho do decaimento.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-5 mb-3">
+    <div class="flex items-center gap-2 mb-3"><span class="w-3 h-3 rounded-full bg-red-400/70"></span><span class="w-3 h-3 rounded-full bg-amber-400/70"></span><span class="w-3 h-3 rounded-full bg-emerald-400/70"></span><span class="text-xs text-neutral-500 ml-2">/memoria lista (recriação ilustrativa, não é captura real)</span></div>
+    <div class="mock text-neutral-300">Memória (412 · 96 semânticas)
+#511 [s·1.00] prefiro reunião de manhã, nunca depois das 17h
+#508 [s·1.20] meu servidor de casa roda Ubuntu e chama estacao
+#504 [e·0.88] hoje o deploy do portal saiu às 14h
+#498 [s·1.10] o domínio inema.club vence em novembro</div>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t2-p3">Legenda: o <code>#id</code> da esquerda é o que vai em <code>/memoria esquecer &lt;id&gt;</code>. A saliência acima de 1.00 mostra memória que já foi usada em resposta.</p>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m3-2-t2-p4">O <strong class="text-purple-400">contexto em 3 camadas</strong> é o que monta o pedaço de memória que entra no prompt de toda conversa, com teto de 600 tokens. O README descreve o conteúdo assim: 3 por palavra-chave, 3 por vetor, 3 mais importantes, 3 mais recentes, sem repetir, mais 3 insights.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-4 mb-3 overflow-x-auto">
+  <table class="tbl"><thead><tr><th>Bloco</th><th>Quantos</th><th>Como é escolhido</th></tr></thead><tbody>
+    <tr><td>Palavra-chave</td><td>3</td><td>FTS5 sobre o texto da memória, com os termos da sua mensagem</td></tr>
+    <tr><td>Vetor</td><td>3</td><td>cosseno entre o vetor <code>bge-m3</code> da sua mensagem e o das memórias</td></tr>
+    <tr><td>Mais importantes</td><td>3</td><td>maior saliência</td></tr>
+    <tr><td>Mais recentes</td><td>3</td><td>ordem de chegada</td></tr>
+    <tr><td>Insights</td><td>3</td><td>o que a consolidação das 4h escreveu para este chat</td></tr>
+  </tbody></table>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t2-p5">Legenda: os blocos se sobrepõem de propósito. Um item que apareceria em dois blocos entra uma vez só. Por isso a conta raramente fecha em 15 itens.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-purple-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copiar e rodar: ensinar um fato e recuperar</h3>
+    <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-300">Objetivo:</strong> gravar um fato seu, achar de novo pela busca e ver a memória aparecer na contagem, tudo no chat do Telegram com o bot.</p>
+    <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>/memoria salvar meu servidor de casa chama &lt;nome-da-sua-maquina&gt; e roda Ubuntu
+/memoria buscar &lt;nome-da-sua-maquina&gt;
+/memoria lista</code></pre>
+    <p class="text-sm text-neutral-400 mt-3"><strong class="text-neutral-300">Como verificar:</strong> a primeira resposta confirma que guardou e oferece o vault com um id de proposta. A busca precisa devolver uma linha com <code>#id</code> e o seu texto. Na lista, ela aparece no topo com <code>[s·1.00]</code>. Se a busca não achar, confira se a frase tem mais de 20 caracteres e se você usou <code>salvar</code> e não <code>buscar</code>.</p>
+  </div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p class="text-neutral-300" data-inema-block="m3-2-t2-p6">Memória recém-criada ainda não tem vetor: o cron <code>indexar-memoria</code> só passa a cada 15 minutos. Nesse intervalo ela é achável por palavra-chave, não por significado. Se você acabou de ensinar um fato e a busca por sinônimo não acha, não é bug: espere o próximo ciclo ou busque pelas palavras exatas. Para medir quanto do prompt é memória, use <code>/context detail</code> (Trilha 4), que lê sem inflar a saliência.</p>
+</div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+<section id="topico-3" data-inema-topic="modulo-3-2#topico-3" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">📓 Vault: MEMORY.md e USER.md</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m3-2-t3-p1">O banco é automático: enche sozinho e decai sozinho. O <strong class="text-purple-400">vault</strong> é o contrário: dois arquivos de texto em <code>~/vault/</code> que só mudam quando você aprova. <code>MEMORY.md</code> é o caderno do que importa; <code>USER.md</code> é quem você é, e entra no prompt de <strong>toda</strong> conversa. Nada é escrito sem aprovação, nem pelo bot, nem por um agente.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-4 mb-3 overflow-x-auto">
+  <table class="tbl"><thead><tr><th></th><th>Banco (<code>memories</code>)</th><th>Vault (<code>~/vault/*.md</code>)</th></tr></thead><tbody>
+    <tr><td>Como entra</td><td>sozinho, a cada mensagem sua</td><td>o bot propõe, você aprova com <code>/memoria aprovar &lt;id&gt;</code></td></tr>
+    <tr><td>Formato</td><td>linha por fato, com setor e saliência</td><td>markdown que você pode abrir e editar no editor</td></tr>
+    <tr><td>Decai</td><td>sim, por dia sem uso</td><td>não, fica até você tirar</td></tr>
+    <tr><td>No prompt</td><td>pelo retrieval, dentro dos 600 tokens</td><td><code>USER.md</code> inteiro, em toda conversa</td></tr>
+    <tr><td>Onde aparece</td><td><code>/memoria lista</code></td><td>os primeiros 500 caracteres de <code>MEMORY.md</code> vão no <code>/daily</code></td></tr>
+  </tbody></table>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t3-p2">Legenda: use o banco para o volume e o vault para o que você não aceita perder. O vault é pequeno de propósito: ele custa tokens em toda mensagem.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6"><h4 class="font-bold text-emerald-400 mb-4">✓ O que merece o vault</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Seu nome, seu fuso, como você quer ser tratado: isso é <code>USER.md</code>.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Regras que valem sempre, do tipo "publicar é commit e push, nunca mexer no painel do provedor".</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Rever a fila com <code>/memoria propostas</code> uma vez por semana e decidir tudo de uma vez.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Abrir o arquivo no editor quando quiser reorganizar: é markdown comum, seu.</span></li>
+    </ul></div>
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6"><h4 class="font-bold text-red-400 mb-4">✗ O que não põe no vault</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Fato de um dia só ("hoje o deploy saiu às 14h"): isso é episódico, deixa decair.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Senha, token ou chave. A guarda de exfiltração redige na saída, mas o arquivo em disco não é lugar de segredo.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Aprovar toda proposta que aparece: <code>USER.md</code> inflado entra em cada prompt e come contexto de graça.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Esperar que <code>/memoria esquecer</code> limpe o vault: ele age no banco. Vault se edita no arquivo ou se descarta antes de aprovar.</span></li>
+    </ul></div>
+  </div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-purple-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copiar e rodar: aprovar uma entrada no vault</h3>
+    <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-300">Objetivo:</strong> ver a fila de propostas, aprovar uma e confirmar que o arquivo mudou.</p>
+    <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>/memoria propostas
+/memoria aprovar &lt;id-da-proposta&gt;
+/daily</code></pre>
+    <p class="text-sm text-neutral-400 mt-3"><strong class="text-neutral-300">Como verificar:</strong> as propostas vêm no formato <code>#id → arquivo: texto</code>. Ao aprovar, o bot confirma em qual arquivo gravou. Fora do chat, <code>cat ~/vault/MEMORY.md</code> mostra a linha nova, e o <code>/daily</code> passa a trazer o começo do arquivo no fim do resumo. Para recusar, <code>/memoria descartar &lt;id&gt;</code>.</p>
+  </div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+<section id="topico-4" data-inema-topic="modulo-3-2#topico-4" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">🌙 Consolidação noturna</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m3-2-t4-p1">Memória que só cresce vira lixo. Toda madrugada o v3 passa três vezes pelo cérebro, em ordem, e sempre no Ollama local: <strong class="text-purple-400">custo zero</strong>. O resultado é um banco menor, mais coerente e com o que é novo por cima do que ficou velho.</p>
+  <div class="space-y-6 mb-6">
+    <div class="flex items-start space-x-4"><div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 grid place-items-center"><span class="text-purple-400 font-bold">1</span></div><div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600"><h4 class="font-semibold text-white mb-2">3h30: <code>decaimento</code></h4><p class="text-neutral-300 text-sm">Reduz a saliência de tudo que passou o dia sem ser usado: 0,5 % para semântica, 2 % para episódica. O que ficou abaixo de <code>0.05</code> e não é acessado há 30 dias é apagado. É a poda antes da limpeza.</p></div></div>
+    <div class="flex items-start space-x-4"><div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 grid place-items-center"><span class="text-purple-400 font-bold">2</span></div><div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600"><h4 class="font-semibold text-white mb-2">4h: <code>consolidacao-noturna</code></h4><p class="text-neutral-300 text-sm">Funde duplicatas e fica com a mais recente. Detecta contradições por data: a memória antiga recebe <code>superseded_by</code> apontando para a nova e <strong>nunca</strong> é apagada, então dá para auditar o que mudou. Por fim escreve até 3 insights por chat.</p></div></div>
+    <div class="flex items-start space-x-4"><div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 grid place-items-center"><span class="text-purple-400 font-bold">3</span></div><div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600"><h4 class="font-semibold text-white mb-2">4h15: <code>backup-noturno</code></h4><p class="text-neutral-300 text-sm">Copia o banco já consolidado com <code>VACUUM INTO</code>, cifra com <code>age</code> (ou comprime com gzip quando não há destinatário) e guarda em <code>store/backups/</code>, com retenção de 14. Backup sempre depois da limpeza, nunca antes.</p></div></div>
+    <div class="flex items-start space-x-4"><div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 grid place-items-center"><span class="text-purple-400 font-bold">4</span></div><div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600"><h4 class="font-semibold text-white mb-2">Quando você não quer esperar</h4><p class="text-neutral-300 text-sm"><code>/consolidar</code> enfileira a consolidação agora, como job na lane <code>ollama</code>, com uma tentativa só. O bot devolve o número do job; <code>/status &lt;id&gt;</code> acompanha. Como a lane <code>ollama</code> roda um por vez, ela espera a indexação ou a ingestão que estiver em curso.</p></div></div>
+  </div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-purple-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copiar e rodar: forçar a consolidação e conferir</h3>
+    <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-300">Objetivo:</strong> rodar a consolidação fora do horário e ver o efeito na contagem de memórias.</p>
+    <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>/memoria lista
+/consolidar
+/status &lt;numero-do-job-que-o-bot-devolveu&gt;
+/memoria lista</code></pre>
+    <p class="text-sm text-neutral-400 mt-3"><strong class="text-neutral-300">Como verificar:</strong> anote o total do cabeçalho da primeira lista. O <code>/consolidar</code> responde com o job enfileirado. Quando o <code>/status</code> mostrar <code>done</code>, a segunda lista precisa ter total igual ou menor, nunca maior. Se o job falhar, quase sempre é Ollama fora de ar: confira com <code>/health</code> e <code>/ollama status</code>.</p>
+  </div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p class="text-neutral-300" data-inema-block="m3-2-t4-p2">Contradição não é erro: é como você corrige o bot sem comando nenhum. Se a memória diz "moro em Porto Alegre" e você escreve "mudei para Florianópolis", a consolidação marca a antiga com <code>superseded_by</code> e a nova passa a valer. O caminho rápido de correção é esse, e o caminho cirúrgico é <code>/memoria esquecer &lt;id&gt;</code> (tópico 6).</p>
+</div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+<section id="topico-5" data-inema-topic="modulo-3-2#topico-5" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">🔌 Conectores: Gmail, agendas e Telegram observado</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m3-2-t5-p1">Conector é o que liga o bot às suas fontes de informação. A documentação separa de propósito <strong class="text-purple-400">três coisas</strong> que costumam ser confundidas, e a diferença entre elas é a diferença entre um bot que lê e um bot que aprende.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-4 mb-3 overflow-x-auto">
+  <table class="tbl"><thead><tr><th></th><th>O que é</th><th>Como se liga</th></tr></thead><tbody>
+    <tr><td><strong>Acesso</strong></td><td>o bot consegue ler a fonte quando você pede</td><td>token OAuth por conta (Google) ou o próprio bot (Telegram)</td></tr>
+    <tr><td><strong>Observação</strong></td><td>o bot vê o que passa, sem responder</td><td>lista de chats observados no <code>.env</code></td></tr>
+    <tr><td><strong>Ingestão</strong></td><td>o que passou vira fato na memória</td><td>cron que lê o novo e extrai fatos no Ollama, custo zero</td></tr>
+  </tbody></table>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t5-p2">Legenda: acesso sem ingestão é o comportamento do v2: o bot lê seu e-mail quando você manda, e esquece depois. A ingestão é o que o v3 acrescenta.</p>
+  <div class="rounded-2xl border border-purple-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 280" class="w-full h-auto" role="img" aria-label="Gmail com várias contas, Google Calendar com várias agendas e os chats observados do Telegram passam pelos conectores, entram na ingestão em lote feita no Ollama local sem custo, viram memórias com a origem marcada, passam pela consolidação das quatro da manhã e chegam ao contexto de toda conversa sua com o bot."><defs><linearGradient id="m32b-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#a855f7"/></linearGradient><filter id="m32b-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><pattern id="m32b-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#a855f7" opacity="0.12"/></pattern><marker id="m32b-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker><marker id="m32b-ahp" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#c084fc"/></marker></defs><rect x="0" y="0" width="1000" height="280" fill="url(#m32b-grid)"/><g font-family="Inter,sans-serif" font-size="12.5" font-weight="600" fill="#bfe6ff"><g class="wf-a"><rect x="24" y="30" width="216" height="40" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="38" y="55">Gmail: N contas</text></g><g class="wf-a"><rect x="24" y="86" width="216" height="40" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="38" y="111">Calendar: N agendas</text></g><g class="wf-a"><rect x="24" y="142" width="216" height="40" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="38" y="167">Telegram observado</text></g></g><g fill="none" stroke="#38bdf8" stroke-width="1.8" opacity="0.55"><path d="M240,50 C296,50 296,106 340,106" marker-end="url(#m32b-ah)"/><path d="M240,106 L340,106" marker-end="url(#m32b-ah)"/><path d="M240,162 C296,162 296,106 340,106" marker-end="url(#m32b-ah)"/></g><g filter="url(#m32b-glow)"><rect x="340" y="72" width="250" height="68" rx="14" fill="#1a1230" stroke="url(#m32b-grad)" stroke-width="2"/></g><text x="465" y="100" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-weight="600" font-size="16">ingestão em lote</text><text x="465" y="122" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="11">Ollama local, custo zero</text><path d="M590,106 L666,106" fill="none" stroke="#c084fc" stroke-width="1.8" opacity="0.6" marker-end="url(#m32b-ahp)"/><g filter="url(#m32b-glow)"><rect x="666" y="72" width="250" height="68" rx="14" fill="#1a1230" stroke="url(#m32b-grad)" stroke-width="2"/></g><text x="791" y="100" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-weight="600" font-size="16">memories</text><text x="791" y="122" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="11">origem = a fonte, FTS5 + vetor</text><path d="M791,140 L791,190" fill="none" stroke="#c084fc" stroke-width="1.8" opacity="0.6" marker-end="url(#m32b-ahp)"/><rect x="632" y="190" width="318" height="40" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="791" y="215" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-size="12.5" font-weight="600">consolidação das 4h: duplicatas e contradições</text><path d="M632,210 L470,210 L470,180" fill="none" stroke="#38bdf8" stroke-width="1.8" opacity="0.55" stroke-dasharray="6 5" marker-end="url(#m32b-ah)"/><rect x="330" y="232" width="280" height="40" rx="10" fill="#1a1230" stroke="url(#m32b-grad)" stroke-width="2"/><text x="470" y="257" text-anchor="middle" fill="#c084fc" font-family="Inter,sans-serif" font-size="13" font-weight="600">contexto de toda conversa sua</text><path d="M470,232 L470,180" fill="none" stroke="#c084fc" stroke-width="1.8" opacity="0.6" marker-end="url(#m32b-ahp)"/></svg>
+</div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t5-p3">Legenda: nada nesse caminho sai da máquina. A extração roda no modelo local, e por isso um grupo movimentado ou uma caixa de entrada cheia não geram custo nenhum.</p>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m3-2-t5-p4"><strong class="text-purple-400">Google, uma credencial para todas as contas.</strong> Você cria um projeto no Google Cloud, ativa Gmail API e Google Calendar API, configura a tela de consentimento como External com todos os seus e-mails em Test users, gera um OAuth client ID do tipo Desktop app e salva o JSON como <code>~/.config/google/credentials.json</code> com permissão 600. Essa credencial serve todas as contas. Cada conta ganha um apelido em <code>~/.config/google/contas.json</code> e um token próprio, criado uma vez com <code>auth</code>. Os scripts moram no repo, em <code>conectores/google/</code>; os segredos nunca entram no repo.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-4 mb-3 overflow-x-auto">
+  <table class="tbl"><thead><tr><th>Passo</th><th>Comando ou arquivo</th><th>Resultado</th></tr></thead><tbody>
+    <tr><td>Credencial, uma vez</td><td><code>~/.config/google/credentials.json</code> (chmod 600)</td><td>o "app" que serve todas as contas</td></tr>
+    <tr><td>Declarar as contas</td><td><code>~/.config/google/contas.json</code>: apelido para e-mail</td><td>a primeira do arquivo é a padrão; <code>GOOGLE_CONTA_PADRAO</code> fixa outra</td></tr>
+    <tr><td>Autenticar cada uma</td><td><code>python3 gmail.py --conta &lt;apelido&gt; auth</code></td><td><code>~/.config/google/token_gmail_&lt;apelido&gt;.json</code>, renovado sozinho</td></tr>
+    <tr><td>Agenda</td><td><code>python3 gcal.py --conta &lt;apelido&gt; auth</code></td><td>mesmo arquivo de contas, consentimento separado porque o escopo é outro</td></tr>
+    <tr><td>Usar</td><td><code>--conta</code> aceita um apelido, vários por vírgula, ou <code>todas</code></td><td>saída sempre em JSON; conta com token quebrado avisa e não derruba as outras</td></tr>
+    <tr><td>Ligar a ingestão</td><td><code>/cron on gmail-ingestao</code> · <code>/cron on agenda-ingestao</code></td><td>e-mail a cada 2 h (últimas 3 h); agenda às 7h05 (próximos 14 dias)</td></tr>
+  </tbody></table>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t5-p5">Legenda: agenda compartilhada entra sozinha, sem apelido novo: o token da conta enxerga tudo que aquela conta enxerga no Google Calendar. Memória vinda do e-mail fica com origem <code>gmail:&lt;apelido&gt;</code>; da agenda, <code>gcal:&lt;apelido&gt;</code>.</p>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m3-2-t5-p6"><strong class="text-purple-400">Telegram observado.</strong> Um bot vê o que acontece na frente dele, dali para frente. Ele lê mensagens dos chats onde está, lê todo o texto de um grupo se a privacidade estiver desligada, lê legenda de foto e vídeo e recebe encaminhadas. Ele não lê suas conversas privadas com outras pessoas, não lê histórico anterior à entrada dele, não lista seus contatos e não lê canal onde não é membro. Para grupo funcionar, desligue Group Privacy no BotFather e <strong>remova e adicione o bot de volta</strong> em cada grupo: a configuração só vale a partir da nova entrada.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-4 mb-3 overflow-x-auto">
+  <table class="tbl"><thead><tr><th>Variável no <code>.env</code></th><th>O que define</th><th>Regra</th></tr></thead><tbody>
+    <tr><td><code>TELEGRAM_CHATS_RESPONDER</code></td><td>chats onde o bot conversa</td><td>padrão: só o <code>ALLOWED_CHAT_ID</code></td></tr>
+    <tr><td><code>TELEGRAM_CHATS_OBSERVAR</code></td><td>chats que ele só observa: grava e nunca responde</td><td>aceita lista, ou <code>todos</code> para qualquer chat em que ele for adicionado</td></tr>
+    <tr><td>Chat nas duas listas</td><td></td><td>vale como chat de conversa</td></tr>
+    <tr><td>Chat fora das duas</td><td></td><td>ignorado, nem grava</td></tr>
+    <tr><td>As duas vazias</td><td></td><td>o bot responde a quem falar com ele</td></tr>
+  </tbody></table>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t5-p7">Legenda: para descobrir o id, mande <code>/chatid</code> no chat ou olhe o log, onde um chat desconhecido aparece uma vez justamente para isso. Grupo tem id negativo; conversa pessoal tem id positivo. Depois de editar o <code>.env</code>, aplique com <code>bash scripts/instalar-servico.sh</code> e confirme com <code>/fontes</code>.</p>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m3-2-t5-p8">O que acontece com uma mensagem observada: ela entra no <code>conversation_log</code> com <code>agent_id = 'observado'</code>, o autor no início do texto e o nome do grupo junto. Nenhuma resposta, nenhum modelo, nenhum custo nesse momento. A cada 30 minutos o cron <code>ingestao-observados</code> pega o que chegou desde a última passagem, monta um bloco por grupo e faz uma única chamada no Ollama residente pedindo os fatos duráveis: decisão, compromisso, prazo, preferência, dado de pessoa, valor combinado. Cada fato vira memória com origem <code>telegram:&lt;chatId&gt;</code>, entra no FTS5 e ganha vetor no ciclo seguinte. O marcador <code>ingestao_estado</code> garante que rodar duas vezes não reprocessa; se o Ollama estiver fora, o bloco não é marcado e volta na próxima passagem.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-purple-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copiar e rodar: conferir as fontes e forçar a ingestão</h3>
+    <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-300">Objetivo:</strong> ver quais chats o bot observa, quanto de cada fonte já virou memória e rodar a ingestão sem esperar o cron.</p>
+    <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>/fontes
+/fontes ingerir
+/status &lt;numero-do-job-que-o-bot-devolveu&gt;
+/memoria buscar &lt;palavra-que-apareceu-no-grupo&gt;</code></pre>
+    <p class="text-sm text-neutral-400 mt-3"><strong class="text-neutral-300">Como verificar:</strong> o <code>/fontes</code> mostra em quais chats o bot responde, quais observa e, por fonte, quantos itens já foram ingeridos e quando foi o último. O <code>/fontes ingerir</code> devolve o job; quando ele fica <code>done</code>, a busca precisa achar o fato. Sem argumento, <code>ingerir</code> roda só os chats observados; <code>/fontes ingerir gmail</code> e <code>/fontes ingerir agenda</code> fazem o mesmo para os conectores Google. Ingestão que devolve zero fato costuma ser conversa sem nada durável, e isso é o esperado.</p>
+  </div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p class="text-neutral-300" data-inema-block="m3-2-t5-p9">Grupo observado é conversa de outras pessoas, e elas não sabem que um bot está guardando fatos. Em grupo de trabalho isso costuma ser aceitável; em grupo de família ou de terceiros, pergunte antes. Vale lembrar o limite técnico do outro lado: importar o seu Telegram inteiro, com DMs e histórico, exigiria uma sessão de usuário via MTProto, que não está implementada no v3 e cujo arquivo de sessão equivale à senha da sua conta. A documentação descreve o desenho e diz de forma explícita que isso só é ligado se você pedir.</p>
+</div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+<section id="topico-6" data-inema-topic="modulo-3-2#topico-6" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">🧹 O que a memória ainda não faz</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m3-2-t6-p1">O README é direto sobre o limite principal: <strong class="text-purple-400">a memória guarda a frase inteira, não um fato extraído.</strong> Quando você conversa com o bot, a sua mensagem é classificada e armazenada como veio. Não há um passo que a reduza a "usuário prefere reunião de manhã". Repare no contraste com o tópico anterior: na ingestão de e-mail, agenda e grupo observado existe extração, feita em lote no Ollama. Na sua conversa, não.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-4 mb-3 overflow-x-auto">
+  <table class="tbl"><thead><tr><th>Caminho</th><th>Passa por extração</th><th>O que fica gravado</th></tr></thead><tbody>
+    <tr><td>Você conversa com o bot</td><td>não</td><td>a frase inteira, classificada em semântica ou episódica</td></tr>
+    <tr><td>Chat observado do Telegram</td><td>sim, a cada 30 min</td><td>fatos duráveis extraídos do bloco do grupo</td></tr>
+    <tr><td>Gmail e Google Calendar</td><td>sim, no cron de cada um</td><td>fatos duráveis, com a conta na origem</td></tr>
+  </tbody></table>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m3-2-t6-p2">Legenda: a consequência prática é simples. Frase longa vira memória longa, come parte dos 600 tokens do contexto e pode trazer junto um detalhe que já não vale.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6"><h4 class="font-bold text-emerald-400 mb-4">✓ Como corrigir uma memória errada</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><code>/memoria buscar &lt;termo-errado&gt;</code> para achar o <code>#id</code>, depois <code>/memoria esquecer &lt;id&gt;</code>. É o corte cirúrgico.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Afirmar o fato novo e deixar a consolidação das 4h marcar o antigo com <code>superseded_by</code>. O histórico fica auditável.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><code>/memoria salvar &lt;frase-curta-e-correta&gt;</code>: escrever você mesmo a versão enxuta que queria que a extração tivesse feito.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Para o que não pode errar nunca, levar ao vault com <code>/memoria aprovar</code>: lá não decai e não se contradiz sozinho.</span></li>
+    </ul></div>
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6"><h4 class="font-bold text-red-400 mb-4">✗ O que não resolve</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Pedir em prosa "esquece aquilo": a frase vira mais uma memória, e a errada continua lá.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><code>/novo</code>: apaga sessão e histórico do chat, não toca em <code>memories</code> nem no vault.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Esperar <code>/retry</code> ou <code>/undo</code>: estão anotados como fase 10, não existem hoje.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Apagar o banco para "limpar": a tabela <code>jobs</code> nunca é purgada e cresce cerca de 1,5 mil linhas por dia, mas isso é histórico de fila, não memória.</span></li>
+    </ul></div>
+  </div>
+  <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">▦</span> Novo aqui? Apagar uma fonte inteira</h3>
+  <p class="text-neutral-300" data-inema-block="m3-2-t6-p3">Esquecer um fato é <code>/memoria esquecer &lt;id&gt;</code>. Desfazer uma fonte inteira, por exemplo tudo que veio de um grupo do Telegram, é um <code>DELETE FROM memories WHERE origem = 'telegram:&lt;id-do-grupo&gt;'</code> no banco, com o serviço parado. Essa não tem comando de chat, e é assim de propósito: apagar em lote não deve ser fácil de fazer sem querer.</p>
+</div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p class="text-neutral-300" data-inema-block="m3-2-t6-p4">Duas proteções que valem saber antes de ligar tudo. Os escopos do Gmail hoje são leitura, modificação e envio, para o bot poder marcar como lida e responder; se você quer só leitura, tire <code>gmail.send</code> e <code>gmail.modify</code> de <code>SCOPES_GMAIL</code> em <code>conectores/google/comum.py</code> e refaça o <code>auth</code> de cada conta. E toda resposta que sai passa pela guarda de exfiltração: token, chave de API, JWT e os valores das variáveis sensíveis do <code>.env</code> viram <code>[REDIGIDO]</code>, inclusive quando vieram de um e-mail ingerido.</p>
+</div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+      <section class="mb-12">
+  <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+    <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do módulo</h2>
+    <div class="space-y-4 mb-8">
+      <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Quatro depósitos</strong><span class="text-neutral-400"> - <code>memories</code> com setor e saliência, vetor <code>bge-m3</code>, <code>conversation_log</code> e insights; pergunta nunca vira fato</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">/memoria é a porta</strong><span class="text-neutral-400"> - <code>lista</code> traz 15, <code>buscar</code> traz 8, <code>salvar</code> grava e propõe o vault, <code>esquecer</code> apaga pelo <code>#id</code></span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Retrieval com teto de 600 tokens</strong><span class="text-neutral-400"> - palavra-chave, vetor, mais importantes, mais recentes e insights, sem repetir item</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Vault só com aprovação</strong><span class="text-neutral-400"> - <code>MEMORY.md</code> e <code>USER.md</code> em <code>~/vault/</code>; <code>USER.md</code> entra em toda conversa</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Madrugada em três passos</strong><span class="text-neutral-400"> - 3h30 decai, 4h consolida (duplicatas, <code>superseded_by</code>, insights), 4h15 copia; <code>/consolidar</code> antecipa</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Conectores e o limite</strong><span class="text-neutral-400"> - uma credencial Google para N contas, Telegram observado sem resposta, <code>/fontes</code>; sua conversa guarda a frase inteira, não o fato</span></div></div>
+    </div>
+    <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+      <h3 class="font-semibold text-purple-400 mb-2">Próxima trilha:</h3>
+      <p class="text-neutral-300">Trilha 4 - Configurar e estender: interruptores, modos de fila, persona, custo do prompt, agentes e skills com a sua cara.</p>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="modulo-3-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">Módulo anterior: Comandos e conversa</a>
+      <a href="../trilha4/index.html" class="flex-1 text-center px-6 py-3 bg-purple-500/20 border border-purple-500/30 text-purple-400 rounded-lg font-semibold hover:bg-purple-500/30 transition-colors">Próxima trilha: Configurar e estender</a>
+    </div>
+  </div>
+</section>
+    </div>
+    <nav data-inema-toc aria-label="Índice da página" class="hidden lg:block sticky top-24 self-start">
+  <p class="inema-toc-progress"><span data-inema-section-counter>Seção 1 de 6</span></p>
+  <ul class="space-y-1">
+    <li><a href="#topico-1">1. O que o cérebro guarda</a></li>
+<li><a href="#topico-2">2. /memoria e o retrieval em 3 camadas</a></li>
+<li><a href="#topico-3">3. Vault: MEMORY e USER</a></li>
+<li><a href="#topico-4">4. Consolidação noturna</a></li>
+<li><a href="#topico-5">5. Conectores</a></li>
+<li><a href="#topico-6">6. O que ainda não faz</a></li>
+  </ul>
+</nav>
+  </article>
+</main>
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>openpcbot v3: seu Jarvis local · INEMA.CLUB · 2026</p>
+    </div>
+  </footer>
+  <script>
+function toggleTopic(button) {
+  var panelId = button.getAttribute('aria-controls');
+  var explanation = panelId ? document.getElementById(panelId) : null;
+  if (!explanation) return;
+  var moduleCard = button.closest('[data-inema-module]') || button.closest('.module-shell') || document;
+  moduleCard.querySelectorAll('.topic-explanation.active').forEach(function (exp) {
+    if (exp !== explanation) {
+      exp.classList.remove('active');
+      var other = moduleCard.querySelector('[aria-controls="' + exp.id + '"]');
+      if (other) other.setAttribute('aria-expanded', 'false');
+    }
+  });
+  var next = !explanation.classList.contains('active');
+  explanation.classList.toggle('active', next);
+  button.setAttribute('aria-expanded', next ? 'true' : 'false');
+}
+function openModal(modalId) {
+  var modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    var close = modal.querySelector('[data-modal-close]');
+    if (close) close.focus();
+  }
+}
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(function (modal) {
+    modal.classList.add('hidden');
+  });
+  document.body.style.overflow = 'auto';
+}
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+<script src="../../assets/learn.js"></script>
+<script>
+if (window.INEMA && typeof window.INEMA.init === 'function') {
+  window.INEMA.init();
+}
+document.addEventListener('click', function (e) {
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var nav = t.closest('nav');
+  if (!nav) return;
+  var journey = t.closest('[data-inema-journey-open]');
+  if (journey && window.INEMA && INEMA.openJourney) {
+    e.preventDefault();
+    INEMA.openJourney();
+    return;
+  }
+  var toggle = t.closest('[data-inema-appearance-toggle]');
+  if (toggle) {
+    var targetSel = toggle.getAttribute('data-inema-appearance-toggle');
+    var panel = targetSel ? document.querySelector(targetSel) : document.querySelector('[data-inema-appearance]');
+    if (panel) {
+      var open = panel.getAttribute('data-open') !== 'true';
+      panel.setAttribute('data-open', open ? 'true' : 'false');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    return;
+  }
+  var pairs = [
+    ['data-inema-set-theme', 'theme'],
+    ['data-inema-set-font', 'font'],
+    ['data-inema-set-fontscale', 'fontScale'],
+    ['data-inema-set-linewidth', 'lineWidth'],
+    ['data-inema-set-leading', 'leading'],
+    ['data-inema-set-accent', 'accent']
+  ];
+  for (var i = 0; i < pairs.length; i++) {
+    var btn = t.closest('[' + pairs[i][0] + ']');
+    if (btn && window.INEMA && INEMA.setPref) {
+      var raw = btn.getAttribute(pairs[i][0]);
+      var key = pairs[i][1];
+      var value = key === 'fontScale' || key === 'lineWidth' ? parseInt(raw, 10) : (key === 'leading' ? parseFloat(raw) : raw);
+      INEMA.setPref(key, value);
+      return;
+    }
+  }
+  var theme = t.closest('#theme-toggle');
+  if (theme) {
+    var html = document.documentElement;
+    var next = html.classList.contains('dark') ? 'claro' : 'inema-dark';
+    if (window.INEMA && INEMA.setPref) {
+      INEMA.setPref('theme', next);
+    } else {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    }
+  }
+});
+</script>
+</body>
+</html>

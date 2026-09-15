@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="inema-course" content="curso-openpcbotv3">
+  <script>
+(function () {
+  try {
+    var html = document.documentElement;
+    var DEF = { theme: 'inema-dark', font: 'inter', fontScale: 100, lineWidth: 68, leading: 1.7, accent: 'emerald' };
+    function clone(o) { var r = {}; for (var x in o) r[x] = o[x]; return r; }
+    var p = clone(DEF);
+    try {
+      var raw = localStorage.getItem('inema.prefs');
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          for (var k in DEF) if (parsed[k] != null) p[k] = parsed[k];
+        }
+      } else {
+        var legacy = localStorage.getItem('theme');
+        if (legacy === 'light') p.theme = 'claro';
+        else if (legacy === 'dark') p.theme = 'inema-dark';
+      }
+    } catch (e) { p = clone(DEF); }
+    var THEMES = {
+      'inema-dark': { dark: true,  attr: null,        cs: 'dark'  },
+      'claro':      { dark: false, attr: null,        cs: 'light' },
+      'sepia':      { dark: false, attr: 'sepia',     cs: 'light' },
+      'foco':       { dark: null,  attr: 'foco',      cs: null    },
+      'contraste':  { dark: true,  attr: 'contraste', cs: 'dark'  }
+    };
+    var t = THEMES[p.theme] || THEMES['inema-dark'];
+    if (t.dark === true) html.classList.add('dark');
+    else if (t.dark === false) html.classList.remove('dark');
+    if (t.attr) html.setAttribute('data-theme', t.attr);
+    else html.removeAttribute('data-theme');
+    html.style.colorScheme = (t.cs ? t.cs : (html.classList.contains('dark') ? 'dark' : 'light'));
+    html.setAttribute('data-font', p.font || 'inter');
+    html.setAttribute('data-accent', p.accent || 'emerald');
+    var s = html.style;
+    var scale = (+p.fontScale || 100);
+    s.setProperty('--inema-font-scale', (scale / 100).toString());
+    s.setProperty('font-size', scale + '%');
+    s.setProperty('--measure', (+p.lineWidth || 68) + 'ch');
+    s.setProperty('--lh-body', (+p.leading || 1.7).toString());
+    var fam = p.font === 'system'
+      ? 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+      : (p.font === 'leitura'
+        ? '"Atkinson Hyperlegible", "Inter", system-ui, sans-serif'
+        : '"Inter", system-ui, sans-serif');
+    s.setProperty('--font-body', fam);
+    var ACC = {
+      emerald: [152, 76, 45], blue: [217, 91, 60], purple: [258, 90, 66],
+      amber: [38, 92, 50], teal: [174, 72, 41], rose: [350, 89, 60]
+    };
+    var a = ACC[p.accent] || ACC.emerald;
+    s.setProperty('--accent-h', a[0] + '');
+    s.setProperty('--accent-s', a[1] + '%');
+    s.setProperty('--accent-l', a[2] + '%');
+    s.setProperty('--accent', 'hsl(' + a[0] + ' ' + a[1] + '% ' + a[2] + '%)');
+  } catch (err) {
+    try { document.documentElement.classList.add('dark'); document.documentElement.style.colorScheme = 'dark'; } catch (e) {}
+  }
+})();
+</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <script type="application/json" data-inema-manifest>
+{
+  "course": "curso-openpcbotv3",
+  "tracks": [
+    {
+      "n": "1",
+      "title": "Fundamentos",
+      "modules": [
+        {
+          "id": "1-1",
+          "title": "O que é o openpcbot v3",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-1.html"
+        },
+        {
+          "id": "1-2",
+          "title": "O caminho de uma mensagem",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-2.html"
+        }
+      ]
+    },
+    {
+      "n": "2",
+      "title": "Instalar e operar",
+      "modules": [
+        {
+          "id": "2-1",
+          "title": "Subir o v3",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-1.html"
+        },
+        {
+          "id": "2-2",
+          "title": "Operar no dia a dia",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-2.html"
+        }
+      ]
+    },
+    {
+      "n": "3",
+      "title": "Usar no dia a dia",
+      "modules": [
+        {
+          "id": "3-1",
+          "title": "Comandos e conversa",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-1.html"
+        },
+        {
+          "id": "3-2",
+          "title": "Cérebro e conectores",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-2.html"
+        }
+      ]
+    },
+    {
+      "n": "4",
+      "title": "Configurar e estender",
+      "modules": [
+        {
+          "id": "4-1",
+          "title": "Controle da conversa",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-1.html"
+        },
+        {
+          "id": "4-2",
+          "title": "Agentes, skills, custo e o que vem",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-2.html"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Módulo 4.1: Controle da conversa | openpcbot v3: seu Jarvis local</title>
+  <style>
+body { font-family: 'Inter', sans-serif; }
+.dark body { background-color: #111827; }
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 100;
+  padding: .75rem 1rem;
+  background: #111827;
+  color: #facc15;
+  border: 1px solid #4b5563;
+  border-radius: .5rem;
+}
+.skip:focus { left: .75rem; top: .75rem; }
+.topic-explanation { display: none; }
+.topic-explanation.active { display: block; }
+.dark .border-dark-600 { border-color: #374151; }
+.dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+html:not(.dark) body { background-color: #f8fafc; }
+html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+html:not(.dark) .bg-dark-800\/50 { background-color: rgba(249, 250, 251, 0.88); }
+html:not(.dark) .bg-dark-800\/70 { background-color: rgba(249, 250, 251, 0.94); }
+html:not(.dark) .bg-dark-900\/40 { background-color: rgba(255, 255, 255, 0.72); }
+html:not(.dark) .bg-dark-700\/30 { background-color: rgba(243, 244, 246, 0.72); }
+html:not(.dark) .bg-dark-700\/50 { background-color: rgba(243, 244, 246, 0.86); }
+html:not(.dark) .text-neutral-100 { color: #111827; }
+html:not(.dark) .text-neutral-200 { color: #1f2937; }
+html:not(.dark) .text-neutral-300 { color: #4b5563; }
+html:not(.dark) .text-neutral-400 { color: #6b7280; }
+html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+html:not(.dark) .text-white { color: #111827; }
+html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+html:not(.dark) .text-emerald-400 { color: #059669; }
+html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .text-blue-400 { color: #2563eb; }
+html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .text-purple-400 { color: #7c3aed; }
+html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .text-amber-400 { color: #92400e; }
+html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+html:not(.dark) .group:hover .group-hover\:text-amber-400 { color: #92400e; }
+html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) .bg-amber-900\/20 { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(217, 119, 6, 0.18); }
+html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+html:not(.dark) .text-primary { color: #a16207; }
+html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+html:not(.dark) .border-primary\/30,
+html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+html:not(.dark) .text-sky-400 { color: #0369a1; }
+html:not(.dark) .text-yellow-400 { color: #a16207; }
+html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+html:not(.dark) .text-blue-400 { color: #2563eb; }
+html:not(.dark) .bg-red-900\/20 { background-color: rgba(220, 38, 38, 0.08); }
+html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.24); }
+html:not(.dark) .text-red-400 { color: #b91c1c; }
+html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+@keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+@media (prefers-reduced-motion: no-preference) {
+  .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+  .wf-a:nth-child(2){animation-delay:.25s}
+  .wf-a:nth-child(3){animation-delay:.5s}
+  .wf-a:nth-child(4){animation-delay:.75s}
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+.module-shell { scroll-margin-top: 5rem; }
+.inema-prose pre, .inema-prose .mock { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
+article[data-inema-module] > .inema-prose { width: 100%; min-width: 0; }
+.topic-section { scroll-margin-top: 5rem; }
+.course-meter .inema-bar { margin-top: .75rem; }
+.tbl { width: 100%; border-collapse: collapse; font-size: .875rem; }
+.tbl th, .tbl td { text-align: left; vertical-align: top; padding: .5rem .75rem; border-bottom: 1px solid #374151; }
+html:not(.dark) .tbl th, html:not(.dark) .tbl td { border-bottom-color: #e5e7eb; }
+.tbl th { color: #fbbf24; font-weight: 600; }
+html:not(.dark) .tbl th { color: #92400e; }
+.mock { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .8rem; line-height: 1.5; white-space: pre-wrap; }
+  </style>
+  <link rel="stylesheet" href="../../assets/learn.css">
+  
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-wrap justify-between items-center min-h-14 gap-3 py-2">
+      <div class="flex items-center space-x-4 min-w-0">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🧠</span>
+          <span class="font-bold text-lg hidden sm:inline">openpcbot v3</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        <span class="text-neutral-600">-</span>
+        <a href="https://inema.pro" target="_blank" class="text-amber-700 dark:text-slate-300 hover:opacity-80 text-sm font-medium">PRO</a>
+      </div>
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href="../trilha1/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+        <span class="sm:hidden">T1</span>
+        <span class="hidden sm:inline">Fundamentos</span>
+      </a>
+<a href="../trilha2/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+        <span class="sm:hidden">T2</span>
+        <span class="hidden sm:inline">Instalar e operar</span>
+      </a>
+<a href="../trilha3/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+        <span class="sm:hidden">T3</span>
+        <span class="hidden sm:inline">Usar no dia a dia</span>
+      </a>
+<a href="index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10" aria-current="page">
+        <span class="sm:hidden">T4</span>
+        <span class="hidden sm:inline">Configurar e estender</span>
+      </a>
+        <button type="button" data-inema-journey-open class="inline-flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 transition-colors">
+          <span aria-hidden="true">◷</span>
+          <span class="hidden lg:inline">Minha jornada</span>
+          <span class="inema-journey-badge hidden" data-inema-journey-badge data-count="0" aria-hidden="true"></span>
+        </button>
+        <div class="relative">
+          <button type="button" class="inema-appearance-trigger" data-inema-appearance-toggle="[data-inema-appearance]" aria-expanded="false" aria-label="Aparência">
+            <span aria-hidden="true">◑</span>
+            <span class="hidden lg:inline">Aparência</span>
+          </button>
+          <div data-inema-appearance class="inema-appearance-pop right-0">
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Tema</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-theme="inema-dark">Escuro</button>
+      <button type="button" data-inema-set-theme="claro">Claro</button>
+      <button type="button" data-inema-set-theme="sepia">Sépia</button>
+      <button type="button" data-inema-set-theme="foco">Foco</button>
+      <button type="button" data-inema-set-theme="contraste">Contraste</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Fonte</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-font="inter">Inter</button>
+      <button type="button" data-inema-set-font="system">Sistema</button>
+      <button type="button" data-inema-set-font="leitura">Leitura</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Texto</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-fontscale="100">A</button>
+      <button type="button" data-inema-set-fontscale="112">A+</button>
+      <button type="button" data-inema-set-fontscale="125">A++</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Linha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-linewidth="60">60</button>
+      <button type="button" data-inema-set-linewidth="68">68</button>
+      <button type="button" data-inema-set-linewidth="75">75</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Entrelinha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-leading="1.45">Compacta</button>
+      <button type="button" data-inema-set-leading="1.7">Confortável</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Acento</span>
+    <div class="inema-accent-grid">
+      <button type="button" data-inema-set-accent="emerald" data-accent="emerald" aria-label="Acento emerald"></button>
+<button type="button" data-inema-set-accent="blue" data-accent="blue" aria-label="Acento blue"></button>
+<button type="button" data-inema-set-accent="purple" data-accent="purple" aria-label="Acento purple"></button>
+<button type="button" data-inema-set-accent="amber" data-accent="amber" aria-label="Acento amber"></button>
+<button type="button" data-inema-set-accent="teal" data-accent="teal" aria-label="Acento teal"></button>
+<button type="button" data-inema-set-accent="rose" data-accent="rose" aria-label="Acento rose"></button>
+    </div>
+  </div>
+</div>
+        </div>
+        <button id="theme-toggle" type="button" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors" aria-label="Alternar tema claro e escuro">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          </svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Breadcrumb">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-amber-400">Início</a>
+    <span>/</span>
+    <a href="index.html" class="hover:text-amber-400">Trilha 4</a>
+    <span>/</span>
+    <span class="text-amber-400">Módulo 4.1</span>
+  </div>
+</nav>
+<header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-y border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MÓDULO 4.1</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🎛️ Controle da conversa</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Parar, priorizar e dar voz. Os interruptores que cancelam o que está em voo, os quatro modos de fila com os limites reais, a persona em três camadas, o custo fixo do prompt, os servidores MCP de um agente só e onde conferir a sintaxe quando a memória falha.</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-3xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">75</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Prático</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Fase 9</div><div class="text-xs text-neutral-400">Origem</div></div>
+    </div>
+    <div class="mt-8 max-w-xl"><div data-inema-meter="modulo:4-1" class="course-meter p-5 rounded-xl bg-dark-800/70 border border-dark-600" aria-label="Progresso do módulo 4.1">
+  <div class="flex items-center justify-between gap-4">
+    <span class="text-sm text-neutral-400">Progresso do módulo 4.1</span>
+    <span class="text-sm font-semibold text-primary" data-inema-meter-pct>0%</span>
+  </div>
+  <div class="flex items-center justify-between gap-4 mt-1">
+    <span class="text-xs text-neutral-500" data-inema-meter-frac>0 de 0</span>
+  </div>
+  <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+</div></div>
+  </div>
+</header>
+<main id="conteudo" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <article id="modulo-4-1" data-inema-module="4-1" data-inema-track="4" class="grid grid-cols-1 lg:grid-cols-[1fr_16rem] gap-10">
+    <div class="inema-prose max-w-none min-w-0">
+      <section id="topico-1" data-inema-topic="modulo-4-1#topico-1" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">🛑 Interruptores: /parar e /retomar</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m4-1-t1-p1"><code>/parar [tudo|agentes|&lt;agente&gt;] [motivo]</code> é o freio de mão. Ele grava um <strong class="text-amber-400">interruptor</strong> na tabela <code>prefs</code> (um armazém de chave e valor por chat, onde <code>'*'</code> vale como global), então ele sobrevive a restart do serviço. <code>/parar</code> sozinho lista o que está ligado, com o motivo que você escreveu. <code>/retomar</code> sem alvo desliga todos.</p>
+  <div class="rounded-2xl border border-amber-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 250" class="w-full h-auto" role="img" aria-label="Os três alvos do comando parar. Parar tudo bloqueia respostas e agentes e deixa passar comandos de barra e manutenção no Ollama. Parar agentes bloqueia só o claude menos p e mantém a resposta direta no Ollama. Parar um agente específico bloqueia apenas aquele.">
+  <defs>
+    <linearGradient id="m41a-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+    <filter id="m41a-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="m41a-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#f59e0b" opacity="0.12"/></pattern>
+    <marker id="m41a-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="250" fill="url(#m41a-grid)"/>
+  <g fill="none" stroke="#38bdf8" stroke-width="1.8" opacity="0.5">
+    <path d="M226,125 C300,125 300,52 380,52" marker-end="url(#m41a-ahc)"/><path d="M226,125 L380,125" marker-end="url(#m41a-ahc)"/><path d="M226,125 C300,125 300,198 380,198" marker-end="url(#m41a-ahc)"/>
+  </g>
+  <g filter="url(#m41a-glow)"><rect x="60" y="87" width="166" height="76" rx="14" fill="#1f1604" stroke="url(#m41a-grad)" stroke-width="2"/></g>
+  <text x="143" y="119" text-anchor="middle" fill="#fbbf24" font-family="Inter,sans-serif" font-weight="600" font-size="21">/parar</text>
+  <text x="143" y="141" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">grava em prefs, cancela em voo</text>
+  <g font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#bfe6ff">
+    <g class="wf-a"><rect x="380" y="32" width="550" height="40" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="394" y="49">tudo: nenhuma resposta, nenhum agente</text><text x="394" y="65" fill="#9ecbe8" font-weight="400">passam: comandos de barra e manutenção na lane ollama</text></g>
+    <g class="wf-a"><rect x="380" y="105" width="550" height="40" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="394" y="122">agentes: nenhum claude -p, lead ou especialista</text><text x="394" y="138" fill="#9ecbe8" font-weight="400">passa: resposta direta no Ollama</text></g>
+    <g class="wf-a"><rect x="380" y="178" width="550" height="40" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="394" y="195">agente:&lt;id&gt;: só aquele, por exemplo /parar ops quebrou</text><text x="394" y="211" fill="#9ecbe8" font-weight="400">passa: todo o resto</text></g>
+  </g>
+</svg>
+</div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m4-1-t1-p3">Legenda: quanto mais alto o alvo, mais coisa para. Nenhum deles derruba o serviço, e nenhum deles apaga job: a fila continua sendo o histórico.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6"><h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Escrever o motivo: <code>/parar agentes revisando o prompt</code>. Ele aparece quando você mandar <code>/parar</code> sozinho.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Usar <code>/parar &lt;agente&gt;</code> quando o problema é de um especialista só, por exemplo <code>ops</code>.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Contar até 30 s antes de concluir que não parou: o processo em execução morre na batida seguinte do worker.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Lembrar que consolidação, ingestão, indexação e backup seguem rodando na lane <code>ollama</code>.</span></li>
+    </ul></div>
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6"><h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Reiniciar o serviço para "parar": o interruptor persiste e o restart não cancela nada a mais.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Esquecer o <code>/retomar</code>: o bot vai continuar mudo amanhã, e o motivo escrito é a única pista.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Achar que job enfileirado antes do <code>/parar</code> vai rodar: ele falha ao ser pego, com o motivo, sem gastar token.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Contar com <code>/parar</code> para bloquear comando de barra: comando sempre responde.</span></li>
+    </ul></div>
+  </div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p class="text-neutral-300" data-inema-block="m4-1-t1-p2">Ligar um interruptor cancela o que está em voo nas lanes <code>chat</code>, <code>agente</code> e <code>io</code> que bate com o alvo. É cancelamento sem corrida: a fila marca o job como cancelado e o worker desiste. O que não é instantâneo é o subprocesso já rodando, porque quem mata é o worker na próxima batida.</p>
+</div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+<section id="topico-2" data-inema-topic="modulo-4-1#topico-2" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">🚦 Modos de fila: /fila</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m4-1-t2-p1">Uma mensagem sua chega enquanto outra ainda está sendo respondida. O que fazer com ela é escolha sua, por chat, com <code>/fila collect|followup|steer|interrupt</code>. O padrão é <code>collect</code>. A ideia veio do openclaw, e dois dos quatro modos têm um limite que vale conhecer antes de confiar neles.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-4 mb-3 overflow-x-auto">
+  <table class="tbl"><thead><tr><th>Modo</th><th>Comportamento</th><th>Diferença para o openclaw</th></tr></thead><tbody>
+    <tr><td><code>collect</code></td><td>junta mensagens seguidas por 2 s e responde uma vez</td><td>igual</td></tr>
+    <tr><td><code>followup</code></td><td>sem janela; se ocupado, entra na fila e responde depois</td><td>igual</td></tr>
+    <tr><td><code>steer</code></td><td>se ocupado, substitui o que estava na fila deste chat pela nova, com prioridade alta</td><td>o openclaw injeta no agente em execução; com <code>claude -p</code> em subprocesso não dá, então a mensagem só entra quando o agente atual terminar</td></tr>
+    <tr><td><code>interrupt</code></td><td>cancela fila e agentes deste chat (por <code>flow_ref = canal:chat</code>) e responde à nova agora</td><td>resposta direta já em voo no Ollama não é abortável: ela termina e é descartada, por um contador de geração por chat</td></tr>
+  </tbody></table>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m4-1-t2-p3">Legenda: a terceira coluna é a parte honesta. <code>steer</code> muda a fila, não o agente que já está rodando; <code>interrupt</code> joga fora a resposta pronta em vez de interromper a geração.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">⏱</span> Uma mensagem em modo interrupt, segundo a segundo</h3>
+    <ol class="relative border-l border-amber-500/30 ml-3 space-y-5">
+      <li class="ml-6"><span class="absolute -left-2 w-4 h-4 rounded-full bg-amber-500/40 border border-amber-500/60"></span><strong class="text-neutral-100">t0</strong><span class="text-neutral-400"> você pergunta algo; o roteador manda para agente e o job entra na lane <code>agente</code>.</span></li>
+      <li class="ml-6"><span class="absolute -left-2 w-4 h-4 rounded-full bg-amber-500/40 border border-amber-500/60"></span><strong class="text-neutral-100">t0 + 40 s</strong><span class="text-neutral-400"> você percebe que pediu errado e manda a mensagem certa.</span></li>
+      <li class="ml-6"><span class="absolute -left-2 w-4 h-4 rounded-full bg-amber-500/40 border border-amber-500/60"></span><strong class="text-neutral-100">imediato</strong><span class="text-neutral-400"> o contador de geração do chat avança e o cancelamento por <code>flow_ref</code> acontece antes de qualquer checagem.</span></li>
+      <li class="ml-6"><span class="absolute -left-2 w-4 h-4 rounded-full bg-amber-500/40 border border-amber-500/60"></span><strong class="text-neutral-100">até 30 s</strong><span class="text-neutral-400"> o <code>claude -p</code> cancelado morre na batida seguinte do worker.</span></li>
+      <li class="ml-6"><span class="absolute -left-2 w-4 h-4 rounded-full bg-amber-500/40 border border-amber-500/60"></span><strong class="text-neutral-100">em paralelo</strong><span class="text-neutral-400"> a nova mensagem já está sendo respondida; se a antiga produzir texto, ele é descartado.</span></li>
+    </ol>
+  </div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p class="text-neutral-300" data-inema-block="m4-1-t2-p2">Essa correção do <code>interrupt</code> é a versão 3.2.2. Antes dela, o teste de "tem algo em curso" só olhava a resposta direta, e no caso comum (agente rodando na fila, resposta direta já encerrada) o <code>claude -p</code> seguia vivo. Foi achado em revisão, não em produção. Se você leu documentação antiga, confira a versão com <code>/versao</code>.</p>
+</div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-amber-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copiar e rodar: escolher o modo do chat</h3>
+    <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-300">Objetivo:</strong> ver o modo atual, trocar para <code>interrupt</code> e voltar ao padrão, no chat do Telegram com o bot.</p>
+    <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>/fila
+/fila interrupt
+/ajuda fila
+/fila collect</code></pre>
+    <p class="text-sm text-neutral-400 mt-3"><strong class="text-neutral-300">Como verificar:</strong> <code>/fila</code> sem argumento responde qual modo está valendo neste chat. Depois de trocar, mande uma pergunta longa e, enquanto ela roda, mande outra: em <code>interrupt</code> a segunda é respondida e a primeira some; em <code>collect</code> as duas viram uma resposta só. O modo fica gravado em <code>prefs</code>, então continua valendo depois de um restart.</p>
+  </div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+<section id="topico-3" data-inema-topic="modulo-4-1#topico-3" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">🗣️ Persona em três camadas</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m4-1-t3-p1">A voz do bot não vem de um arquivo só. São três camadas, sempre somadas, sempre nesta ordem dentro do prompt. Vale tanto para a resposta direta no Ollama quanto para os agentes. A ideia da alma fixa por agente veio do Hermes.</p>
+  <div class="rounded-2xl border border-amber-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 230" class="w-full h-auto" role="img" aria-label="Três camadas empilhadas no prompt: identidade ponto m d na raiz, que nunca sai; o arquivo SOUL ponto m d da pasta do agente, que precisa de restart; e o arquivo escolhido em personalidades, trocado por chat com o comando personality. As três somadas formam a voz final.">
+  <defs>
+    <linearGradient id="m41b-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+    <filter id="m41b-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="m41b-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#f59e0b" opacity="0.12"/></pattern>
+    <marker id="m41b-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="230" fill="url(#m41b-grid)"/>
+  <g font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#bfe6ff">
+    <g class="wf-a"><rect x="60" y="26" width="520" height="46" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="76" y="46">1. IDENTIDADE.md (raiz)</text><text x="76" y="63" fill="#9ecbe8" font-weight="400">a base do bot, nunca sai do prompt</text></g>
+    <g class="wf-a"><rect x="60" y="88" width="520" height="46" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="76" y="108">2. agents/&lt;id&gt;/SOUL.md</text><text x="76" y="125" fill="#9ecbe8" font-weight="400">persona fixa daquele agente, opcional, pede restart</text></g>
+    <g class="wf-a"><rect x="60" y="150" width="520" height="46" rx="10" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="76" y="170">3. personalidades/&lt;nome&gt;.md</text><text x="76" y="187" fill="#9ecbe8" font-weight="400">escolhida por chat com /personality, vale já</text></g>
+  </g>
+  <g fill="none" stroke="#fbbf24" stroke-width="1.8" opacity="0.6">
+    <path d="M580,49 C660,49 660,111 740,111" marker-end="url(#m41b-ah)"/><path d="M580,111 L740,111" marker-end="url(#m41b-ah)"/><path d="M580,173 C660,173 660,111 740,111" marker-end="url(#m41b-ah)"/>
+  </g>
+  <g filter="url(#m41b-glow)"><rect x="740" y="73" width="200" height="76" rx="14" fill="#1f1604" stroke="url(#m41b-grad)" stroke-width="2"/></g>
+  <text x="840" y="105" text-anchor="middle" fill="#fbbf24" font-family="Inter,sans-serif" font-weight="600" font-size="19">voz final</text>
+  <text x="840" y="127" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">direto e agente, mesma soma</text>
+</svg>
+</div>
+  <p class="text-xs text-neutral-500 mb-6">Legenda: a camada 1 não é negociável, por isso uma personalidade não consegue apagar um limite da identidade. A camada 2 mora com o agente; a 3 é sua, naquele chat.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-amber-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copiar e rodar: trocar a voz deste chat</h3>
+    <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-300">Objetivo:</strong> listar as personalidades disponíveis, ligar uma e voltar ao padrão. Duas já vêm no repositório: <code>curto</code> e <code>professor</code>.</p>
+    <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>/personality
+/personality professor
+/personality off</code></pre>
+    <p class="text-sm text-neutral-400 mt-3"><strong class="text-neutral-300">Como verificar:</strong> sem argumento, o comando lista as disponíveis. Depois de trocar, a próxima resposta já sai na voz nova. Para criar a sua, crie um arquivo <code>personalidades/&lt;nome-que-voce-escolhe&gt;.md</code> e chame por esse nome.</p>
+  </div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p class="text-neutral-300" data-inema-block="m4-1-t3-p2">Trocar a personalidade apaga as sessões retomadas daquele chat. Não é efeito colateral: uma sessão <code>--resume</code> de até 6 h faria o agente continuar com a voz antiga. Já o <code>SOUL.md</code> de um agente só entra depois de reiniciar o serviço, porque o registry de agentes lê a pasta uma vez.</p>
+</div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+<section id="topico-4" data-inema-topic="modulo-4-1#topico-4" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">🧮 /context: o custo fixo do prompt</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m4-1-t4-p1"><code>/context [detail] [texto]</code> mede, sem chamar modelo de chat, quanto do prompt é cada camada: identidade, persona, <code>USER.md</code>, memória e insights, histórico, skills, regras e a sua mensagem. Mostra os números para a resposta direta e para o agente, que montam prompts diferentes. Sem <code>texto</code>, ele usa a sua última mensagem do chat como consulta.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-5 mb-3">
+    <div class="flex items-center gap-2 mb-3"><span class="w-3 h-3 rounded-full bg-red-400/70"></span><span class="w-3 h-3 rounded-full bg-amber-400/70"></span><span class="w-3 h-3 rounded-full bg-emerald-400/70"></span><span class="text-xs text-neutral-500 ml-2">/context (recriação ilustrativa, não é captura real)</span></div>
+    <div class="mock text-neutral-300">Camadas do prompt
+identidade      IDENTIDADE.md
+persona         personalidades + SOUL.md
+USER.md         perfil do usuário
+memória         itens recuperados + insights
+histórico       turnos recentes do chat
+skills          só nome e descrição
+regras          limites operacionais
+mensagem        sua consulta
+
+detail lista item a item o que entrou em memória e histórico</div>
+  </div>
+  <p class="text-xs text-neutral-500 mb-6" data-inema-block="m4-1-t4-p2">Legenda: a forma da saída é esta, com a contagem de tokens de cada linha, para os dois caminhos. Os números dependem do seu chat, por isso não estão reproduzidos aqui.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6"><h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Rodar <code>/context</code> quando as respostas ficarem caras sem motivo aparente.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Usar <code>/context detail</code> para ver item a item o que a memória trouxe.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Passar um texto de consulta quando quiser simular outro assunto: <code>/context detail &lt;assunto-que-voce-quer-testar&gt;</code>.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Comparar as duas colunas: overhead fixo alto pesa mais na rota de agente.</span></li>
+    </ul></div>
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6"><h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Achar que <code>/context</code> gasta token de chat: ele só conta, não chama modelo de conversa.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Temer que consultar infle a memória: o retrieval roda em modo somente leitura e não mexe na saliência.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Cortar memória boa antes de medir; muitas vezes o peso está no histórico.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Confundir com <code>/usage</code>, que é dinheiro gasto, não tamanho de prompt.</span></li>
+    </ul></div>
+  </div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+<section id="topico-5" data-inema-topic="modulo-4-1#topico-5" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">🔌 mcp_config por agente</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m4-1-t5-p1"><strong class="text-amber-400">Novo aqui?</strong> MCP é o protocolo pelo qual um assistente conversa com ferramentas externas: um servidor MCP expõe ações (ler arquivo, baixar vídeo, consultar API) e o cliente chama. Por padrão, um agente do v3 herda os servidores MCP configurados no seu <code>~/.claude</code>. A chave <code>mcp_config</code> troca isso por uma lista fechada.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-amber-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copiar e rodar: dar a um agente só os servidores dele</h3>
+    <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-300">Objetivo:</strong> criar o JSON na pasta do agente e apontar o <code>agent.yaml</code> para ele. Os dois exemplos saem de <code>agents/_template/mcp.json.example</code>.</p>
+    <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code># agents/&lt;id-do-agente&gt;/mcp.json
+{
+  "mcpServers": {
+    "exemplo-http": { "type": "http", "url": "http://127.0.0.1:8010/mcp" },
+    "exemplo-stdio": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/&lt;seu-usuario&gt;/projetos"] }
+  }
+}
+
+# agents/&lt;id-do-agente&gt;/agent.yaml
+mcp_config: mcp.json</code></pre>
+    <p class="text-sm text-neutral-400 mt-3"><strong class="text-neutral-300">Como verificar:</strong> reinicie o serviço com <code>bash scripts/instalar-servico.sh</code> para o registry reler a pasta. A partir daí o runner sobe o <code>claude -p</code> com <code>--mcp-config &lt;arquivo&gt; --strict-mcp-config</code>, e o agente enxerga apenas esses servidores. O caminho é relativo à pasta do agente.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6"><h4 class="font-bold text-emerald-400 mb-4">✓ Quando usar</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Especialista de pesquisa que não deveria ter ferramenta de escrita.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Agente que precisa de um servidor local específico e de mais nada.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Quando você quer que o comportamento do agente não mude junto com a sua máquina.</span></li>
+    </ul></div>
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6"><h4 class="font-bold text-red-400 mb-4">✗ Onde erra</h4><ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Caminho absoluto do outro computador: use o nome do arquivo na própria pasta.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Esperar que valha sem restart: o registry lê a pasta do agente no boot.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Deixar a chave e esquecer um servidor de que o agente precisa: com <code>strict</code>, o que não está listado não existe.</span></li>
+    </ul></div>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m4-1-t5-p2">Sem a chave <code>mcp_config</code>, nada muda: o agente herda os MCP do usuário, como sempre foi. Um cliente MCP nativo no caminho da resposta direta no Ollama é outra coisa, e está anotado como fase 10 em <code>docs/INCORPORAR-V3.md</code>, sem ordem de início.</p>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+<section id="topico-6" data-inema-topic="modulo-4-1#topico-6" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="grid place-items-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">📘 /ajuda &lt;comando&gt; e o CHANGELOG</h2>
+    </div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button>
+  </div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m4-1-t6-p1">Os cinco comandos deste módulo têm detalhe embutido. <code>/ajuda</code> lista tudo por grupo, incluindo o bloco "Controle da conversa"; <code>/ajuda &lt;comando&gt;</code> abre o texto longo de <code>parar</code>, <code>retomar</code>, <code>fila</code>, <code>personality</code> e <code>context</code>. Para os demais comandos, a resposta diz que não há detalhe e lista os que têm.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">⏱</span> De onde veio este módulo</h3>
+    <ol class="relative border-l border-amber-500/30 ml-3 space-y-5">
+      <li class="ml-6"><span class="absolute -left-2 w-4 h-4 rounded-full bg-amber-500/40 border border-amber-500/60"></span><strong class="text-neutral-100">3.2.1, fase 9 "Jarvis obedece"</strong><span class="text-neutral-400"> seis itens de <code>docs/INCORPORAR-V3.md</code>, um commit cada, tudo em <code>prefs</code> pela migration 8: interruptores, modos de fila, SOUL e personality, <code>/context</code>, <code>doctor --deep</code> e <code>mcp_config</code>. Testes: 187 passando.</span></li>
+      <li class="ml-6"><span class="absolute -left-2 w-4 h-4 rounded-full bg-amber-500/40 border border-amber-500/60"></span><strong class="text-neutral-100">3.2.2</strong><span class="text-neutral-400"> correção do <code>interrupt</code> que não pegava agente em voo, achada em revisão.</span></li>
+      <li class="ml-6"><span class="absolute -left-2 w-4 h-4 rounded-full bg-amber-500/40 border border-amber-500/60"></span><strong class="text-neutral-100">3.2.3</strong><span class="text-neutral-400"> a documentação: seção 9b do README e o <code>/ajuda</code> com detalhe por comando. É a fonte deste módulo.</span></li>
+    </ol>
+  </div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p class="text-neutral-300" data-inema-block="m4-1-t6-p2">Quando a resposta do bot contradiz o que você lembra da documentação, confie no <code>/versao</code> e no CHANGELOG, nessa ordem. Os comandos de controle são novos, e a seção 9b do README é o texto que acompanha o código que está no ar.</p>
+</div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+      <section class="mb-12">
+  <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+    <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do módulo</h2>
+    <div class="space-y-4 mb-8">
+      <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Interruptores persistem</strong><span class="text-neutral-400"> - <code>/parar tudo|agentes|&lt;agente&gt; [motivo]</code> grava em <code>prefs</code>; comandos e manutenção na lane <code>ollama</code> seguem</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Nada morre na hora</strong><span class="text-neutral-400"> - processo em execução cai na batida seguinte do worker, até 30 s; job enfileirado antes falha sem gastar token</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Quatro modos de fila</strong><span class="text-neutral-400"> - <code>collect</code> é o padrão; <code>steer</code> não injeta no agente em voo; <code>interrupt</code> descarta a resposta direta por geração</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Persona em três camadas</strong><span class="text-neutral-400"> - <code>IDENTIDADE.md</code>, <code>SOUL.md</code> do agente (pede restart), <code>personalidades/*.md</code> por chat; trocar apaga a sessão retomada</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">/context mede, não gasta</strong><span class="text-neutral-400"> - tokens por camada, direto e agente; <code>detail</code> lista os itens; retrieval só leitura</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">mcp_config fecha a caixa</strong><span class="text-neutral-400"> - <code>--mcp-config &lt;arquivo&gt; --strict-mcp-config</code>; sem a chave, herda os MCP do usuário</span></div></div>
+    </div>
+    <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+      <h3 class="font-semibold text-amber-400 mb-2">Próximo módulo:</h3>
+      <p class="text-neutral-300">4.2 - Agentes, skills, custo e o que vem: a pasta que vira agente, o arquivo que vira skill, os tiers de custo com trava, o gestor do Ollama e o roadmap.</p>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">Voltar para a Trilha 4</a>
+      <a href="modulo-4-2.html" class="flex-1 text-center px-6 py-3 bg-amber-500/20 border border-amber-500/30 text-amber-400 rounded-lg font-semibold hover:bg-amber-500/30 transition-colors">Próximo módulo: Agentes, skills, custo e o que vem</a>
+    </div>
+  </div>
+</section>
+    </div>
+    <nav data-inema-toc aria-label="Índice da página" class="hidden lg:block sticky top-24 self-start">
+  <p class="inema-toc-progress"><span data-inema-section-counter>Seção 1 de 6</span></p>
+  <ul class="space-y-1">
+    <li><a href="#topico-1">1. Interruptores</a></li>
+<li><a href="#topico-2">2. Modos de fila</a></li>
+<li><a href="#topico-3">3. Persona em camadas</a></li>
+<li><a href="#topico-4">4. /context</a></li>
+<li><a href="#topico-5">5. mcp_config por agente</a></li>
+<li><a href="#topico-6">6. /ajuda e CHANGELOG</a></li>
+  </ul>
+</nav>
+  </article>
+</main>
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>openpcbot v3: seu Jarvis local · INEMA.CLUB · 2026</p>
+    </div>
+  </footer>
+  <script>
+function toggleTopic(button) {
+  var panelId = button.getAttribute('aria-controls');
+  var explanation = panelId ? document.getElementById(panelId) : null;
+  if (!explanation) return;
+  var moduleCard = button.closest('[data-inema-module]') || button.closest('.module-shell') || document;
+  moduleCard.querySelectorAll('.topic-explanation.active').forEach(function (exp) {
+    if (exp !== explanation) {
+      exp.classList.remove('active');
+      var other = moduleCard.querySelector('[aria-controls="' + exp.id + '"]');
+      if (other) other.setAttribute('aria-expanded', 'false');
+    }
+  });
+  var next = !explanation.classList.contains('active');
+  explanation.classList.toggle('active', next);
+  button.setAttribute('aria-expanded', next ? 'true' : 'false');
+}
+function openModal(modalId) {
+  var modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    var close = modal.querySelector('[data-modal-close]');
+    if (close) close.focus();
+  }
+}
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(function (modal) {
+    modal.classList.add('hidden');
+  });
+  document.body.style.overflow = 'auto';
+}
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+<script src="../../assets/learn.js"></script>
+<script>
+if (window.INEMA && typeof window.INEMA.init === 'function') {
+  window.INEMA.init();
+}
+document.addEventListener('click', function (e) {
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var nav = t.closest('nav');
+  if (!nav) return;
+  var journey = t.closest('[data-inema-journey-open]');
+  if (journey && window.INEMA && INEMA.openJourney) {
+    e.preventDefault();
+    INEMA.openJourney();
+    return;
+  }
+  var toggle = t.closest('[data-inema-appearance-toggle]');
+  if (toggle) {
+    var targetSel = toggle.getAttribute('data-inema-appearance-toggle');
+    var panel = targetSel ? document.querySelector(targetSel) : document.querySelector('[data-inema-appearance]');
+    if (panel) {
+      var open = panel.getAttribute('data-open') !== 'true';
+      panel.setAttribute('data-open', open ? 'true' : 'false');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    return;
+  }
+  var pairs = [
+    ['data-inema-set-theme', 'theme'],
+    ['data-inema-set-font', 'font'],
+    ['data-inema-set-fontscale', 'fontScale'],
+    ['data-inema-set-linewidth', 'lineWidth'],
+    ['data-inema-set-leading', 'leading'],
+    ['data-inema-set-accent', 'accent']
+  ];
+  for (var i = 0; i < pairs.length; i++) {
+    var btn = t.closest('[' + pairs[i][0] + ']');
+    if (btn && window.INEMA && INEMA.setPref) {
+      var raw = btn.getAttribute(pairs[i][0]);
+      var key = pairs[i][1];
+      var value = key === 'fontScale' || key === 'lineWidth' ? parseInt(raw, 10) : (key === 'leading' ? parseFloat(raw) : raw);
+      INEMA.setPref(key, value);
+      return;
+    }
+  }
+  var theme = t.closest('#theme-toggle');
+  if (theme) {
+    var html = document.documentElement;
+    var next = html.classList.contains('dark') ? 'claro' : 'inema-dark';
+    if (window.INEMA && INEMA.setPref) {
+      INEMA.setPref('theme', next);
+    } else {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    }
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="inema-course" content="curso-openpcbotv3">
+  <script>
+(function () {
+  try {
+    var html = document.documentElement;
+    var DEF = { theme: 'inema-dark', font: 'inter', fontScale: 100, lineWidth: 68, leading: 1.7, accent: 'emerald' };
+    function clone(o) { var r = {}; for (var x in o) r[x] = o[x]; return r; }
+    var p = clone(DEF);
+    try {
+      var raw = localStorage.getItem('inema.prefs');
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          for (var k in DEF) if (parsed[k] != null) p[k] = parsed[k];
+        }
+      } else {
+        var legacy = localStorage.getItem('theme');
+        if (legacy === 'light') p.theme = 'claro';
+        else if (legacy === 'dark') p.theme = 'inema-dark';
+      }
+    } catch (e) { p = clone(DEF); }
+    var THEMES = {
+      'inema-dark': { dark: true,  attr: null,        cs: 'dark'  },
+      'claro':      { dark: false, attr: null,        cs: 'light' },
+      'sepia':      { dark: false, attr: 'sepia',     cs: 'light' },
+      'foco':       { dark: null,  attr: 'foco',      cs: null    },
+      'contraste':  { dark: true,  attr: 'contraste', cs: 'dark'  }
+    };
+    var t = THEMES[p.theme] || THEMES['inema-dark'];
+    if (t.dark === true) html.classList.add('dark');
+    else if (t.dark === false) html.classList.remove('dark');
+    if (t.attr) html.setAttribute('data-theme', t.attr);
+    else html.removeAttribute('data-theme');
+    html.style.colorScheme = (t.cs ? t.cs : (html.classList.contains('dark') ? 'dark' : 'light'));
+    html.setAttribute('data-font', p.font || 'inter');
+    html.setAttribute('data-accent', p.accent || 'emerald');
+    var s = html.style;
+    var scale = (+p.fontScale || 100);
+    s.setProperty('--inema-font-scale', (scale / 100).toString());
+    s.setProperty('font-size', scale + '%');
+    s.setProperty('--measure', (+p.lineWidth || 68) + 'ch');
+    s.setProperty('--lh-body', (+p.leading || 1.7).toString());
+    var fam = p.font === 'system'
+      ? 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+      : (p.font === 'leitura'
+        ? '"Atkinson Hyperlegible", "Inter", system-ui, sans-serif'
+        : '"Inter", system-ui, sans-serif');
+    s.setProperty('--font-body', fam);
+    var ACC = {
+      emerald: [152, 76, 45], blue: [217, 91, 60], purple: [258, 90, 66],
+      amber: [38, 92, 50], teal: [174, 72, 41], rose: [350, 89, 60]
+    };
+    var a = ACC[p.accent] || ACC.emerald;
+    s.setProperty('--accent-h', a[0] + '');
+    s.setProperty('--accent-s', a[1] + '%');
+    s.setProperty('--accent-l', a[2] + '%');
+    s.setProperty('--accent', 'hsl(' + a[0] + ' ' + a[1] + '% ' + a[2] + '%)');
+  } catch (err) {
+    try { document.documentElement.classList.add('dark'); document.documentElement.style.colorScheme = 'dark'; } catch (e) {}
+  }
+})();
+</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <script type="application/json" data-inema-manifest>
+{
+  "course": "curso-openpcbotv3",
+  "tracks": [
+    {
+      "n": "1",
+      "title": "Fundamentos",
+      "modules": [
+        {
+          "id": "1-1",
+          "title": "O que é o openpcbot v3",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-1.html"
+        },
+        {
+          "id": "1-2",
+          "title": "O caminho de uma mensagem",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-2.html"
+        }
+      ]
+    },
+    {
+      "n": "2",
+      "title": "Instalar e operar",
+      "modules": [
+        {
+          "id": "2-1",
+          "title": "Subir o v3",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-1.html"
+        },
+        {
+          "id": "2-2",
+          "title": "Operar no dia a dia",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-2.html"
+        }
+      ]
+    },
+    {
+      "n": "3",
+      "title": "Usar no dia a dia",
+      "modules": [
+        {
+          "id": "3-1",
+          "title": "Comandos e conversa",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-1.html"
+        },
+        {
+          "id": "3-2",
+          "title": "Cérebro e conectores",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-2.html"
+        }
+      ]
+    },
+    {
+      "n": "4",
+      "title": "Configurar e estender",
+      "modules": [
+        {
+          "id": "4-1",
+          "title": "Controle da conversa",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-1.html"
+        },
+        {
+          "id": "4-2",
+          "title": "Agentes, skills, custo e o que vem",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-2.html"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Módulo 2.1: Subir o v3 | openpcbot v3: seu Jarvis local</title>
+  <style>
+body { font-family: 'Inter', sans-serif; }
+.dark body { background-color: #111827; }
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 100;
+  padding: .75rem 1rem;
+  background: #111827;
+  color: #facc15;
+  border: 1px solid #4b5563;
+  border-radius: .5rem;
+}
+.skip:focus { left: .75rem; top: .75rem; }
+.topic-explanation { display: none; }
+.topic-explanation.active { display: block; }
+.dark .border-dark-600 { border-color: #374151; }
+.dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+html:not(.dark) body { background-color: #f8fafc; } html:not(.dark) .bg-dark-900 { background-color: #ffffff; } html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; } html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; } html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+html:not(.dark) .bg-dark-800\/50 { background-color: rgba(249, 250, 251, 0.88); } html:not(.dark) .bg-dark-800\/70 { background-color: rgba(249, 250, 251, 0.94); } html:not(.dark) .bg-dark-900\/40 { background-color: rgba(255, 255, 255, 0.72); }
+html:not(.dark) .bg-dark-700\/30 { background-color: rgba(243, 244, 246, 0.72); } html:not(.dark) .bg-dark-700\/50 { background-color: rgba(243, 244, 246, 0.86); } html:not(.dark) .text-neutral-100 { color: #111827; }
+html:not(.dark) .text-neutral-200 { color: #1f2937; } html:not(.dark) .text-neutral-300 { color: #4b5563; } html:not(.dark) .text-neutral-400 { color: #6b7280; }
+html:not(.dark) .text-neutral-500 { color: #9ca3af; } html:not(.dark) .text-white { color: #111827; } html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+html:not(.dark) .border-dark-700 { border-color: #e5e7eb; } html:not(.dark) .text-emerald-400 { color: #059669; } html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; } html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); } html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); } html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); } html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); } html:not(.dark) .text-blue-400 { color: #2563eb; } html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; } html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); } html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); } html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); } html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); } html:not(.dark) .text-purple-400 { color: #7c3aed; } html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; } html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); } html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124, 58, 237, 0.08); } html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); } html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); } html:not(.dark) .text-amber-400 { color: #92400e; } html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+html:not(.dark) .group:hover .group-hover\:text-amber-400 { color: #92400e; } html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); } html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) .bg-amber-900\/20 { background-color: rgba(217, 119, 6, 0.08); } html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); } html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(217, 119, 6, 0.18); }
+html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); } html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; } html:not(.dark) .text-primary { color: #a16207; }
+html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+html:not(.dark) .border-primary\/30,
+html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); } html:not(.dark) .text-sky-400 { color: #0369a1; } html:not(.dark) .text-yellow-400 { color: #a16207; }
+html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; } html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; } html:not(.dark) .bg-red-900\/20 { background-color: rgba(220, 38, 38, 0.08); }
+html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.24); } html:not(.dark) .text-red-400 { color: #b91c1c; } html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+@keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+@media (prefers-reduced-motion: no-preference) {
+  .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+  .wf-a:nth-child(2){animation-delay:.25s}
+  .wf-a:nth-child(3){animation-delay:.5s}
+  .wf-a:nth-child(4){animation-delay:.75s}
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+.module-shell { scroll-margin-top: 5rem; }
+.inema-prose pre, .inema-prose .mock { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
+article[data-inema-module] > .inema-prose { width: 100%; min-width: 0; }
+.topic-section { scroll-margin-top: 5rem; }
+.course-meter .inema-bar { margin-top: .75rem; }
+table.tabela-ops { width: 100%; border-collapse: collapse; font-size: .875rem; }
+table.tabela-ops th, table.tabela-ops td { text-align: left; padding: .5rem .75rem; border-bottom: 1px solid #374151; vertical-align: top; }
+html:not(.dark) table.tabela-ops th, html:not(.dark) table.tabela-ops td { border-bottom-color: #d1d5db; }
+  </style>
+  <link rel="stylesheet" href="../../assets/learn.css">
+
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-wrap justify-between items-center min-h-14 gap-3 py-2">
+      <div class="flex items-center space-x-4 min-w-0">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🧠</span>
+          <span class="font-bold text-lg hidden sm:inline">openpcbot v3</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        <span class="text-neutral-600">-</span>
+        <a href="https://inema.pro" target="_blank" class="text-amber-700 hover:text-amber-600 dark:text-slate-300 dark:hover:text-slate-200 text-sm font-medium">PRO</a>
+</div>
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href="../trilha1/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+        <span class="sm:hidden">T1</span>
+        <span class="hidden sm:inline">Fundamentos</span>
+      </a>
+<a href="index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+        <span class="sm:hidden">T2</span>
+        <span class="hidden sm:inline">Instalar e operar</span>
+      </a>
+<a href="../trilha3/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+        <span class="sm:hidden">T3</span>
+        <span class="hidden sm:inline">Usar no dia a dia</span>
+      </a>
+<a href="../trilha4/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+        <span class="sm:hidden">T4</span>
+        <span class="hidden sm:inline">Configurar e estender</span>
+      </a>
+        <button type="button" data-inema-journey-open class="inline-flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 transition-colors">
+          <span aria-hidden="true">◷</span>
+          <span class="hidden lg:inline">Minha jornada</span>
+          <span class="inema-journey-badge hidden" data-inema-journey-badge data-count="0" aria-hidden="true"></span>
+</button>
+        <div class="relative">
+          <button type="button" class="inema-appearance-trigger" data-inema-appearance-toggle="[data-inema-appearance]" aria-expanded="false" aria-label="Aparência">
+            <span aria-hidden="true">◑</span>
+            <span class="hidden lg:inline">Aparência</span>
+</button>
+          <div data-inema-appearance class="inema-appearance-pop right-0">
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Tema</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-theme="inema-dark">Escuro</button>
+      <button type="button" data-inema-set-theme="claro">Claro</button>
+      <button type="button" data-inema-set-theme="sepia">Sépia</button>
+      <button type="button" data-inema-set-theme="foco">Foco</button>
+      <button type="button" data-inema-set-theme="contraste">Contraste</button>
+</div></div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Fonte</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-font="inter">Inter</button>
+      <button type="button" data-inema-set-font="system">Sistema</button>
+      <button type="button" data-inema-set-font="leitura">Leitura</button>
+</div></div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Texto</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-fontscale="100">A</button>
+      <button type="button" data-inema-set-fontscale="112">A+</button>
+      <button type="button" data-inema-set-fontscale="125">A++</button>
+</div></div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Linha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-linewidth="60">60</button>
+      <button type="button" data-inema-set-linewidth="68">68</button>
+      <button type="button" data-inema-set-linewidth="75">75</button>
+</div></div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Entrelinha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-leading="1.45">Compacta</button>
+      <button type="button" data-inema-set-leading="1.7">Confortável</button>
+</div></div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Acento</span>
+    <div class="inema-accent-grid">
+      <button type="button" data-inema-set-accent="emerald" data-accent="emerald" aria-label="Acento emerald"></button>
+<button type="button" data-inema-set-accent="blue" data-accent="blue" aria-label="Acento blue"></button>
+<button type="button" data-inema-set-accent="purple" data-accent="purple" aria-label="Acento purple"></button>
+<button type="button" data-inema-set-accent="amber" data-accent="amber" aria-label="Acento amber"></button>
+<button type="button" data-inema-set-accent="teal" data-accent="teal" aria-label="Acento teal"></button>
+<button type="button" data-inema-set-accent="rose" data-accent="rose" aria-label="Acento rose"></button>
+</div></div></div></div>
+        <button id="theme-toggle" type="button" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors" aria-label="Alternar tema claro e escuro">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+</svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+</svg></button></div></div></div>
+</nav>
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Breadcrumb">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-blue-400">Início</a>
+    <span>/</span>
+    <a href="index.html" class="hover:text-blue-400">Trilha 2</a>
+    <span>/</span>
+    <span class="text-blue-400">Módulo 2.1</span>
+</div>
+</nav>
+<header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-y border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">MÓDULO 2.1</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🚀 Subir o v3</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Do clone ao serviço em 20 minutos: pré-requisitos, bot próprio no BotFather, o <code>.env</code> mínimo, os três YAML de <code>config/</code>, a unit de usuário do systemd e a primeira conversa.</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-3xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">45</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Técnico</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Prático</div><div class="text-xs text-neutral-400">Tipo</div></div>
+</div>
+    <div class="mt-8 max-w-xl"><div data-inema-meter="modulo:2-1" class="course-meter p-5 rounded-xl bg-dark-800/70 border border-dark-600" aria-label="Progresso do módulo 2.1">
+  <div class="flex items-center justify-between gap-4">
+    <span class="text-sm text-neutral-400">Progresso do módulo 2.1</span>
+    <span class="text-sm font-semibold text-primary" data-inema-meter-pct>0%</span>
+</div>
+  <div class="flex items-center justify-between gap-4 mt-1">
+    <span class="text-xs text-neutral-500" data-inema-meter-frac>0 de 0</span>
+</div>
+  <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+</div></div>
+</div>
+</header>
+<main id="conteudo" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <article id="modulo-2-1" data-inema-module="2-1" data-inema-track="2" class="grid grid-cols-1 lg:grid-cols-[1fr_16rem] gap-10">
+    <div class="inema-prose max-w-none min-w-0">
+      <section id="topico-1" data-inema-topic="modulo-2-1#topico-1" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">📋 Pré-requisitos: o que já precisa estar na máquina</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-1-t1-p1">O v3 não instala nada além dos pacotes do <code>npm install</code>. Ele assume quatro coisas prontas na máquina: Node, o Ollama rodando como serviço do systemd na porta 11434, o CLI <code>claude</code> no PATH e o <code>.env</code> do v2 em <code>~/projetos/openpcbotv2/.env</code>, de onde vêm as API keys compartilhadas (OpenRouter, Anthropic e as demais). Se um desses faltar, o <code>npm run doctor</code> mostra exatamente qual.</p>
+  <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 260" class="w-full h-auto" role="img" aria-label="Quatro pré-requisitos (Node 20 ou mais, Ollama via systemd na porta 11434, CLI claude, .env do v2 com as keys) convergem para o processo openpcbotv3; o doctor fica entre eles e o serviço checando cada um">
+  <defs>
+    <linearGradient id="svg-211a-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+    <filter id="svg-211a-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="svg-211a-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#3b82f6" opacity="0.12"/></pattern>
+    <marker id="svg-211a-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"/></marker>
+    <marker id="svg-211a-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="260" fill="url(#svg-211a-grid)"/>
+  <g fill="none" stroke="#38bdf8" stroke-width="1.8" opacity="0.55">
+    <path d="M226,44 C330,44 340,130 430,130" marker-end="url(#svg-211a-ahc)"/>
+    <path d="M226,100 C330,100 340,130 430,130" marker-end="url(#svg-211a-ahc)"/>
+    <path d="M226,160 C330,160 340,130 430,130" marker-end="url(#svg-211a-ahc)"/>
+    <path d="M226,216 C330,216 340,130 430,130" marker-end="url(#svg-211a-ahc)"/>
+</g>
+  <g fill="none" stroke="#60a5fa" stroke-width="1.8" opacity="0.6"><path d="M600,130 L790,130" marker-end="url(#svg-211a-ah)"/></g>
+  <g font-family="Inter,sans-serif" font-size="13" font-weight="600">
+    <g class="wf-a"><rect x="60" y="28" width="166" height="32" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="143" y="49" text-anchor="middle" fill="#bfe6ff">Node 20+</text></g>
+    <g class="wf-a"><rect x="60" y="84" width="166" height="32" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="143" y="105" text-anchor="middle" fill="#bfe6ff">Ollama systemd :11434</text></g>
+    <g class="wf-a"><rect x="60" y="144" width="166" height="32" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="143" y="165" text-anchor="middle" fill="#bfe6ff">claude CLI no PATH</text></g>
+    <g class="wf-a"><rect x="60" y="200" width="166" height="32" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="143" y="221" text-anchor="middle" fill="#bfe6ff">.env do v2 (keys)</text></g>
+</g>
+  <rect x="430" y="100" width="170" height="60" rx="12" fill="#0e1622" stroke="#60a5fa" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="515" y="126" text-anchor="middle" fill="#60a5fa" font-family="Inter,sans-serif" font-weight="600" font-size="16">npm run doctor</text>
+  <text x="515" y="146" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="11">checa cada item, não muda nada</text>
+  <g filter="url(#svg-211a-glow)"><rect x="790" y="92" width="170" height="76" rx="14" fill="#0e1622" stroke="url(#svg-211a-grad)" stroke-width="2"/></g>
+  <text x="875" y="124" text-anchor="middle" fill="#60a5fa" font-family="Inter,sans-serif" font-weight="600" font-size="18">openpcbotv3</text>
+  <text x="875" y="146" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">porta 3142, ao lado do v2</text>
+</svg></div>
+  <p class="text-xs text-neutral-500 mb-6">Legenda: os quatro itens da esquerda são de fora do repo. O <code>doctor</code> (tracejado) só lê e relata; quem sobe o processo é a unit do tópico 5.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+    <h4 class="font-bold text-emerald-400 mb-4">✓ Assim o v3 sobe limpo</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Ollama só pelo serviço do systemd, falando HTTP na 11434.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><code>claude</code> instalado em <code>~/.local/bin</code> ou <code>~/.npm-global/bin</code>: a unit põe esses dois no PATH.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>O v2 continua no ar (<code>systemctl --user is-active openpcbot</code> = <code>active</code>); o v3 roda ao lado.</span></li>
+</ul></div>
+  <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+    <h4 class="font-bold text-red-400 mb-4">✗ Assim ele quebra</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><code>ollama serve</code> num terminal paralelo: o doctor conta os processos e acusa.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Copiar as API keys do v2 para o <code>.env</code> do v3: elas são lidas em runtime, nunca duplicadas.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Sem o <code>.env</code> do v2: o doctor marca falha crítica, e o tier barato/premium fica sem key.</span></li>
+</ul></div></div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: instalar dependências e checar a máquina</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> baixar os pacotes e ver, antes de configurar qualquer coisa, o que falta na máquina. O <code>doctor</code> não altera nada.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>cd ~/projetos/openpcbotv3
+npm install
+npm run doctor</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> cada linha sai com ✅, ⚠️ ou ❌. Nesta altura é normal ver <code>.env v3</code> e <code>TELEGRAM_BOT_TOKEN_V3</code> em aviso. Os críticos que precisam estar ✅ já: <code>.env v2 (keys compartilhadas)</code>, <code>Ollama</code>, <code>modelo roteador</code>, <code>modelo geral</code> e <code>claude CLI</code>. A última linha diz <code>Tudo crítico OK</code> ou quantas falhas críticas há; o processo sai com código 1 quando há alguma.</p>
+</div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p data-inema-block="m2-1-t1-p2" class="text-neutral-300">A versão mínima de Node vem do <code>package.json</code> (<code>engines: node &gt;=20</code>). O README não repete esse número; se o seu Node for mais antigo, o <code>npm install</code> avisa antes de qualquer outra coisa.</p>
+</div>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+<section id="topico-2" data-inema-topic="modulo-2-1#topico-2" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">🤖 Bot próprio no BotFather e o TELEGRAM_BOT_TOKEN_V3</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-1-t2-p1">O v3 fala no Telegram como <strong>@inemav3bot</strong>; o v2 continua no @inemaclaudebot. Cada bot tem um token, e o v3 exige o dele em <code>TELEGRAM_BOT_TOKEN_V3</code>. Isso não é preferência: dois processos chamando <code>getUpdates</code> com o mesmo token recebem 409 do Telegram e os dois bots ficam surdos. Por isso o boot do v3 reconhece o prefixo do token do v2 e recusa subir com ele.</p>
+  <div class="space-y-6 mb-6">
+  <div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">1</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Crie o bot no BotFather</h4>
+      <p class="text-sm text-neutral-400 mb-3">No Telegram</p>
+      <p data-inema-block="m2-1-t2-p2" class="text-neutral-300 text-sm">Abra o @BotFather, peça um bot novo e guarde o token que ele devolve. O formato é <code>&lt;número&gt;:&lt;letras-e-números&gt;</code>; o número antes dos dois-pontos é o id do bot, e é por ele que o doctor identifica de qual bot é o token.</p>
+</div></div>
+<div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">2</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Cole em <code>TELEGRAM_BOT_TOKEN_V3</code></h4>
+      <p class="text-sm text-neutral-400 mb-3">No <code>.env</code> do v3</p>
+      <p class="text-neutral-300 text-sm">Copie <code>.env.exemplo</code> para <code>.env</code> e preencha só essa variável. As outras do exemplo já vêm com o default ou comentadas.</p>
+</div></div>
+<div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">3</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Confirme com o doctor</h4>
+      <p class="text-sm text-neutral-400 mb-3">Sem chamar o Telegram</p>
+      <p class="text-neutral-300 text-sm">A linha <code>TELEGRAM_BOT_TOKEN_V3</code> passa a mostrar <code>bot id &lt;número&gt;</code>. Se aparecer "é o token do v2" ou "formato inválido", você colou o token errado. O doctor nunca chama <code>getUpdates</code>: token em uso pelo serviço não pode ser consultado assim.</p>
+</div></div></div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: criar o <code>.env</code> a partir do exemplo</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> ter um <code>.env</code> do v3 com o token próprio. Troque o valor entre <code>&lt; &gt;</code> pelo token que o BotFather deu.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>cd ~/projetos/openpcbotv3
+cp .env.exemplo .env
+# edite a linha TELEGRAM_BOT_TOKEN_V3=&lt;token-do-seu-bot-novo&gt;
+npm run doctor</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> <code>.env v3</code> fica ✅ com o caminho do arquivo, e <code>TELEGRAM_BOT_TOKEN_V3</code> mostra <code>bot id</code> seguido de um número diferente do id do v2.</p>
+</div>
+  <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠</span> Sem token o serviço sobe mesmo assim</h3>
+  <p data-inema-block="m2-1-t2-p3" class="text-neutral-300">Sem <code>TELEGRAM_BOT_TOKEN_V3</code> o v3 sobe só com HTTP em <code>127.0.0.1:3142</code> e CLI. Isso é útil para testar sem bot, mas alertas e conversa pelo Telegram ficam desligados. Nunca "resolva" pegando o token do v2 emprestado: além de ser recusado no boot, um 409 derruba o bot que já está em produção.</p>
+</div>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+<section id="topico-3" data-inema-topic="modulo-2-1#topico-3" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">⚙️ O .env do v3: só o que é específico deste bot</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-1-t3-p1">O <code>.env</code> do v3 é curto de propósito. A regra é: keys compartilhadas vivem no <code>.env</code> do v2 e são carregadas em runtime; o arquivo do v3 vem por cima e só traz o que é deste bot (token, porta, piso de RAM, orçamento, token do dashboard). A precedência é fixa: variável já presente no processo (systemd ou shell) ganha do <code>.env</code> do v3, que ganha do <code>.env</code> do v2.</p>
+  <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 220" class="w-full h-auto" role="img" aria-label="Três camadas de configuração empilhadas por precedência: no topo, variáveis já presentes no processo (systemd EnvironmentFile ou shell); no meio, o .env do openpcbotv3 com o que é específico; na base, o .env do openpcbotv2 com as keys compartilhadas. A camada de cima só preenche o que ainda não existe embaixo">
+  <defs>
+    <linearGradient id="svg-211b-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+    <filter id="svg-211b-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="svg-211b-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#3b82f6" opacity="0.12"/></pattern>
+    <marker id="svg-211b-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="220" fill="url(#svg-211b-grid)"/>
+  <g filter="url(#svg-211b-glow)"><rect x="120" y="22" width="560" height="48" rx="12" fill="#0e1622" stroke="url(#svg-211b-grad)" stroke-width="2"/></g>
+  <text x="140" y="52" fill="#60a5fa" font-family="Inter,sans-serif" font-weight="600" font-size="15">1. processo: systemd EnvironmentFile / shell</text>
+  <rect x="120" y="86" width="560" height="48" rx="12" fill="#0e1622" stroke="#60a5fa" stroke-width="2"/>
+  <text x="140" y="116" fill="#60a5fa" font-family="Inter,sans-serif" font-weight="600" font-size="15">2. openpcbotv3/.env: token, porta, piso, orçamento</text>
+  <rect x="120" y="150" width="560" height="48" rx="12" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/>
+  <text x="140" y="180" fill="#bfe6ff" font-family="Inter,sans-serif" font-weight="600" font-size="15">3. openpcbotv2/.env: OPENROUTER_API_KEY, ANTHROPIC_API_KEY, ALLOWED_CHAT_ID</text>
+  <g fill="none" stroke="#60a5fa" stroke-width="1.8" opacity="0.6"><path d="M740,190 L740,40" marker-end="url(#svg-211b-ah)"/></g>
+  <text x="760" y="100" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">mais forte</text>
+  <text x="760" y="118" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">para cima</text>
+  <text x="760" y="160" fill="#9ca3af" font-family="Inter,sans-serif" font-size="11">só preenche o</text>
+  <text x="760" y="176" fill="#9ca3af" font-family="Inter,sans-serif" font-size="11">que ainda falta</text>
+</svg></div>
+  <p class="text-xs text-neutral-500 mb-6">Legenda: leia de baixo para cima. Nada é copiado entre arquivos: cada camada só preenche variável que ainda não existe no processo.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 overflow-x-auto">
+  <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">▦</span> As variáveis do <code>.env</code> do v3 (README, seção 13)</h3>
+  <table class="tabela-ops text-neutral-300">
+    <thead><tr><th class="text-blue-400">Variável</th><th class="text-blue-400">Default</th><th class="text-blue-400">Para quê</th></tr></thead>
+    <tbody>
+      <tr><td><code>TELEGRAM_BOT_TOKEN_V3</code></td><td>(vazio)</td><td>token próprio; o do v2 é recusado</td></tr>
+      <tr><td><code>ALLOWED_CHAT_ID</code></td><td>(vem do <code>.env</code> do v2)</td><td>o único chat que o bot responde e onde os alertas chegam; o <code>.env</code> do v3 pode sobrescrever</td></tr>
+      <tr><td><code>PORT_V3</code></td><td>3142</td><td>porta do HTTP, do <code>/health</code> e do dashboard</td></tr>
+      <tr><td><code>HTTP_BIND_V3</code></td><td>127.0.0.1</td><td>onde o HTTP escuta; <code>0.0.0.0</code> só junto com o token abaixo</td></tr>
+      <tr><td><code>DASHBOARD_TOKEN_V3</code></td><td>(vazio)</td><td>protege <code>/</code> e <code>/api/*</code>; o <code>/health</code> continua aberto</td></tr>
+      <tr><td><code>PISO_RAM_GB</code></td><td>40</td><td>GB livres exigidos para carregar um modelo grande não residente</td></tr>
+      <tr><td><code>ORCAMENTO_MENSAL_USD</code></td><td>50</td><td>teto do mês; sobrescreve <code>mensal_usd</code> do <code>orcamento.yaml</code></td></tr>
+      <tr><td><code>SLACK_ENABLED</code> / <code>WHATSAPP_ENABLED</code></td><td>0</td><td>ficam em 0 até o corte: o v2 é dono do token e da sessão</td></tr>
+      <tr><td><code>AGE_RECIPIENT</code></td><td>(vazio)</td><td>cifra o backup noturno com <code>age</code>; sem ele, gzip</td></tr>
+      <tr><td><code>CLAUDE_BIN</code> / <code>CODEX_BIN</code></td><td>claude / codex</td><td>binários dos agentes, se não estiverem com esse nome no PATH</td></tr>
+</tbody></table></div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: ler o exemplo em vez de adivinhar</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> ver o modelo comentado que o repo entrega. Ele explica cada variável e diz quais só entram depois do corte. Nunca imprima o seu <code>.env</code> real em chat ou log.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>cd ~/projetos/openpcbotv3
+cat .env.exemplo</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> o arquivo começa avisando que keys compartilhadas e <code>ALLOWED_CHAT_ID</code> vêm do v2 em runtime, traz <code>TELEGRAM_BOT_TOKEN_V3</code>, <code>PORT_V3</code>, <code>PISO_RAM_GB</code> e <code>ORCAMENTO_MENSAL_USD</code> ativos, e o resto comentado (<code>DASHBOARD_TOKEN_V3</code>, canais do v2, <code>AGE_RECIPIENT</code>, <code>HTTP_BIND_V3</code>, chats do Telegram, conta Google padrão).</p>
+</div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p data-inema-block="m2-1-t3-p2" class="text-neutral-300">Mudou o <code>.env</code>? O serviço só relê no restart: <code>bash scripts/instalar-servico.sh</code> (tópico 5). A unit carrega o arquivo com <code>EnvironmentFile=-</code>, então a ausência dele não impede o boot; o que impede é faltar coisa crítica dentro dele.</p>
+</div>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+<section id="topico-4" data-inema-topic="modulo-2-1#topico-4" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">🧩 config/*.yaml: papéis do Ollama, preços e orçamento</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-1-t4-p1">Três arquivos YAML em <code>config/</code> definem o comportamento que não muda por chat: <code>ollama.yaml</code> (que modelo faz cada papel), <code>precos.yaml</code> (USD por milhão de tokens e o modelo de cada tier) e <code>orcamento.yaml</code> (teto mensal, aviso e trava). Os três já vêm prontos; o doctor confere que existem e, se faltarem, o código usa defaults embutidos.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 overflow-x-auto">
+  <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">▦</span> <code>ollama.yaml</code>: os papéis (README, seção 7)</h3>
+  <table class="tabela-ops text-neutral-300">
+    <thead><tr><th class="text-blue-400">Papel</th><th class="text-blue-400">Modelo</th><th class="text-blue-400">keep_alive</th><th class="text-blue-400">Por quê</th></tr></thead>
+    <tbody>
+      <tr><td><code>roteador</code></td><td><code>llama3.2</code></td><td><code>10m</code></td><td>classificação em JSON, 2 s, 4 GB</td></tr>
+      <tr><td><code>geral</code></td><td><code>qwen3.8:27b</code>, residente</td><td><code>-1</code> (número)</td><td>mesma tag do v2: um único modelo serve os dois bots</td></tr>
+      <tr><td><code>embed</code></td><td><code>bge-m3</code></td><td><code>10m</code></td><td>vetores da memória, 0,7 GB</td></tr>
+      <tr><td><code>pesado</code></td><td><code>llama3.1:70b</code>, <code>ativo: false</code></td><td></td><td>42 GB; só depois do corte</td></tr>
+</tbody></table>
+  <p class="text-sm text-neutral-400 mt-4">Abaixo dos papéis ficam <code>piso_ram_gb: 40</code>, <code>descarregar_alheios: false</code>, <code>probe_segundos: 60</code> e <code>latencia_alerta_ms: 5000</code>.</p>
+</div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+    <h4 class="font-bold text-emerald-400 mb-4">✓ Pode mexer</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><code>keep_alive</code> do <code>geral</code>: <code>-1</code> fixa 17 GB na RAM; trocar para <code>"10m"</code> solta o modelo depois de dez minutos ocioso.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><code>orcamento.yaml</code>: <code>mensal_usd</code>, <code>aviso_pct: 70</code>, <code>trava_pct: 100</code>. O <code>.env</code> sobrescreve só o valor mensal.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><code>precos.yaml</code>: acrescentar um modelo novo na tabela quando o OpenRouter não devolver <code>usage.cost</code>.</span></li>
+</ul></div>
+  <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+    <h4 class="font-bold text-red-400 mb-4">✗ Não mexa enquanto o v2 estiver no ar</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Trocar a tag do <code>geral</code>: vira dois modelões residentes (um de cada bot) e a máquina vai a OOM.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Ligar o <code>pesado</code>: 42 GB que só cabem depois do corte.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><code>descarregar_alheios: true</code>: o v3 passaria a descarregar modelo que o v2 carregou.</span></li>
+</ul></div></div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: conferir que os papéis batem com o v2</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> ler os três YAML e deixar o doctor comparar o modelo <code>geral</code> do v3 com o <code>OLLAMA_MODEL</code> que o v2 usa.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>cd ~/projetos/openpcbotv3
+cat config/ollama.yaml config/orcamento.yaml config/precos.yaml
+npm run doctor</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> no doctor, <code>modelo roteador</code>, <code>modelo geral</code> e <code>modelo embed</code> aparecem ✅ com a tag ao lado (as tags precisam existir no Ollama), <code>mesmo modelo geral que o v2</code> mostra <code>v2=... v3=...</code> iguais, e as três linhas <code>config/*.yaml</code> dizem <code>ok</code>.</p>
+</div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p data-inema-block="m2-1-t4-p2" class="text-neutral-300">Lição registrada no <code>FALHAS.md</code> do repo: <code>keep_alive: -1</code> é número, não a string <code>"-1"</code>. Com aspas, o Ollama responde 400 ("missing unit in duration") na primeira conversa. Durações, sim, vão entre aspas: <code>"10m"</code>.</p>
+</div>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+<section id="topico-5" data-inema-topic="modulo-2-1#topico-5" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">🛠 instalar-servico.sh: build, unit de usuário e teto de memória</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-1-t5-p1">Um único script sobe e atualiza o v3: <code>bash scripts/instalar-servico.sh</code>. Ele copia a unit para <code>~/.config/systemd/user/</code>, compila (<code>npm run build</code>), recarrega o systemd do usuário, habilita e reinicia o serviço, mostra o status e o <code>MemoryMax</code>. Tudo com <code>systemctl --user</code>: sem sudo, sem tocar no v2. É o mesmo comando para o primeiro boot e para qualquer restart depois de mudar <code>src/</code> ou <code>.env</code>.</p>
+  <div class="space-y-6 mb-6">
+  <div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">1</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Copia a unit</h4>
+      <p class="text-sm text-neutral-400 mb-3"><code>cp systemd/openpcbotv3.service ~/.config/systemd/user/</code></p>
+      <p data-inema-block="m2-1-t5-p2" class="text-neutral-300 text-sm">A unit é de usuário. Antes disso o script garante <code>XDG_RUNTIME_DIR</code>, que o <code>systemctl --user</code> precisa quando roda fora de uma sessão gráfica.</p>
+</div></div>
+<div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">2</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Compila</h4>
+      <p class="text-sm text-neutral-400 mb-3"><code>npm run build</code> (tsc)</p>
+      <p class="text-neutral-300 text-sm">O serviço roda <code>dist/index.js</code>, não o TypeScript. Sem esse passo, mudar <code>src/</code> não muda nada no ar.</p>
+</div></div>
+<div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">3</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Recarrega, habilita, reinicia</h4>
+      <p class="text-sm text-neutral-400 mb-3"><code>daemon-reload</code> · <code>enable</code> · <code>restart openpcbotv3</code></p>
+      <p class="text-neutral-300 text-sm">Espera 2 s, imprime as 12 primeiras linhas do <code>status</code>, o <code>MemoryMax</code> lido do systemd e o <code>curl</code> do <code>/health</code> para você colar.</p>
+</div></div></div>
+  <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 250" class="w-full h-auto" role="img" aria-label="Uma caixa grande rotulada unit openpcbotv3.service com MemoryHigh 1536M e MemoryMax 2G contém o processo node dist/index.js com max-old-space-size 1024 e, ao lado, um filho claude -p da lane agente. Os dois cabem no teto porque a lane agente roda um por vez">
+  <defs>
+    <linearGradient id="svg-211c-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+    <filter id="svg-211c-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="svg-211c-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#3b82f6" opacity="0.12"/></pattern>
+  </defs>
+  <rect x="0" y="0" width="1000" height="250" fill="url(#svg-211c-grid)"/>
+  <g filter="url(#svg-211c-glow)"><rect x="60" y="30" width="880" height="190" rx="18" fill="#0e1622" stroke="url(#svg-211c-grad)" stroke-width="2"/></g>
+  <text x="90" y="62" fill="#60a5fa" font-family="Inter,sans-serif" font-weight="600" font-size="17">unit openpcbotv3.service (systemctl --user)</text>
+  <text x="910" y="62" text-anchor="end" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">MemoryHigh=1536M · MemoryMax=2G · Restart=on-failure</text>
+  <rect x="100" y="90" width="360" height="100" rx="12" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/>
+  <text x="280" y="126" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-weight="600" font-size="15">node --max-old-space-size=1024 dist/index.js</text>
+  <text x="280" y="150" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12">bus · fila · orquestrador · HTTP :3142</text>
+  <text x="280" y="170" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12">EnvironmentFile=-.env do v3</text>
+  <g class="wf-a"><rect x="540" y="90" width="360" height="100" rx="12" fill="#0e1b26" stroke="#38bdf8" stroke-width="2" stroke-dasharray="7 5"/></g>
+  <text x="720" y="126" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-weight="600" font-size="15">claude -p (filho, lane agente)</text>
+  <text x="720" y="150" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12">~500 MB cada · concorrência 1</text>
+  <text x="720" y="170" text-anchor="middle" fill="#9ad6ff" font-family="Inter,sans-serif" font-size="12">conta no mesmo cgroup</text>
+  <text x="500" y="145" text-anchor="middle" fill="#60a5fa" font-family="Inter,sans-serif" font-weight="600" font-size="22">+</text>
+</svg></div>
+  <p class="text-xs text-neutral-500 mb-6">Legenda: o teto de 2 GB é do cgroup inteiro, então os <code>claude -p</code> filhos contam junto com o Node. Por isso a lane <code>agente</code> roda um de cada vez. Pico observado no README: cerca de 1 GB com um agente rodando.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: subir (ou reiniciar) o serviço</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> instalar a unit, compilar e colocar o v3 no ar. Se a porta estiver diferente do default, troque <code>3142</code> pelo seu <code>PORT_V3</code>.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>cd ~/projetos/openpcbotv3
+bash scripts/instalar-servico.sh
+systemctl --user is-active openpcbotv3
+curl -s localhost:3142/health</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> o script termina imprimindo <code>MemoryMax: 2G</code> (se sair <code>infinity</code>, o cgroup não foi delegado e o doctor acusa em <code>v3 MemoryMax</code>). <code>is-active</code> responde <code>active</code>. O <code>curl</code> devolve um JSON com <code>"ok":true</code> quando o Ollama está online, há 10 GB ou mais de RAM e o heartbeat é recente. Se algo falhar, os logs estão em <code>journalctl --user -u openpcbotv3 -n 50 --no-pager -o cat</code> (módulo 2.2).</p>
+</div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p data-inema-block="m2-1-t5-p3" class="text-neutral-300">A unit põe <code>~/.local/bin</code> e <code>~/.npm-global/bin</code> no PATH de propósito: para o <code>systemd --user</code>, o <code>claude</code> e o <code>yt-dlp</code> instalados pelo usuário não existem sem isso. Se um agente falhar com "comando não encontrado" só quando roda pelo serviço, olhe primeiro essa linha <code>Environment=PATH=</code>.</p>
+</div>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+<section id="topico-6" data-inema-topic="modulo-2-1#topico-6" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">💬 Primeira conversa: /versao, /health, /chatid e o CLI</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-1-t6-p1">Com o serviço <code>active</code>, a primeira conversa serve para provar três coisas: que o processo que responde é o que você acabou de compilar (<code>/versao</code>), que ele enxerga Ollama, RAM e fila (<code>/health</code>) e que o seu chat é o permitido (<code>/chatid</code>). Se o Telegram ainda não estiver configurado, o mesmo teste sai pelo CLI, sem bot.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6 overflow-x-auto">
+  <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">▦</span> Os três comandos da primeira conversa</h3>
+  <table class="tabela-ops text-neutral-300">
+    <thead><tr><th class="text-blue-400">Comando</th><th class="text-blue-400">O que volta</th><th class="text-blue-400">O que provar com ele</th></tr></thead>
+    <tbody>
+      <tr><td><code>/versao</code></td><td><code>openpcbot v3.2.3 · instância &lt;host&gt;:&lt;pid&gt;</code></td><td>a versão bate com o CHANGELOG e o pid muda a cada restart: você está falando com o binário novo</td></tr>
+      <tr><td><code>/health</code></td><td>Ollama (modelos carregados, latência), RAM e swap, RSS do processo e uptime, fila em voo e pendente, heartbeat, canais ativos, orçamento</td><td>Ollama online, o <code>qwen3.8:27b</code> residente e <code>telegram</code> entre os canais</td></tr>
+      <tr><td><code>/chatid</code></td><td><code>chat_id: &lt;número&gt; (telegram)</code></td><td>é o mesmo valor de <code>ALLOWED_CHAT_ID</code>; se o bot nem responder, o chat não é o permitido</td></tr>
+</tbody></table></div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: falar com o bot sem Telegram</h3>
+  <p data-inema-block="m2-1-t6-p2" class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> mandar uma mensagem pelo CLI e pelo HTTP local. Os dois passam pelo mesmo orquestrador que o Telegram; a resposta direta sai do Ollama residente, custo zero.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>cd ~/projetos/openpcbotv3
+npm run cli -- "/versao"
+npm run cli -- "&lt;uma-pergunta-curta-sua&gt;"
+curl -s -X POST http://127.0.0.1:3142/mensagem -H 'content-type: application/json' -d '{"texto":"/health"}'</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p data-inema-block="m2-1-t6-p3" class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> a primeira linha devolve <code>openpcbot v3.2.3</code>. A pergunta curta volta como resposta direta em segundos (se demorar, o <code>qwen3.8:27b</code> estava sendo carregado). O <code>POST /mensagem</code> só é aceito em <code>127.0.0.1</code>; se você definiu <code>DASHBOARD_TOKEN_V3</code>, ele protege <code>/</code> e <code>/api/*</code>, não o <code>/health</code>.</p>
+</div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+    <h4 class="font-bold text-emerald-400 mb-4">✓ Sinais de que subiu certo</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><code>/health</code> lista <code>telegram</code> em canais e o heartbeat não diz <code>nunca</code> depois da primeira meia hora.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><code>/status</code> mostra as cinco lanes (<code>chat</code>, <code>agente</code>, <code>ollama</code>, <code>cron</code>, <code>io</code>) com 0 rodando.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>O v2 continua respondendo no @inemaclaudebot: nada do que você fez o tocou.</span></li>
+</ul></div>
+  <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+    <h4 class="font-bold text-red-400 mb-4">✗ Sinais de problema</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>O bot não responde nada no Telegram: chat fora do <code>ALLOWED_CHAT_ID</code>, ou token ausente (o serviço subiu só com HTTP e CLI).</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><code>/versao</code> devolve uma versão antiga: você editou <code>src/</code> mas não rodou o script de instalação (sem <code>npm run build</code> o <code>dist/</code> é o velho).</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><code>/health</code> com aviso de Ollama fora: confira o serviço do Ollama antes de mexer no bot.</span></li>
+</ul></div></div>
+  <div data-inema-check="modulo-2-1#q1" class="inema-check">
+  <p class="inema-check__q">O v3 recusa subir com o token do v2. Qual é o motivo técnico?</p>
+  <div class="inema-check__options space-y-2">
+    <button type="button" class="inema-check__option" data-inema-check-option="0">O token do v2 tem formato diferente e o grammy não aceita.</button>
+    <button type="button" class="inema-check__option" data-inema-check-option="1">Dois processos chamando getUpdates com o mesmo token recebem 409 e os dois bots ficam surdos.</button>
+    <button type="button" class="inema-check__option" data-inema-check-option="2">O Telegram limita cada token a uma porta HTTP.</button>
+</div>
+  <p class="inema-check-feedback mt-4 text-sm" role="status" aria-live="polite"></p>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.INEMA && INEMA.registerCheck) {
+    INEMA.registerCheck('modulo-2-1#q1', {
+      q: 'O v3 recusa subir com o token do v2. Qual é o motivo técnico?',
+      options: ['Formato diferente.', 'Dois getUpdates no mesmo token = 409 e bot surdo.', 'Limite de porta por token.'],
+      answer: '1',
+      explain: {
+        '0': 'O formato é o mesmo para qualquer bot; o v3 reconhece o token do v2 pelo id numérico antes dos dois-pontos.',
+        '1': 'Isso. É a lição do v2: um segundo consumidor do mesmo token derruba os dois. Por isso bot próprio, token próprio.',
+        '2': 'Porta HTTP não tem relação com o token do Telegram; o v3 escuta em 3142 por escolha do PORT_V3.'
+      }
+    });
+  }
+});
+</script>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+      <section class="mb-12">
+  <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+    <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do módulo</h2>
+    <div class="space-y-4 mb-8">
+      <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Pré-requisitos</strong><span class="text-neutral-400"> - Node 20+, Ollama via systemd na 11434, claude CLI, .env do v2; o doctor aponta o que falta</span></div></div>
+<div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Bot próprio</strong><span class="text-neutral-400"> - BotFather, TELEGRAM_BOT_TOKEN_V3; o token do v2 é recusado porque dois getUpdates dão 409</span></div></div>
+<div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">.env do v3</strong><span class="text-neutral-400"> - só o específico; keys vêm do v2 em runtime; precedência processo, v3, v2</span></div></div>
+<div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">config/*.yaml</strong><span class="text-neutral-400"> - papéis roteador, geral, embed com as mesmas tags do v2; preços por tier; orçamento 70/100 %</span></div></div>
+<div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">instalar-servico.sh</strong><span class="text-neutral-400"> - build, unit --user, MemoryMax=2G, Restart=on-failure, sem sudo; vale para primeiro boot e restart</span></div></div>
+<div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Primeira conversa</strong><span class="text-neutral-400"> - /versao, /health, /chatid; npm run cli e POST /mensagem quando não há Telegram</span></div></div>
+</div>
+    <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+      <h3 class="font-semibold text-blue-400 mb-2">Próximo módulo:</h3>
+      <p class="text-neutral-300">2.2 - Operar no dia a dia</p>
+</div>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">Voltar para a trilha</a>
+      <a href="modulo-2-2.html" class="flex-1 text-center px-6 py-3 bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg font-semibold hover:bg-blue-500/30 transition-colors">Próximo módulo: Operar no dia a dia</a>
+</div></div></section></div>
+    <nav data-inema-toc aria-label="Índice da página" class="hidden lg:block sticky top-24 self-start">
+  <p class="inema-toc-progress"><span data-inema-section-counter>Seção 1 de 6</span></p>
+  <ul class="space-y-1">
+    <li><a href="#topico-1">1. Pré-requisitos</a></li>
+<li><a href="#topico-2">2. Bot próprio e o token</a></li>
+<li><a href="#topico-3">3. O .env do v3</a></li>
+<li><a href="#topico-4">4. config/*.yaml</a></li>
+<li><a href="#topico-5">5. instalar-servico.sh</a></li>
+<li><a href="#topico-6">6. Primeira conversa</a></li>
+</ul>
+</nav>
+</article>
+</main>
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>openpcbot v3: seu Jarvis local - INEMA.CLUB - 2026</p>
+</div>
+  </footer>
+  <script>
+function toggleTopic(button) {
+  var panelId = button.getAttribute('aria-controls');
+  var explanation = panelId ? document.getElementById(panelId) : null;
+  if (!explanation) return;
+  var moduleCard = button.closest('[data-inema-module]') || button.closest('.module-shell') || document;
+  moduleCard.querySelectorAll('.topic-explanation.active').forEach(function (exp) {
+    if (exp !== explanation) {
+      exp.classList.remove('active');
+      var other = moduleCard.querySelector('[aria-controls="' + exp.id + '"]');
+      if (other) other.setAttribute('aria-expanded', 'false');
+    }
+  });
+  var next = !explanation.classList.contains('active');
+  explanation.classList.toggle('active', next);
+  button.setAttribute('aria-expanded', next ? 'true' : 'false');
+}
+function openModal(modalId) {
+  var modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    var close = modal.querySelector('[data-modal-close]');
+    if (close) close.focus();
+  }
+}
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(function (modal) {
+    modal.classList.add('hidden');
+  });
+  document.body.style.overflow = 'auto';
+}
+function copiarBloco(btn) {
+  var box = btn.closest('[data-copy-box]');
+  var pre = box ? box.querySelector('pre') : null;
+  if (!pre) return;
+  var texto = pre.innerText;
+  function ok() { btn.textContent = 'Copiado'; setTimeout(function () { btn.textContent = 'Copiar'; }, 1800); }
+  function falha() { btn.textContent = 'Selecione e copie'; }
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(ok, falha);
+    else falha();
+  } catch (e) { falha(); }
+}
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+<script src="../../assets/learn.js"></script>
+<script>
+if (window.INEMA && typeof window.INEMA.init === 'function') {
+  window.INEMA.init();
+}
+document.addEventListener('click', function (e) {
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var nav = t.closest('nav');
+  if (!nav) return;
+  var journey = t.closest('[data-inema-journey-open]');
+  if (journey && window.INEMA && INEMA.openJourney) {
+    e.preventDefault();
+    INEMA.openJourney();
+    return;
+  }
+  var toggle = t.closest('[data-inema-appearance-toggle]');
+  if (toggle) {
+    var targetSel = toggle.getAttribute('data-inema-appearance-toggle');
+    var panel = targetSel ? document.querySelector(targetSel) : document.querySelector('[data-inema-appearance]');
+    if (panel) {
+      var open = panel.getAttribute('data-open') !== 'true';
+      panel.setAttribute('data-open', open ? 'true' : 'false');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    return;
+  }
+  var pairs = [
+    ['data-inema-set-theme', 'theme'],
+    ['data-inema-set-font', 'font'],
+    ['data-inema-set-fontscale', 'fontScale'],
+    ['data-inema-set-linewidth', 'lineWidth'],
+    ['data-inema-set-leading', 'leading'],
+    ['data-inema-set-accent', 'accent']
+  ];
+  for (var i = 0; i < pairs.length; i++) {
+    var btn = t.closest('[' + pairs[i][0] + ']');
+    if (btn && window.INEMA && INEMA.setPref) {
+      var raw = btn.getAttribute(pairs[i][0]);
+      var key = pairs[i][1];
+      var value = key === 'fontScale' || key === 'lineWidth' ? parseInt(raw, 10) : (key === 'leading' ? parseFloat(raw) : raw);
+      INEMA.setPref(key, value);
+      return;
+    }
+  }
+  var theme = t.closest('#theme-toggle');
+  if (theme) {
+    var html = document.documentElement;
+    var next = html.classList.contains('dark') ? 'claro' : 'inema-dark';
+    if (window.INEMA && INEMA.setPref) {
+      INEMA.setPref('theme', next);
+    } else {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    }
+  }
+});
+</script>
+</body>
+</html>

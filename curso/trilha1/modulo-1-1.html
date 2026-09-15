@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="inema-course" content="curso-openpcbotv3">
+  <script>
+(function () {
+  try {
+    var html = document.documentElement;
+    var DEF = { theme: 'inema-dark', font: 'inter', fontScale: 100, lineWidth: 68, leading: 1.7, accent: 'emerald' };
+    function clone(o) { var r = {}; for (var x in o) r[x] = o[x]; return r; }
+    var p = clone(DEF);
+    try {
+      var raw = localStorage.getItem('inema.prefs');
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          for (var k in DEF) if (parsed[k] != null) p[k] = parsed[k];
+        }
+      } else {
+        var legacy = localStorage.getItem('theme');
+        if (legacy === 'light') p.theme = 'claro';
+        else if (legacy === 'dark') p.theme = 'inema-dark';
+      }
+    } catch (e) { p = clone(DEF); }
+    var THEMES = {
+      'inema-dark': { dark: true,  attr: null,        cs: 'dark'  },
+      'claro':      { dark: false, attr: null,        cs: 'light' },
+      'sepia':      { dark: false, attr: 'sepia',     cs: 'light' },
+      'foco':       { dark: null,  attr: 'foco',      cs: null    },
+      'contraste':  { dark: true,  attr: 'contraste', cs: 'dark'  }
+    };
+    var t = THEMES[p.theme] || THEMES['inema-dark'];
+    if (t.dark === true) html.classList.add('dark');
+    else if (t.dark === false) html.classList.remove('dark');
+    if (t.attr) html.setAttribute('data-theme', t.attr);
+    else html.removeAttribute('data-theme');
+    html.style.colorScheme = (t.cs ? t.cs : (html.classList.contains('dark') ? 'dark' : 'light'));
+    html.setAttribute('data-font', p.font || 'inter');
+    html.setAttribute('data-accent', p.accent || 'emerald');
+    var s = html.style;
+    var scale = (+p.fontScale || 100);
+    s.setProperty('--inema-font-scale', (scale / 100).toString());
+    s.setProperty('font-size', scale + '%');
+    s.setProperty('--measure', (+p.lineWidth || 68) + 'ch');
+    s.setProperty('--lh-body', (+p.leading || 1.7).toString());
+    var fam = p.font === 'system'
+      ? 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+      : (p.font === 'leitura'
+        ? '"Atkinson Hyperlegible", "Inter", system-ui, sans-serif'
+        : '"Inter", system-ui, sans-serif');
+    s.setProperty('--font-body', fam);
+    var ACC = {
+      emerald: [152, 76, 45], blue: [217, 91, 60], purple: [258, 90, 66],
+      amber: [38, 92, 50], teal: [174, 72, 41], rose: [350, 89, 60]
+    };
+    var a = ACC[p.accent] || ACC.emerald;
+    s.setProperty('--accent-h', a[0] + '');
+    s.setProperty('--accent-s', a[1] + '%');
+    s.setProperty('--accent-l', a[2] + '%');
+    s.setProperty('--accent', 'hsl(' + a[0] + ' ' + a[1] + '% ' + a[2] + '%)');
+  } catch (err) {
+    try { document.documentElement.classList.add('dark'); document.documentElement.style.colorScheme = 'dark'; } catch (e) {}
+  }
+})();
+</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <script type="application/json" data-inema-manifest>
+{
+  "course": "curso-openpcbotv3",
+  "tracks": [
+    {
+      "n": "1",
+      "title": "Fundamentos",
+      "modules": [
+        {
+          "id": "1-1",
+          "title": "O que é o openpcbot v3",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-1.html"
+        },
+        {
+          "id": "1-2",
+          "title": "O caminho de uma mensagem",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-2.html"
+        }
+      ]
+    },
+    {
+      "n": "2",
+      "title": "Instalar e operar",
+      "modules": [
+        {
+          "id": "2-1",
+          "title": "Subir o v3",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-1.html"
+        },
+        {
+          "id": "2-2",
+          "title": "Operar no dia a dia",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-2.html"
+        }
+      ]
+    },
+    {
+      "n": "3",
+      "title": "Usar no dia a dia",
+      "modules": [
+        {
+          "id": "3-1",
+          "title": "Comandos e conversa",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-1.html"
+        },
+        {
+          "id": "3-2",
+          "title": "Cérebro e conectores",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-2.html"
+        }
+      ]
+    },
+    {
+      "n": "4",
+      "title": "Configurar e estender",
+      "modules": [
+        {
+          "id": "4-1",
+          "title": "Controle da conversa",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-1.html"
+        },
+        {
+          "id": "4-2",
+          "title": "Agentes, skills, custo e o que vem",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-2.html"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Módulo 1.1: O que é o openpcbot v3 | openpcbot v3: seu Jarvis local</title>
+  <style>
+body { font-family: 'Inter', sans-serif; }
+.dark body { background-color: #111827; }
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 100;
+  padding: .75rem 1rem;
+  background: #111827;
+  color: #facc15;
+  border: 1px solid #4b5563;
+  border-radius: .5rem;
+}
+.skip:focus { left: .75rem; top: .75rem; }
+.topic-explanation { display: none; }
+.topic-explanation.active { display: block; }
+.dark .border-dark-600 { border-color: #374151; }
+.dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+html:not(.dark) body { background-color: #f8fafc; }
+html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+html:not(.dark) .bg-dark-800\/50 { background-color: rgba(249, 250, 251, 0.88); }
+html:not(.dark) .bg-dark-800\/70 { background-color: rgba(249, 250, 251, 0.94); }
+html:not(.dark) .bg-dark-900\/40 { background-color: rgba(255, 255, 255, 0.72); }
+html:not(.dark) .bg-dark-700\/30 { background-color: rgba(243, 244, 246, 0.72); }
+html:not(.dark) .bg-dark-700\/50 { background-color: rgba(243, 244, 246, 0.86); }
+html:not(.dark) .text-neutral-100 { color: #111827; }
+html:not(.dark) .text-neutral-200 { color: #1f2937; }
+html:not(.dark) .text-neutral-300 { color: #4b5563; }
+html:not(.dark) .text-neutral-400 { color: #6b7280; }
+html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+html:not(.dark) .text-white { color: #111827; }
+html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+html:not(.dark) .text-emerald-400 { color: #059669; }
+html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .text-blue-400 { color: #2563eb; }
+html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .text-purple-400 { color: #7c3aed; }
+html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .text-amber-400 { color: #92400e; }
+html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+html:not(.dark) .group:hover .group-hover\:text-amber-400 { color: #92400e; }
+html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) .bg-amber-900\/20 { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(217, 119, 6, 0.18); }
+html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+html:not(.dark) .text-primary { color: #a16207; }
+html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+html:not(.dark) .border-primary\/30,
+html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+html:not(.dark) .text-sky-400 { color: #0369a1; }
+html:not(.dark) .text-yellow-400 { color: #a16207; }
+html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+html:not(.dark) .text-blue-400 { color: #2563eb; }
+html:not(.dark) .bg-red-900\/20 { background-color: rgba(220, 38, 38, 0.08); }
+html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.24); }
+html:not(.dark) .text-red-400 { color: #b91c1c; }
+html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+@keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+@media (prefers-reduced-motion: no-preference) {
+  .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+  .wf-a:nth-child(2){animation-delay:.25s}
+  .wf-a:nth-child(3){animation-delay:.5s}
+  .wf-a:nth-child(4){animation-delay:.75s}
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+.module-shell { scroll-margin-top: 5rem; }
+.inema-prose pre, .inema-prose .mock { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
+article[data-inema-module] > .inema-prose { width: 100%; min-width: 0; }
+.topic-section { scroll-margin-top: 5rem; }
+.course-meter .inema-bar { margin-top: .75rem; }
+  </style>
+  <link rel="stylesheet" href="../../assets/learn.css">
+  
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-wrap justify-between items-center min-h-14 gap-3 py-2">
+      <div class="flex items-center space-x-4 min-w-0">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🧠</span>
+          <span class="font-bold text-lg hidden sm:inline">openpcbot v3</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        <span class="text-neutral-600">-</span>
+        <a href="https://inema.pro" target="_blank" class="text-amber-700 dark:text-slate-300 hover:opacity-80 text-sm font-medium">PRO</a>
+      </div>
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href="index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+        <span class="sm:hidden">T1</span>
+        <span class="hidden sm:inline">Fundamentos</span>
+      </a>
+<a href="../trilha2/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+        <span class="sm:hidden">T2</span>
+        <span class="hidden sm:inline">Instalar e operar</span>
+      </a>
+<a href="../trilha3/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+        <span class="sm:hidden">T3</span>
+        <span class="hidden sm:inline">Usar no dia a dia</span>
+      </a>
+<a href="../trilha4/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+        <span class="sm:hidden">T4</span>
+        <span class="hidden sm:inline">Configurar e estender</span>
+      </a>
+        <button type="button" data-inema-journey-open class="inline-flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 transition-colors">
+          <span aria-hidden="true">◷</span>
+          <span class="hidden lg:inline">Minha jornada</span>
+          <span class="inema-journey-badge hidden" data-inema-journey-badge data-count="0" aria-hidden="true"></span>
+        </button>
+        <div class="relative">
+          <button type="button" class="inema-appearance-trigger" data-inema-appearance-toggle="[data-inema-appearance]" aria-expanded="false" aria-label="Aparência">
+            <span aria-hidden="true">◑</span>
+            <span class="hidden lg:inline">Aparência</span>
+          </button>
+          <div data-inema-appearance class="inema-appearance-pop right-0">
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Tema</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-theme="inema-dark">Escuro</button>
+      <button type="button" data-inema-set-theme="claro">Claro</button>
+      <button type="button" data-inema-set-theme="sepia">Sépia</button>
+      <button type="button" data-inema-set-theme="foco">Foco</button>
+      <button type="button" data-inema-set-theme="contraste">Contraste</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Fonte</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-font="inter">Inter</button>
+      <button type="button" data-inema-set-font="system">Sistema</button>
+      <button type="button" data-inema-set-font="leitura">Leitura</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Texto</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-fontscale="100">A</button>
+      <button type="button" data-inema-set-fontscale="112">A+</button>
+      <button type="button" data-inema-set-fontscale="125">A++</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Linha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-linewidth="60">60</button>
+      <button type="button" data-inema-set-linewidth="68">68</button>
+      <button type="button" data-inema-set-linewidth="75">75</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Entrelinha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-leading="1.45">Compacta</button>
+      <button type="button" data-inema-set-leading="1.7">Confortável</button>
+    </div>
+  </div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Acento</span>
+    <div class="inema-accent-grid">
+      <button type="button" data-inema-set-accent="emerald" data-accent="emerald" aria-label="Acento emerald"></button>
+<button type="button" data-inema-set-accent="blue" data-accent="blue" aria-label="Acento blue"></button>
+<button type="button" data-inema-set-accent="purple" data-accent="purple" aria-label="Acento purple"></button>
+<button type="button" data-inema-set-accent="amber" data-accent="amber" aria-label="Acento amber"></button>
+<button type="button" data-inema-set-accent="teal" data-accent="teal" aria-label="Acento teal"></button>
+<button type="button" data-inema-set-accent="rose" data-accent="rose" aria-label="Acento rose"></button>
+    </div>
+  </div>
+</div>
+        </div>
+        <button id="theme-toggle" type="button" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors" aria-label="Alternar tema claro e escuro">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          </svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Breadcrumb">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-emerald-400">Início</a>
+    <span>/</span>
+    <a href="index.html" class="hover:text-emerald-400">Trilha 1</a>
+    <span>/</span>
+    <span class="text-emerald-400">Módulo 1.1</span>
+  </div>
+</nav>
+<header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-y border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">MÓDULO 1.1</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🧠 O que é o openpcbot v3</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Um Jarvis que cabe na sua máquina: assistente pessoal multicanal com fila durável em SQLite, cérebro com memória PT-BR e custo medido em toda chamada.</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-3xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">50</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Essencial</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Fundamento</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+    <div class="mt-8 max-w-xl"><div data-inema-meter="modulo:1-1" class="course-meter p-5 rounded-xl bg-dark-800/70 border border-dark-600" aria-label="Progresso do módulo 1.1">
+  <div class="flex items-center justify-between gap-4">
+    <span class="text-sm text-neutral-400">Progresso do módulo 1.1</span>
+    <span class="text-sm font-semibold text-primary" data-inema-meter-pct>0%</span>
+  </div>
+  <div class="flex items-center justify-between gap-4 mt-1">
+    <span class="text-xs text-neutral-500" data-inema-meter-frac>0 de 0</span>
+  </div>
+  <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+</div></div>
+  </div>
+</header>
+<main id="conteudo" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <article id="modulo-1-1" data-inema-module="1-1" data-inema-track="1" class="grid grid-cols-1 lg:grid-cols-[1fr_16rem] gap-10">
+    <div class="inema-prose max-w-none min-w-0">
+
+<section id="topico-1" data-inema-topic="modulo-1-1#topico-1" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"><div class="flex items-center space-x-4"><span class="inline-block w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl text-center leading-[3rem]">1</span><h2 class="text-2xl font-bold">📡 Um assistente com três portas de entrada</h2></div><button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m1-1-t1-p1">O openpcbot v3 é um assistente pessoal multicanal. Multicanal quer dizer que a mesma cabeça atende por três portas: o Telegram (o bot <strong>@inemav3bot</strong>), a linha de comando da sua máquina e uma porta HTTP local. Você escolhe por onde falar, a resposta sai pelo mesmo lugar de onde veio.</p>
+  <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🆕</span> Novo aqui?</h3>
+    <ul class="space-y-2 text-neutral-300 text-sm">
+      <li><strong>Canal</strong>: um jeito de conversar com o bot. Telegram, terminal e HTTP são canais diferentes do mesmo assistente.</li>
+      <li><strong>CLI</strong>: a linha de comando, aquele terminal preto onde você digita comandos. No v3 é <code>npm run cli</code>.</li>
+      <li><strong>HTTP</strong>: o jeito que programas conversam entre si na rede. Aqui é um endereço local que aceita uma mensagem e devolve a resposta.</li>
+      <li><strong>systemd</strong>: o programa do Linux que liga serviços sozinho e reinicia quando caem. O v3 roda como serviço de usuário chamado <code>openpcbotv3</code>.</li></ul></div>
+  <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">◆</span> Conceito principal</h3> <p class="text-neutral-300 mb-4" data-inema-block="m1-1-t1-p2">As três portas existem para que o assistente nunca fique inacessível. Se o Telegram estiver fora, o CLI continua. O serviço sobe mesmo sem token do Telegram, servindo só HTTP em <code>127.0.0.1:3142</code> e o CLI.</p>
+    <ul class="space-y-2 text-neutral-300 text-sm">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span><strong>Telegram</strong>: responde só ao chat autorizado em <code>ALLOWED_CHAT_ID</code>.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span><strong>CLI</strong>: <code>npm run cli -- "mensagem"</code>, sem sair da máquina.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span><strong>HTTP</strong>: <code>POST /mensagem</code> com <code>{"texto":"..."}</code>, mais o painel em <code>/</code>.</span></li></ul></div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3> <p class="text-neutral-300">A porta HTTP escuta em <code>127.0.0.1</code> por padrão, ou seja, só a sua máquina alcança. Expor na rede local exige <code>HTTP_BIND_V3=0.0.0.0</code> <strong>e</strong> <code>DASHBOARD_TOKEN_V3</code>, nunca só o primeiro.</p>
+  </div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+
+<section id="topico-2" data-inema-topic="modulo-1-1#topico-2" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"><div class="flex items-center space-x-4"><span class="inline-block w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl text-center leading-[3rem]">2</span><h2 class="text-2xl font-bold">🧱 As camadas que formam o v3</h2></div><button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m1-1-t2-p1">O v3 não é um arquivo gigante: é um conjunto de camadas, cada uma com uma responsabilidade só. A pasta <code>src/</code> tem uma subpasta por camada, e nenhum módulo passa de 500 linhas.</p>
+  <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🆕</span> Novo aqui?</h3>
+    <ul class="space-y-2 text-neutral-300 text-sm">
+      <li><strong>Bus</strong> (barramento): o correio interno do programa. Uma camada publica um aviso, por exemplo <code>mensagem.recebida</code>, e quem se interessa escuta. Assim o canal não precisa conhecer o cérebro.</li>
+      <li><strong>Fila</strong>: a lista de trabalhos a fazer, gravada em SQLite. Se o serviço reinicia, a lista continua lá. É isso que "durável" quer dizer.</li>
+      <li><strong>Orquestrador</strong>: quem lê a mensagem e decide o que fazer com ela.</li>
+      <li><strong>Cérebro</strong>: a memória do bot, o que ele lembra de você entre conversas.</li>
+      <li><strong>Ollama</strong>: o programa que roda modelos de IA dentro da sua máquina, sem internet e sem custo por uso.</li></ul></div>
+  <div class="rounded-2xl border border-emerald-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 300" class="w-full h-auto" role="img" aria-label="Diagrama das camadas do openpcbot v3: os canais Telegram, CLI e HTTP entram no bus; o bus leva ao orquestrador; o orquestrador usa a fila, o cérebro e o gestor do Ollama; toda chamada de modelo passa pelo gateway de custo antes de sair">
+  <defs>
+    <linearGradient id="svg-111a-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#10b981"/></linearGradient>
+    <filter id="svg-111a-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="svg-111a-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#10b981" opacity="0.12"/></pattern>
+    <marker id="svg-111a-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#34d399"/></marker>
+    <marker id="svg-111a-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="300" fill="url(#svg-111a-grid)"/>
+  <g font-family="Inter,sans-serif" font-size="13" font-weight="600">
+    <g class="wf-a"><rect x="30" y="40" width="130" height="34" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="95" y="62" text-anchor="middle" fill="#bfe6ff">Telegram</text></g>
+    <g class="wf-a"><rect x="30" y="118" width="130" height="34" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="95" y="140" text-anchor="middle" fill="#bfe6ff">CLI</text></g>
+    <g class="wf-a"><rect x="30" y="196" width="130" height="34" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/><text x="95" y="218" text-anchor="middle" fill="#bfe6ff">HTTP</text></g>
+  </g>
+  <g fill="none" stroke="#38bdf8" stroke-width="1.8" opacity="0.6">
+    <path d="M160,57 C210,57 220,135 250,135" marker-end="url(#svg-111a-ahc)"/><path d="M160,135 L250,135" marker-end="url(#svg-111a-ahc)"/><path d="M160,213 C210,213 220,135 250,135" marker-end="url(#svg-111a-ahc)"/>
+  </g>
+  <g filter="url(#svg-111a-glow)"><rect x="252" y="106" width="120" height="58" rx="13" fill="#0e2018" stroke="url(#svg-111a-grad)" stroke-width="2"/></g>
+  <text x="312" y="132" text-anchor="middle" fill="#34d399" font-family="Inter,sans-serif" font-weight="600" font-size="17">bus</text>
+  <text x="312" y="152" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="11">correio interno</text>
+  <g fill="none" stroke="#34d399" stroke-width="1.8" opacity="0.6"><path d="M372,135 L440,135" marker-end="url(#svg-111a-ah)"/></g>
+  <g filter="url(#svg-111a-glow)"><rect x="442" y="98" width="150" height="74" rx="13" fill="#0e2018" stroke="url(#svg-111a-grad)" stroke-width="2"/></g>
+  <text x="517" y="128" text-anchor="middle" fill="#34d399" font-family="Inter,sans-serif" font-weight="600" font-size="17">orquestrador</text>
+  <text x="517" y="150" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="11">decide o que fazer</text>
+  <g fill="none" stroke="#34d399" stroke-width="1.8" opacity="0.6">
+    <path d="M592,120 C650,120 660,60 700,60" marker-end="url(#svg-111a-ah)"/><path d="M592,135 L700,135" marker-end="url(#svg-111a-ah)"/><path d="M592,150 C650,150 660,210 700,210" marker-end="url(#svg-111a-ah)"/>
+  </g>
+  <g font-family="Inter,sans-serif" font-size="13" font-weight="600">
+    <rect x="700" y="42" width="150" height="36" rx="9" fill="#0e2018" stroke="#34d399" stroke-width="2"/><text x="775" y="65" text-anchor="middle" fill="#a7f3d0">fila (SQLite)</text>
+    <rect x="700" y="117" width="150" height="36" rx="9" fill="#0e2018" stroke="#34d399" stroke-width="2"/><text x="775" y="140" text-anchor="middle" fill="#a7f3d0">cérebro</text>
+    <rect x="700" y="192" width="150" height="36" rx="9" fill="#0e2018" stroke="#34d399" stroke-width="2"/><text x="775" y="215" text-anchor="middle" fill="#a7f3d0">gestor do Ollama</text>
+  </g>
+  <g filter="url(#svg-111a-glow)"><rect x="330" y="232" width="420" height="44" rx="12" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/></g>
+  <text x="540" y="260" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-weight="600" font-size="15">gateway de custo: toda chamada de modelo passa aqui</text>
+</svg>
+</div>
+  <p class="text-sm text-neutral-400 mb-8">O que olhar: em azul, o que vem de fora e o que mede o gasto. Em verde, o que é decisão e estado do bot. Nenhuma seta pula o gateway quando um modelo é chamado.</p>
+  <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">◆</span> Conceito principal</h3> <p class="text-neutral-300 mb-4" data-inema-block="m1-1-t2-p2">A lista de camadas aparece na pasta <code>src/</code>: <code>bus/</code>, <code>canais/</code>, <code>fila/</code>, <code>orquestrador/</code>, <code>ollama/</code>, <code>custo/</code>, <code>cerebro/</code>, <code>tarefas/</code>, <code>telemetria/</code>, <code>dashboard/</code>, <code>cli/</code> e <code>db/</code>. Guardar as sete primeiras já explica quase tudo que acontece com uma mensagem.</p>
+  </div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+
+<section id="topico-3" data-inema-topic="modulo-1-1#topico-3" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"><div class="flex items-center space-x-4"><span class="inline-block w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl text-center leading-[3rem]">3</span><h2 class="text-2xl font-bold">🕰️ De onde veio: o v3 roda ao lado do v2</h2></div><button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m1-1-t3-p1">O v3 é sucessor do <code>openpcbotv2</code>, que continua em produção no bot <strong>@inemaclaudebot</strong>. O v3 tem bot próprio (<strong>@inemav3bot</strong>), porta própria (3142) e banco próprio (<code>store/openpcbotv3.db</code>). Estrangulamento, não corte: o novo sobe ao lado, prova que funciona, e só depois o velho sai.</p>
+  <div class="space-y-6 mb-6">
+    <div class="flex items-start space-x-4"><div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-center leading-[3rem]">1</div>
+      <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600"><h4 class="font-semibold text-white mb-2">O diagnóstico do v2</h4>
+        <p class="text-neutral-300 text-sm">Um monólito: <code>src/bot.ts</code> com 145 KB, sem fila, sem custo por chamada, sem gestão do Ollama, e a memória semântica classificando por regex só em inglês, o que a deixava quebrada em português.</p></div></div>
+    <div class="flex items-start space-x-4"><div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-center leading-[3rem]">2</div>
+      <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600"><h4 class="font-semibold text-white mb-2">3.0.0, em 2026-09-06: fases 0 a 7 no ar</h4>
+        <p class="text-neutral-300 text-sm">Esqueleto e bus, fila e gestor do Ollama, custo e telemetria, canal Telegram e orquestrador, cérebro, tarefas e cron, canais extras, dashboard e backup. A fase 8, o corte, ficou de fora de propósito.</p></div></div>
+    <div class="flex items-start space-x-4"><div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-center leading-[3rem]">3</div>
+      <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600"><h4 class="font-semibold text-white mb-2">3.1.0 e 3.1.1: conectores</h4>
+        <p class="text-neutral-300 text-sm">E-mails e agendas Google versionados em <code>conectores/google/</code>, Telegram com chats observados, e a ingestão que transforma texto bruto em fatos duráveis usando o modelo local, com custo zero.</p></div></div>
+    <div class="flex items-start space-x-4"><div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-center leading-[3rem]">4</div>
+      <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600"><h4 class="font-semibold text-white mb-2">3.2.1 a 3.2.3: a fase 9, "Jarvis obedece"</h4>
+        <p class="text-neutral-300 text-sm">Interruptores <code>/parar</code> e <code>/retomar</code>, modos de fila por chat, persona em camadas, <code>/context</code>, <code>doctor --deep</code> e ferramentas externas declaradas por agente. São 187 testes passando em <code>npm test</code>.</p></div></div>
+  </div>
+  <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">◆</span> Conceito principal</h3> <p class="text-neutral-300 mb-4" data-inema-block="m1-1-t3-p2">Rodar ao lado impõe regras. O token do Telegram do v2 é recusado no boot do v3, porque dois programas pedindo <code>getUpdates</code> ao mesmo bot geram erro 409 e deixam o bot surdo. O banco do v2 só é lido por snapshot. WhatsApp e Slack ficam desligados no v3 enquanto o v2 é dono da sessão e do token.</p>
+  </div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+
+<section id="topico-4" data-inema-topic="modulo-1-1#topico-4" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"><div class="flex items-center space-x-4"><span class="inline-block w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl text-center leading-[3rem]">4</span><h2 class="text-2xl font-bold">🏠 O que roda local e o que vai para a nuvem</h2></div><button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m1-1-t4-p1">O padrão do v3 é resolver na sua máquina. Só sobe para a nuvem o que o local não dá conta, e cada subida registra o motivo.</p>
+  <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🆕</span> Novo aqui?</h3>
+    <ul class="space-y-2 text-neutral-300 text-sm">
+      <li><strong>Tier</strong>: a faixa de qualidade e preço escolhida para aquela chamada. O v3 tem três: <code>local</code>, <code>barato</code> e <code>premium</code>.</li>
+      <li><strong>Gateway</strong>: o portão único por onde toda chamada de modelo passa, em <code>src/custo/gateway.ts</code>. É ele que escolhe o tier, mede a latência e grava o custo.</li>
+      <li><strong>Token</strong> (no sentido de custo): o pedaço de texto que os provedores cobram. Preço em dólares por milhão de tokens fica em <code>config/precos.yaml</code>.</li></ul></div>
+  <div class="rounded-2xl border border-emerald-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 250" class="w-full h-auto" role="img" aria-label="Escada dos três tiers de custo: local no Ollama com qwen3.8:27b e custo zero, barato no OpenRouter com claude-haiku-4.5, premium pelo CLI claude com sonnet ou opus; a subida só acontece quando o tier de baixo não resolve">
+  <defs>
+    <linearGradient id="svg-111b-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#10b981"/></linearGradient>
+    <filter id="svg-111b-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="svg-111b-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#10b981" opacity="0.12"/></pattern>
+    <marker id="svg-111b-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="250" fill="url(#svg-111b-grid)"/>
+  <g filter="url(#svg-111b-glow)"><rect x="40" y="150" width="270" height="72" rx="13" fill="#0e2018" stroke="url(#svg-111b-grad)" stroke-width="2"/></g>
+  <text x="175" y="180" text-anchor="middle" fill="#34d399" font-family="Inter,sans-serif" font-weight="700" font-size="18">local · Ollama</text>
+  <text x="175" y="203" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">qwen3.8:27b residente · custo 0</text>
+  <g filter="url(#svg-111b-glow)"><rect x="365" y="92" width="270" height="72" rx="13" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/></g>
+  <text x="500" y="122" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-weight="700" font-size="18">barato · OpenRouter</text>
+  <text x="500" y="145" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">claude-haiku-4.5</text>
+  <g filter="url(#svg-111b-glow)"><rect x="690" y="34" width="270" height="72" rx="13" fill="#0e1b26" stroke="#38bdf8" stroke-width="2"/></g>
+  <text x="825" y="64" text-anchor="middle" fill="#bfe6ff" font-family="Inter,sans-serif" font-weight="700" font-size="18">premium · claude -p</text>
+  <text x="825" y="87" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">sonnet ou opus, por agente</text>
+  <g fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.7"><path d="M312,170 L363,128" marker-end="url(#svg-111b-ahc)"/><path d="M637,112 L688,70" marker-end="url(#svg-111b-ahc)"/></g>
+  <text x="500" y="232" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="13">sobe de degrau só com motivo registrado</text>
+</svg>
+</div>
+  <p class="text-sm text-neutral-400 mb-8">O que olhar: o degrau de baixo é o padrão e é grátis. Cada seta para cima custa dinheiro, por isso o motivo da subida é gravado junto com a chamada.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+      <h4 class="font-bold text-emerald-400 mb-4">✓ Fica na sua máquina</h4>
+      <ul class="space-y-3 text-neutral-300 text-sm">
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Conversa comum, pergunta curta, resumo, tradução: tier <code>local</code>.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>A decisão de rota, feita pelo modelo pequeno <code>llama3.2</code>.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Os vetores da memória, gerados por <code>bge-m3</code>.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>A consolidação noturna da memória, às 4h, custo zero.</span></li></ul></div>
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+      <h4 class="font-bold text-red-400 mb-4">✗ Sai da máquina e custa</h4>
+      <ul class="space-y-3 text-neutral-300 text-sm">
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Raciocínio longo em resposta direta cai no tier <code>barato</code>.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Ollama sem RAM suficiente também cai no tier <code>barato</code>, com alerta.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Rota de agente vai para o tier <code>premium</code> pelo CLI <code>claude</code>.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Orçamento em 100 % trava tudo isso: só o Ollama passa.</span></li></ul></div>
+  </div>
+  <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">◆</span> Conceito principal</h3> <p class="text-neutral-300 mb-4" data-inema-block="m1-1-t4-p2">O orçamento mensal vem de <code>ORCAMENTO_MENSAL_USD</code> e de <code>config/orcamento.yaml</code>: aviso em 70 %, trava em 100 %. Travado, o assistente não emudece, ele volta a ser inteiramente local.</p>
+  </div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+
+<section id="topico-5" data-inema-topic="modulo-1-1#topico-5" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"><div class="flex items-center space-x-4"><span class="inline-block w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl text-center leading-[3rem]">5</span><h2 class="text-2xl font-bold">📏 As regras de ouro do projeto</h2></div><button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m1-1-t5-p1">Quatro regras vieram do v2 e do hub de monitoramento e valem para qualquer mudança no código. Elas parecem burocracia até o dia em que a máquina fica sem memória no meio de uma conversa.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+      <h4 class="font-bold text-emerald-400 mb-4">✓ O que fazer</h4>
+      <ul class="space-y-3 text-neutral-300 text-sm">
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Passar toda chamada de modelo por <code>src/custo/gateway.ts</code>, inclusive as que geram os vetores de significado da memória, os embeddings.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Falar com o Ollama só por HTTP, na porta 11434 do serviço systemd.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Manter cada módulo de <code>src/</code> abaixo de 500 linhas.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Registrar toda falha real como uma linha em <code>FALHAS.md</code>, antes da próxima tarefa.</span></li></ul></div>
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+      <h4 class="font-bold text-red-400 mb-4">✗ O que não fazer</h4>
+      <ul class="space-y-3 text-neutral-300 text-sm">
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Subir um <code>ollama serve</code> paralelo ao serviço.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Gerar mídia paga sem confirmação explícita no momento.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Mudar a tag do papel <code>geral</code> sem mudar no v2: viram dois modelões residentes e a máquina fica sem memória.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Descarregar um modelo que o v3 não carregou: pode ser do v2.</span></li></ul></div>
+  </div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3> <p class="text-neutral-300">A linha do <code>FALHAS.md</code> tem quatro campos: data, o que quebrou, a menor correção possível e se era problema de prompt ou de infraestrutura. Depois de umas dez linhas o padrão aparece sozinho.</p>
+  </div>
+  <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">◆</span> Conceito principal</h3> <p class="text-neutral-300 mb-4" data-inema-block="m1-1-t5-p2">O serviço roda com <code>MemoryHigh=1.5G</code> e <code>MemoryMax=2G</code> no cgroup, mais <code>--max-old-space-size=1024</code> no Node. O pico observado foi de cerca de 1 GB com um agente rodando. Esse teto é o que garante que o v3 não derrube o v2.</p>
+  </div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+
+<section id="topico-6" data-inema-topic="modulo-1-1#topico-6" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"><div class="flex items-center space-x-4"><span class="inline-block w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl text-center leading-[3rem]">6</span><h2 class="text-2xl font-bold">✅ O que ele já faz e o que ainda não</h2></div><button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm"><span aria-hidden="true">?</span><span>Tenho dúvida</span></button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m1-1-t6-p1">Na versão 3.2.3 o v3 conversa, delega trabalho a agentes, lembra, agenda, avisa quando quebra e mostra quanto custou. A lista do que falta também está escrita, e isso importa tanto quanto a lista do que existe.</p>
+  <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">🆕</span> Novo aqui?</h3>
+    <ul class="space-y-2 text-neutral-300 text-sm">
+      <li><strong>Agente</strong>: um trabalhador com ferramentas. Diferente da conversa, ele pode abrir arquivo, rodar comando, mexer em repositório, buscar na web. No v3 cada agente é uma pasta em <code>agents/</code>.</li>
+      <li><strong>Skill</strong>: uma receita escrita em <code>skills/&lt;id&gt;/SKILL.md</code> que ensina o bot a fazer um tipo de tarefa. Só o resumo dela entra no prompt, para não gastar token à toa.</li>
+      <li><strong>MCP</strong>: um padrão para plugar ferramentas externas em um agente. No v3 cada agente pode declarar as suas em <code>mcp_config</code> e ver só aquelas.</li></ul></div>
+  <div class="bg-dark-900 rounded-xl border border-dark-600 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-emerald-400 mb-2 flex items-center"><span class="mr-2">⌨️</span> Copie e rode</h3>
+    <p class="text-sm text-neutral-400 mb-3"><strong>Objetivo:</strong> descobrir qual versão está no ar e se o serviço responde, sem depender do Telegram.</p>
+    <pre class="bg-dark-800 border border-dark-600 rounded-lg p-4 overflow-x-auto text-sm text-neutral-200"><code>curl http://127.0.0.1:3142/health</code></pre>
+    <p class="text-sm text-neutral-400 mt-3"><strong>Como verificar:</strong> volta um JSON com <code>ok</code>, mais fila, modelos, RAM e orçamento. No Telegram, o mesmo par de perguntas se faz com <code>/versao</code> e <code>/health</code>.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+      <h4 class="font-bold text-emerald-400 mb-4">✓ Já faz hoje (3.2.3)</h4>
+      <ul class="space-y-3 text-neutral-300 text-sm">
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Conversa no Telegram, no CLI e por HTTP, com fila durável por trás.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Delega a agentes com <code>claude -p</code> e junta especialistas só leitura.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Lembra, consolida de madrugada e propõe entradas no vault para você aprovar.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Mede custo por chamada, avisa em 70 % do orçamento e trava em 100 %.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Faz backup noturno com retenção de 14 cópias em <code>store/backups/</code>.</span></li></ul></div>
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+      <h4 class="font-bold text-red-400 mb-4">✗ Ainda não faz</h4>
+      <ul class="space-y-3 text-neutral-300 text-sm">
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Fase 8, o corte: trocar o token de produção e arquivar o v2. Só com ordem explícita.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Fase 10, anotada: cliente MCP nativo no caminho Ollama, voz no Telegram, <code>/retry</code> e <code>/undo</code>.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>WhatsApp de verdade, em daemon separado, e Slack ligado.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>A memória guarda a frase inteira, não um fato extraído dela.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>A tabela <code>jobs</code> nunca é limpa: crescem cerca de 1,5 mil linhas por dia.</span></li></ul></div>
+  </div>
+  <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+    <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">◆</span> Conceito principal</h3> <p class="text-neutral-300 mb-4" data-inema-block="m1-1-t6-p2">Ter a lista do que falta escrita no próprio repositório é o que permite dizer "ainda não" sem parecer defeito. A fase 8 não começa por iniciativa do código: ela espera ordem.</p>
+  </div>
+  <div class="flex justify-start mt-6"><button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/30 transition-colors"><span class="inema-read-icon" aria-hidden="true">○</span><span data-inema-read-label>Marcar como lido</span></button></div>
+</section>
+
+<section class="mb-12">
+  <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+    <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+    <div class="space-y-4 mb-8">
+      <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Três portas de entrada</strong><span class="text-neutral-400"> - Telegram, CLI e HTTP para a mesma cabeça</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Camadas separadas</strong><span class="text-neutral-400"> - bus, fila, orquestrador, cérebro, Ollama, custo</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Ao lado do v2</strong><span class="text-neutral-400"> - bot, porta e banco próprios, sem corte seco</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Local por padrão</strong><span class="text-neutral-400"> - nuvem só com motivo registrado e orçamento vigiado</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Quatro regras de ouro</strong><span class="text-neutral-400"> - gateway, Ollama por HTTP, 500 linhas, FALHAS.md</span></div></div>
+      <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">O que falta está escrito</strong><span class="text-neutral-400"> - fase 8 e fase 10 esperam ordem</span></div></div>
+    </div>
+    <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+      <h3 class="font-semibold text-emerald-400 mb-2">Próximo módulo:</h3>
+      <p class="text-neutral-300">1.2 - O caminho de uma mensagem</p>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">Voltar para a trilha</a>
+      <a href="modulo-1-2.html" class="flex-1 text-center px-6 py-3 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded-lg font-semibold hover:bg-emerald-500/30 transition-colors">Próximo módulo: O caminho de uma mensagem</a>
+    </div>
+  </div>
+</section>
+    </div>
+    <nav data-inema-toc aria-label="Índice da página" class="hidden lg:block sticky top-24 self-start">
+  <p class="inema-toc-progress"><span data-inema-section-counter>Seção 1 de 6</span></p>
+  <ul class="space-y-1">
+    <li><a href="#topico-1">1. Três portas de entrada</a></li>
+<li><a href="#topico-2">2. As camadas que formam o v3</a></li>
+<li><a href="#topico-3">3. O v3 roda ao lado do v2</a></li>
+<li><a href="#topico-4">4. Local e nuvem</a></li>
+<li><a href="#topico-5">5. As regras de ouro</a></li>
+<li><a href="#topico-6">6. O que já faz e o que não</a></li>
+  </ul>
+</nav>
+  </article>
+</main>
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>openpcbot v3: seu Jarvis local · INEMA.CLUB · 2026</p>
+    </div>
+  </footer>
+  <script>
+function toggleTopic(button) {
+  var panelId = button.getAttribute('aria-controls');
+  var explanation = panelId ? document.getElementById(panelId) : null;
+  if (!explanation) return;
+  var moduleCard = button.closest('[data-inema-module]') || button.closest('.module-shell') || document;
+  moduleCard.querySelectorAll('.topic-explanation.active').forEach(function (exp) {
+    if (exp !== explanation) {
+      exp.classList.remove('active');
+      var other = moduleCard.querySelector('[aria-controls="' + exp.id + '"]');
+      if (other) other.setAttribute('aria-expanded', 'false');
+    }
+  });
+  var next = !explanation.classList.contains('active');
+  explanation.classList.toggle('active', next);
+  button.setAttribute('aria-expanded', next ? 'true' : 'false');
+}
+function openModal(modalId) {
+  var modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    var close = modal.querySelector('[data-modal-close]');
+    if (close) close.focus();
+  }
+}
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(function (modal) {
+    modal.classList.add('hidden');
+  });
+  document.body.style.overflow = 'auto';
+}
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+<script src="../../assets/learn.js"></script>
+<script>
+if (window.INEMA && typeof window.INEMA.init === 'function') {
+  window.INEMA.init();
+}
+document.addEventListener('click', function (e) {
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var nav = t.closest('nav');
+  if (!nav) return;
+  var journey = t.closest('[data-inema-journey-open]');
+  if (journey && window.INEMA && INEMA.openJourney) {
+    e.preventDefault();
+    INEMA.openJourney();
+    return;
+  }
+  var toggle = t.closest('[data-inema-appearance-toggle]');
+  if (toggle) {
+    var targetSel = toggle.getAttribute('data-inema-appearance-toggle');
+    var panel = targetSel ? document.querySelector(targetSel) : document.querySelector('[data-inema-appearance]');
+    if (panel) {
+      var open = panel.getAttribute('data-open') !== 'true';
+      panel.setAttribute('data-open', open ? 'true' : 'false');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    return;
+  }
+  var pairs = [
+    ['data-inema-set-theme', 'theme'],
+    ['data-inema-set-font', 'font'],
+    ['data-inema-set-fontscale', 'fontScale'],
+    ['data-inema-set-linewidth', 'lineWidth'],
+    ['data-inema-set-leading', 'leading'],
+    ['data-inema-set-accent', 'accent']
+  ];
+  for (var i = 0; i < pairs.length; i++) {
+    var btn = t.closest('[' + pairs[i][0] + ']');
+    if (btn && window.INEMA && INEMA.setPref) {
+      var raw = btn.getAttribute(pairs[i][0]);
+      var key = pairs[i][1];
+      var value = key === 'fontScale' || key === 'lineWidth' ? parseInt(raw, 10) : (key === 'leading' ? parseFloat(raw) : raw);
+      INEMA.setPref(key, value);
+      return;
+    }
+  }
+  var theme = t.closest('#theme-toggle');
+  if (theme) {
+    var html = document.documentElement;
+    var next = html.classList.contains('dark') ? 'claro' : 'inema-dark';
+    if (window.INEMA && INEMA.setPref) {
+      INEMA.setPref('theme', next);
+    } else {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    }
+  }
+});
+</script>
+</body>
+</html>

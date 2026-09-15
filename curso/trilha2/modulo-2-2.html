@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="inema-course" content="curso-openpcbotv3">
+  <script>
+(function () {
+  try {
+    var html = document.documentElement;
+    var DEF = { theme: 'inema-dark', font: 'inter', fontScale: 100, lineWidth: 68, leading: 1.7, accent: 'emerald' };
+    function clone(o) { var r = {}; for (var x in o) r[x] = o[x]; return r; }
+    var p = clone(DEF);
+    try {
+      var raw = localStorage.getItem('inema.prefs');
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          for (var k in DEF) if (parsed[k] != null) p[k] = parsed[k];
+        }
+      } else {
+        var legacy = localStorage.getItem('theme');
+        if (legacy === 'light') p.theme = 'claro';
+        else if (legacy === 'dark') p.theme = 'inema-dark';
+      }
+    } catch (e) { p = clone(DEF); }
+    var THEMES = {
+      'inema-dark': { dark: true,  attr: null,        cs: 'dark'  },
+      'claro':      { dark: false, attr: null,        cs: 'light' },
+      'sepia':      { dark: false, attr: 'sepia',     cs: 'light' },
+      'foco':       { dark: null,  attr: 'foco',      cs: null    },
+      'contraste':  { dark: true,  attr: 'contraste', cs: 'dark'  }
+    };
+    var t = THEMES[p.theme] || THEMES['inema-dark'];
+    if (t.dark === true) html.classList.add('dark');
+    else if (t.dark === false) html.classList.remove('dark');
+    if (t.attr) html.setAttribute('data-theme', t.attr);
+    else html.removeAttribute('data-theme');
+    html.style.colorScheme = (t.cs ? t.cs : (html.classList.contains('dark') ? 'dark' : 'light'));
+    html.setAttribute('data-font', p.font || 'inter');
+    html.setAttribute('data-accent', p.accent || 'emerald');
+    var s = html.style;
+    var scale = (+p.fontScale || 100);
+    s.setProperty('--inema-font-scale', (scale / 100).toString());
+    s.setProperty('font-size', scale + '%');
+    s.setProperty('--measure', (+p.lineWidth || 68) + 'ch');
+    s.setProperty('--lh-body', (+p.leading || 1.7).toString());
+    var fam = p.font === 'system'
+      ? 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+      : (p.font === 'leitura'
+        ? '"Atkinson Hyperlegible", "Inter", system-ui, sans-serif'
+        : '"Inter", system-ui, sans-serif');
+    s.setProperty('--font-body', fam);
+    var ACC = {
+      emerald: [152, 76, 45], blue: [217, 91, 60], purple: [258, 90, 66],
+      amber: [38, 92, 50], teal: [174, 72, 41], rose: [350, 89, 60]
+    };
+    var a = ACC[p.accent] || ACC.emerald;
+    s.setProperty('--accent-h', a[0] + '');
+    s.setProperty('--accent-s', a[1] + '%');
+    s.setProperty('--accent-l', a[2] + '%');
+    s.setProperty('--accent', 'hsl(' + a[0] + ' ' + a[1] + '% ' + a[2] + '%)');
+  } catch (err) {
+    try { document.documentElement.classList.add('dark'); document.documentElement.style.colorScheme = 'dark'; } catch (e) {}
+  }
+})();
+</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
+      primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <script type="application/json" data-inema-manifest>
+{
+  "course": "curso-openpcbotv3",
+  "tracks": [
+    {
+      "n": "1",
+      "title": "Fundamentos",
+      "modules": [
+        {
+          "id": "1-1",
+          "title": "O que é o openpcbot v3",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-1.html"
+        },
+        {
+          "id": "1-2",
+          "title": "O caminho de uma mensagem",
+          "topics": 6,
+          "href": "curso/trilha1/modulo-1-2.html"
+        }
+      ]
+    },
+    {
+      "n": "2",
+      "title": "Instalar e operar",
+      "modules": [
+        {
+          "id": "2-1",
+          "title": "Subir o v3",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-1.html"
+        },
+        {
+          "id": "2-2",
+          "title": "Operar no dia a dia",
+          "topics": 6,
+          "href": "curso/trilha2/modulo-2-2.html"
+        }
+      ]
+    },
+    {
+      "n": "3",
+      "title": "Usar no dia a dia",
+      "modules": [
+        {
+          "id": "3-1",
+          "title": "Comandos e conversa",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-1.html"
+        },
+        {
+          "id": "3-2",
+          "title": "Cérebro e conectores",
+          "topics": 6,
+          "href": "curso/trilha3/modulo-3-2.html"
+        }
+      ]
+    },
+    {
+      "n": "4",
+      "title": "Configurar e estender",
+      "modules": [
+        {
+          "id": "4-1",
+          "title": "Controle da conversa",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-1.html"
+        },
+        {
+          "id": "4-2",
+          "title": "Agentes, skills, custo e o que vem",
+          "topics": 6,
+          "href": "curso/trilha4/modulo-4-2.html"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Módulo 2.2: Operar no dia a dia | openpcbot v3: seu Jarvis local</title>
+  <style>
+body { font-family: 'Inter', sans-serif; }
+.dark body { background-color: #111827; }
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 100;
+  padding: .75rem 1rem;
+  background: #111827;
+  color: #facc15;
+  border: 1px solid #4b5563;
+  border-radius: .5rem;
+}
+.skip:focus { left: .75rem; top: .75rem; }
+.topic-explanation { display: none; }
+.topic-explanation.active { display: block; }
+.dark .border-dark-600 { border-color: #374151; }
+.dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+html:not(.dark) body { background-color: #f8fafc; } html:not(.dark) .bg-dark-900 { background-color: #ffffff; } html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; } html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; } html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+html:not(.dark) .bg-dark-800\/50 { background-color: rgba(249, 250, 251, 0.88); } html:not(.dark) .bg-dark-800\/70 { background-color: rgba(249, 250, 251, 0.94); } html:not(.dark) .bg-dark-900\/40 { background-color: rgba(255, 255, 255, 0.72); }
+html:not(.dark) .bg-dark-700\/30 { background-color: rgba(243, 244, 246, 0.72); } html:not(.dark) .bg-dark-700\/50 { background-color: rgba(243, 244, 246, 0.86); } html:not(.dark) .text-neutral-100 { color: #111827; }
+html:not(.dark) .text-neutral-200 { color: #1f2937; } html:not(.dark) .text-neutral-300 { color: #4b5563; } html:not(.dark) .text-neutral-400 { color: #6b7280; }
+html:not(.dark) .text-neutral-500 { color: #9ca3af; } html:not(.dark) .text-white { color: #111827; } html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+html:not(.dark) .border-dark-700 { border-color: #e5e7eb; } html:not(.dark) .text-emerald-400 { color: #059669; } html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; } html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); } html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5, 150, 105, 0.08); } html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); } html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); } html:not(.dark) .text-blue-400 { color: #2563eb; } html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; } html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); } html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37, 99, 235, 0.08); } html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); } html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); } html:not(.dark) .text-purple-400 { color: #7c3aed; } html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; } html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); } html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+html:not(.dark) .bg-purple-900\/20 { background-color: rgba(124, 58, 237, 0.08); } html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); } html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); } html:not(.dark) .text-amber-400 { color: #92400e; } html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+html:not(.dark) .group:hover .group-hover\:text-amber-400 { color: #92400e; } html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); } html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+html:not(.dark) .bg-amber-900\/20 { background-color: rgba(217, 119, 6, 0.08); } html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); } html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(217, 119, 6, 0.18); }
+html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); } html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; } html:not(.dark) .text-primary { color: #a16207; }
+html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+html:not(.dark) .border-primary\/30,
+html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); } html:not(.dark) .text-sky-400 { color: #0369a1; } html:not(.dark) .text-yellow-400 { color: #a16207; }
+html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; } html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; } html:not(.dark) .bg-red-900\/20 { background-color: rgba(220, 38, 38, 0.08); }
+html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.24); } html:not(.dark) .text-red-400 { color: #b91c1c; } html:not(.dark) svg[role="img"] { filter: saturate(0.82) brightness(0.96); }
+@keyframes wf-pulse { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+@media (prefers-reduced-motion: no-preference) {
+  .wf-a { animation: wf-pulse 2.6s ease-in-out infinite; }
+  .wf-a:nth-child(2){animation-delay:.25s}
+  .wf-a:nth-child(3){animation-delay:.5s}
+  .wf-a:nth-child(4){animation-delay:.75s}
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+.module-shell { scroll-margin-top: 5rem; }
+.inema-prose pre, .inema-prose .mock { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
+article[data-inema-module] > .inema-prose { width: 100%; min-width: 0; }
+.topic-section { scroll-margin-top: 5rem; }
+.course-meter .inema-bar { margin-top: .75rem; }
+table.tabela-ops { width: 100%; border-collapse: collapse; font-size: .875rem; }
+table.tabela-ops th, table.tabela-ops td { text-align: left; padding: .5rem .75rem; border-bottom: 1px solid #374151; vertical-align: top; }
+html:not(.dark) table.tabela-ops th, html:not(.dark) table.tabela-ops td { border-bottom-color: #d1d5db; }
+  </style>
+  <link rel="stylesheet" href="../../assets/learn.css">
+
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-wrap justify-between items-center min-h-14 gap-3 py-2">
+      <div class="flex items-center space-x-4 min-w-0">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🧠</span>
+          <span class="font-bold text-lg hidden sm:inline">openpcbot v3</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        <span class="text-neutral-600">-</span>
+        <a href="https://inema.pro" target="_blank" class="text-amber-700 hover:text-amber-600 dark:text-slate-300 dark:hover:text-slate-200 text-sm font-medium">PRO</a>
+</div>
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href="../trilha1/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+        <span class="sm:hidden">T1</span>
+        <span class="hidden sm:inline">Fundamentos</span>
+      </a>
+<a href="index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+        <span class="sm:hidden">T2</span>
+        <span class="hidden sm:inline">Instalar e operar</span>
+      </a>
+<a href="../trilha3/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+        <span class="sm:hidden">T3</span>
+        <span class="hidden sm:inline">Usar no dia a dia</span>
+      </a>
+<a href="../trilha4/index.html" class="px-2 sm:px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+        <span class="sm:hidden">T4</span>
+        <span class="hidden sm:inline">Configurar e estender</span>
+      </a>
+        <button type="button" data-inema-journey-open class="inline-flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-lg text-neutral-300 hover:text-neutral-100 transition-colors">
+          <span aria-hidden="true">◷</span>
+          <span class="hidden lg:inline">Minha jornada</span>
+          <span class="inema-journey-badge hidden" data-inema-journey-badge data-count="0" aria-hidden="true"></span>
+</button>
+        <div class="relative">
+          <button type="button" class="inema-appearance-trigger" data-inema-appearance-toggle="[data-inema-appearance]" aria-expanded="false" aria-label="Aparência">
+            <span aria-hidden="true">◑</span>
+            <span class="hidden lg:inline">Aparência</span>
+</button>
+          <div data-inema-appearance class="inema-appearance-pop right-0">
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Tema</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-theme="inema-dark">Escuro</button>
+      <button type="button" data-inema-set-theme="claro">Claro</button>
+      <button type="button" data-inema-set-theme="sepia">Sépia</button>
+      <button type="button" data-inema-set-theme="foco">Foco</button>
+      <button type="button" data-inema-set-theme="contraste">Contraste</button>
+</div></div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Fonte</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-font="inter">Inter</button>
+      <button type="button" data-inema-set-font="system">Sistema</button>
+      <button type="button" data-inema-set-font="leitura">Leitura</button>
+</div></div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Texto</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-fontscale="100">A</button>
+      <button type="button" data-inema-set-fontscale="112">A+</button>
+      <button type="button" data-inema-set-fontscale="125">A++</button>
+</div></div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Linha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-linewidth="60">60</button>
+      <button type="button" data-inema-set-linewidth="68">68</button>
+      <button type="button" data-inema-set-linewidth="75">75</button>
+</div></div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Entrelinha</span>
+    <div class="inema-segment">
+      <button type="button" data-inema-set-leading="1.45">Compacta</button>
+      <button type="button" data-inema-set-leading="1.7">Confortável</button>
+</div></div>
+  <div class="inema-pref-group">
+    <span class="inema-pref-group__label">Acento</span>
+    <div class="inema-accent-grid">
+      <button type="button" data-inema-set-accent="emerald" data-accent="emerald" aria-label="Acento emerald"></button>
+<button type="button" data-inema-set-accent="blue" data-accent="blue" aria-label="Acento blue"></button>
+<button type="button" data-inema-set-accent="purple" data-accent="purple" aria-label="Acento purple"></button>
+<button type="button" data-inema-set-accent="amber" data-accent="amber" aria-label="Acento amber"></button>
+<button type="button" data-inema-set-accent="teal" data-accent="teal" aria-label="Acento teal"></button>
+<button type="button" data-inema-set-accent="rose" data-accent="rose" aria-label="Acento rose"></button>
+</div></div></div></div>
+        <button id="theme-toggle" type="button" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors" aria-label="Alternar tema claro e escuro">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+</svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+</svg></button></div></div></div>
+</nav>
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Breadcrumb">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-blue-400">Início</a>
+    <span>/</span>
+    <a href="index.html" class="hover:text-blue-400">Trilha 2</a>
+    <span>/</span>
+    <span class="text-blue-400">Módulo 2.2</span>
+</div>
+</nav>
+<header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-y border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">MÓDULO 2.2</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🩺 Operar no dia a dia</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Diagnóstico, logs e o que fazer quando quebra: <code>doctor</code> e <code>doctor --deep</code>, journal e dashboard, <code>/health</code>, <code>/status</code> e <code>/usage</code>, os alertas com dedupe, o backup noturno e o procedimento de quebra.</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 max-w-3xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">45</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Técnico</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Prático</div><div class="text-xs text-neutral-400">Tipo</div></div>
+</div>
+    <div class="mt-8 max-w-xl"><div data-inema-meter="modulo:2-2" class="course-meter p-5 rounded-xl bg-dark-800/70 border border-dark-600" aria-label="Progresso do módulo 2.2">
+  <div class="flex items-center justify-between gap-4">
+    <span class="text-sm text-neutral-400">Progresso do módulo 2.2</span>
+    <span class="text-sm font-semibold text-primary" data-inema-meter-pct>0%</span>
+</div>
+  <div class="flex items-center justify-between gap-4 mt-1">
+    <span class="text-xs text-neutral-500" data-inema-meter-frac>0 de 0</span>
+</div>
+  <div class="inema-bar"><div class="inema-bar__fill" data-inema-meter-fill></div></div>
+</div></div>
+</div>
+</header>
+<main id="conteudo" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <article id="modulo-2-2" data-inema-module="2-2" data-inema-track="2" class="grid grid-cols-1 lg:grid-cols-[1fr_16rem] gap-10">
+    <div class="inema-prose max-w-none min-w-0">
+      <section id="topico-1" data-inema-topic="modulo-2-2#topico-1" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">🔎 doctor e doctor --deep: config contra realidade</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-2-t1-p1">São dois diagnósticos diferentes com o mesmo comando. O <code>npm run doctor</code> lê configuração e ambiente: arquivos, variáveis, RAM, modelos do Ollama, CLIs, units do systemd, banco, conectores. Ele não muda nada e não chama o LLM. Já o <code>npm run doctor -- --deep</code> acrescenta quatro probes que exercitam o sistema de verdade, cada um marcado como probe para você reconhecer que o efeito colateral foi seu.</p>
+  <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 300" class="w-full h-auto" role="img" aria-label="Duas faixas de diagnóstico. Em cima, doctor lê arquivos, variáveis, RAM, modelos do Ollama, CLIs e units sem tocar em nada. Embaixo, doctor --deep dispara quatro probes que atravessam o sistema: GET /health do serviço, sendMessage no Telegram, uma chamada ao modelo roteador pelo gateway de custo e um job doctor-probe na lane io que o worker precisa concluir em 30 segundos">
+  <defs>
+    <linearGradient id="svg-221a-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+    <filter id="svg-221a-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="svg-221a-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#3b82f6" opacity="0.12"/></pattern>
+    <marker id="svg-221a-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"/></marker>
+    <marker id="svg-221a-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="300" fill="url(#svg-221a-grid)"/>
+  <rect x="40" y="26" width="920" height="104" rx="14" fill="#0e1622" stroke="#60a5fa" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="62" y="54" fill="#60a5fa" font-family="Inter,sans-serif" font-weight="600" font-size="15">npm run doctor · só lê</text>
+  <g font-family="Inter,sans-serif" font-size="12" fill="#bfe6ff">
+    <g class="wf-a"><rect x="62" y="70" width="150" height="40" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="137" y="95" text-anchor="middle">.env v3 e .env v2</text></g>
+    <g class="wf-a"><rect x="228" y="70" width="150" height="40" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="303" y="95" text-anchor="middle">RAM e swap</text></g>
+    <g class="wf-a"><rect x="394" y="70" width="180" height="40" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="484" y="95" text-anchor="middle">modelos do Ollama</text></g>
+    <g class="wf-a"><rect x="590" y="70" width="150" height="40" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="665" y="95" text-anchor="middle">claude e codex</text></g>
+    <g class="wf-a"><rect x="756" y="70" width="182" height="40" rx="9" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="847" y="95" text-anchor="middle">units v2 e v3, banco</text></g>
+</g>
+  <g fill="none" stroke="#38bdf8" stroke-width="1.8" opacity="0.6"><path d="M500,130 L500,166" marker-end="url(#svg-221a-ahc)"/></g>
+  <g filter="url(#svg-221a-glow)"><rect x="40" y="170" width="920" height="104" rx="14" fill="#0e1622" stroke="url(#svg-221a-grad)" stroke-width="2"/></g>
+  <text x="62" y="198" fill="#60a5fa" font-family="Inter,sans-serif" font-weight="600" font-size="15">--deep · quatro probes que atravessam o sistema</text>
+  <g font-family="Inter,sans-serif" font-size="12" fill="#e5e7eb">
+    <rect x="62" y="214" width="208" height="44" rx="9" fill="#0e1b26" stroke="#60a5fa" stroke-width="1.6"/><text x="166" y="235" text-anchor="middle" fill="#60a5fa" font-weight="600">1. GET /health</text><text x="166" y="251" text-anchor="middle">o serviço responde</text>
+    <rect x="286" y="214" width="208" height="44" rx="9" fill="#0e1b26" stroke="#60a5fa" stroke-width="1.6"/><text x="390" y="235" text-anchor="middle" fill="#60a5fa" font-weight="600">2. sendMessage</text><text x="390" y="251" text-anchor="middle">chega no seu chat</text>
+    <rect x="510" y="214" width="208" height="44" rx="9" fill="#0e1b26" stroke="#60a5fa" stroke-width="1.6"/><text x="614" y="235" text-anchor="middle" fill="#60a5fa" font-weight="600">3. roteador via gateway</text><text x="614" y="251" text-anchor="middle">Ollama responde</text>
+    <rect x="734" y="214" width="204" height="44" rx="9" fill="#0e1b26" stroke="#60a5fa" stroke-width="1.6"/><text x="836" y="235" text-anchor="middle" fill="#60a5fa" font-weight="600">4. job doctor-probe</text><text x="836" y="251" text-anchor="middle">lane io, 30 s</text>
+</g>
+</svg></div>
+  <p class="text-xs text-neutral-500 mb-6">Legenda: a faixa tracejada de cima é inofensiva e pode rodar a qualquer hora. A faixa sólida de baixo manda mensagem no Telegram e enfileira um job de verdade, por isso cada linha vem com o rótulo <code>deep:</code>.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+    <h4 class="font-bold text-emerald-400 mb-4">✓ O que o doctor comum responde</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Falta key, falta arquivo, falta modelo: <code>.env v2 (keys compartilhadas)</code>, <code>config/ollama.yaml</code>, <code>modelo roteador</code>.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>A máquina aguenta: <code>RAM</code> mostra GB disponíveis, total, swap usado e o piso para carregar modelo grande.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Coexistência sã: <code>v2 ativo</code>, <code>v3 unit</code>, <code>v3 MemoryMax</code>, <code>mesmo modelo geral que o v2</code> e <code>ollama serve paralelo</code>.</span></li>
+</ul></div>
+  <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+    <h4 class="font-bold text-red-400 mb-4">✗ O que só o --deep pega</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Serviço no ar mas com binário antigo: o job <code>doctor-probe</code> não é reconhecido e a linha diz "serviço antigo sem a tarefa doctor-probe? reinstale".</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Token válido no arquivo mas o bot não entrega: só o <code>sendMessage</code> real mostra isso.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Modelo listado no <code>tags</code> mas travado: o probe chama o papel <code>roteador</code> pelo gateway e espera texto de volta.</span></li>
+</ul></div></div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: diagnóstico raso e diagnóstico profundo</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> ver a foto da configuração e, em seguida, provar que o caminho inteiro funciona de ponta a ponta.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>cd ~/projetos/openpcbotv3
+npm run doctor
+npm run doctor -- --deep</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> a última linha diz <code>Tudo crítico OK</code> ou quantas falhas críticas existem, e o processo sai com código 1 quando há alguma. No <code>--deep</code>, as quatro linhas começam com <code>deep:</code> e trazem o tempo medido, por exemplo <code>job #123 done em 900 ms</code>. Uma mensagem com 🩺 e a palavra probe chega no seu Telegram: é o teste, não um alerta.</p>
+</div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p data-inema-block="m2-2-t1-p2" class="text-neutral-300">O <code>--deep</code> precisa do serviço no ar: sem ele, a linha da fila sai como "pulado: serviço fora do ar" e conta como falha crítica. A ordem que economiza tempo é sempre a mesma: <code>doctor</code> primeiro, resolver o que estiver ❌, e só então <code>--deep</code>. O probe do Ollama grava em banco de memória e não entra em <code>chamadas_llm</code>, então diagnosticar não suja o seu relatório de custo.</p>
+</div>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+<section id="topico-2" data-inema-topic="modulo-2-2#topico-2" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">📜 Journal e dashboard: as duas janelas do serviço</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-2-t2-p1">O v3 registra em log estruturado (pino, JSON) e tudo vai para o journal do systemd do usuário. Para leitura humana, o <code>-o cat</code> tira o carimbo do systemd e deixa só a linha do processo. A segunda janela é o dashboard em <code>http://127.0.0.1:3142/</code>, que mostra health, Ollama e RAM, fila por lane, custo dos últimos 14 dias com sparkline, custo por tier e por agente, memória e jobs recentes, atualizando a cada 10 s.</p>
+  <div class="space-y-6 mb-6">
+  <div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">1</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Acompanhe ao vivo</h4>
+      <p class="text-sm text-neutral-400 mb-3">Enquanto manda uma mensagem</p>
+      <p data-inema-block="m2-2-t2-p2" class="text-neutral-300 text-sm"><code>journalctl --user -u openpcbotv3 -f -o cat</code> segue o log. É a forma de ver o caminho da mensagem acontecendo: canal, roteador, fila, resposta.</p>
+</div></div>
+<div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">2</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Olhe para trás</h4>
+      <p class="text-sm text-neutral-400 mb-3">Depois de um erro</p>
+      <p class="text-neutral-300 text-sm"><code>journalctl --user -u openpcbotv3 -n 50 --no-pager -o cat</code> mostra as últimas 50 linhas sem abrir o paginador. É o comando que o <code>CLAUDE.md</code> do repo indica para diagnóstico.</p>
+</div></div>
+<div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">3</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Veja o conjunto</h4>
+      <p class="text-sm text-neutral-400 mb-3">No navegador</p>
+      <p class="text-neutral-300 text-sm">O dashboard junta o que o log só conta linha a linha. Com <code>DASHBOARD_TOKEN_V3</code> definido, <code>/</code> e <code>/api/*</code> passam a exigir o segredo; o <code>/health</code> continua aberto porque o hub <code>wifi</code> consome esse endpoint.</p>
+</div></div></div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: log ao vivo e health cru</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> confirmar que o processo está vivo e ler o estado sem depender do Telegram.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>systemctl --user is-active openpcbotv3
+curl -s http://127.0.0.1:3142/health
+journalctl --user -u openpcbotv3 -n 50 --no-pager -o cat</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> o primeiro comando responde <code>active</code>. O <code>curl</code> devolve JSON com <code>ok</code>, fila, modelos, RAM e orçamento. O journal termina nas linhas mais recentes do processo. Se a porta estiver mudada no <code>.env</code>, troque 3142 pelo valor de <code>&lt;seu-PORT_V3&gt;</code>.</p>
+</div>
+  <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">✦</span> Escutar só em casa é o padrão</h3>
+  <p data-inema-block="m2-2-t2-p3" class="text-neutral-300">O HTTP escuta em <code>127.0.0.1</code> por padrão porque <code>POST /mensagem</code> dispara agente com as permissões da sua máquina. Expor na rede local só faz sentido com os dois juntos: <code>HTTP_BIND_V3=0.0.0.0</code> e <code>DASHBOARD_TOKEN_V3</code> preenchido. Um sem o outro é dashboard aberto para quem estiver no mesmo Wi-Fi.</p>
+</div>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+<section id="topico-3" data-inema-topic="modulo-2-2#topico-3" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">📊 /health, /status e /usage: ler fila, Ollama, RAM e custo</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-2-t3-p1">Três comandos no chat cobrem a operação inteira sem sair do Telegram. O <code>/health</code> responde saúde, o <code>/status</code> responde trabalho e o <code>/usage</code> responde dinheiro. Vale saber o que é "saudável" para o v3: o <code>GET /health</code> devolve <code>ok</code> quando o Ollama está online, a RAM livre está em 10 GB ou mais e o heartbeat rodou há menos de 90 minutos.</p>
+  <div class="overflow-x-auto mb-6">
+  <table class="tabela-ops">
+    <thead><tr><th>Comando</th><th>O que devolve</th><th>Quando usar</th></tr></thead>
+    <tbody>
+      <tr><td><code>/health</code></td><td>Ollama (modelos carregados e latência), RAM e swap, RSS do processo, fila, heartbeat, canais</td><td>O bot está lento ou mudo</td></tr>
+      <tr><td><code>/status</code></td><td>Fila por lane: o que está rodando e o que está pendente</td><td>Pedi algo e não voltou</td></tr>
+      <tr><td><code>/status &lt;id-do-job&gt;</code></td><td>Detalhe de um job, com resultado ou erro</td><td>Um job específico falhou</td></tr>
+      <tr><td><code>/usage</code></td><td>Custo de hoje, da semana e do mês, por tier e por agente, mais o orçamento</td><td>Antes de pedir algo caro</td></tr>
+      <tr><td><code>/ollama status</code></td><td>Estado do gestor do Ollama</td><td>Suspeita de modelo descarregado</td></tr>
+      <tr><td><code>/daily</code></td><td>Tarefas, feitas nas últimas 24 h, custo do dia, fila, Ollama, MEMORY.md</td><td>Começo do dia, às 8h também sai sozinho</td></tr>
+</tbody>
+</table>
+</div>
+  <p class="text-xs text-neutral-500 mb-6">Legenda: as lanes que aparecem no <code>/status</code> são <code>chat</code> (concorrência 2), <code>agente</code> (1), <code>ollama</code> (1), <code>cron</code> (1) e <code>io</code> (4). Job nunca é apagado: a fila é o histórico.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: a mesma leitura sem o Telegram</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> ler saúde e custo pela linha de comando, útil quando o canal do Telegram é justamente o que está quebrado. O <code>npm run cli</code> fala com o serviço no ar por <code>POST /mensagem</code>, e comando iniciado por barra é tratado igual em qualquer canal.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>cd ~/projetos/openpcbotv3
+npm run cli -- "/health"
+npm run cli -- "/usage"</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> a saída é o mesmo texto que o bot mandaria no chat. No <code>/health</code>, confira RAM disponível e heartbeat; no <code>/usage</code>, o total do mês contra o <code>ORCAMENTO_MENSAL_USD</code>. Se o serviço estiver fora do ar, o CLI avisa que o v3 não respondeu na porta; com <code>DASHBOARD_TOKEN_V3</code> definido, ele manda o segredo sozinho.</p>
+</div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Dica prática</h3>
+  <p data-inema-block="m2-2-t3-p2" class="text-neutral-300">Quando o <code>/status</code> mostrar algo preso, prefira operar a fila a reiniciar o serviço: <code>/cancelar &lt;id-do-job&gt;</code> tira o job sem corrida e <code>/prioridade &lt;id-do-job&gt; &lt;número&gt;</code> reordena o que ainda não começou. Restart é remédio de último caso, porque o drain gracioso espera até 110 s antes de abortar o que está em curso.</p>
+</div>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+<section id="topico-4" data-inema-topic="modulo-2-2#topico-4" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">🔔 Alertas no Telegram e o dedupe de 30 minutos</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-2-t4-p1">O v3 avisa sozinho no chat permitido quando algo sai do lugar, e cada alerta tem uma chave própria com dedupe de 30 minutos: a mesma condição não vira dez mensagens seguidas. São sete gatilhos, e cada um tem uma resposta esperada de você.</p>
+  <div class="rounded-2xl border border-blue-500/30 bg-dark-900/40 p-3 sm:p-4 mb-3 overflow-hidden">
+<svg viewBox="0 0 1000 280" class="w-full h-auto" role="img" aria-label="Sete gatilhos de alerta (Ollama fora, RAM baixa, lease morto, job zumbi, três falhas da mesma tarefa em uma hora, orçamento em setenta por cento e orçamento em cem por cento) passam por um filtro de dedupe com janela de trinta minutos por chave antes de virar uma mensagem no chat permitido do Telegram">
+  <defs>
+    <linearGradient id="svg-221b-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+    <filter id="svg-221b-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="svg-221b-grid" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1.3" cy="1.3" r="1.3" fill="#3b82f6" opacity="0.12"/></pattern>
+    <marker id="svg-221b-ah" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#60a5fa"/></marker>
+    <marker id="svg-221b-ahc" markerWidth="9" markerHeight="9" refX="6.5" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 L2.4,4.5 Z" fill="#38bdf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1000" height="280" fill="url(#svg-221b-grid)"/>
+  <g font-family="Inter,sans-serif" font-size="12" fill="#bfe6ff">
+    <g class="wf-a"><rect x="40" y="18" width="190" height="28" rx="8" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="135" y="37" text-anchor="middle">Ollama fora</text></g>
+    <g class="wf-a"><rect x="40" y="54" width="190" height="28" rx="8" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="135" y="73" text-anchor="middle">RAM baixa</text></g>
+    <g class="wf-a"><rect x="40" y="90" width="190" height="28" rx="8" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="135" y="109" text-anchor="middle">lease morto</text></g>
+    <g class="wf-a"><rect x="40" y="126" width="190" height="28" rx="8" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="135" y="145" text-anchor="middle">job zumbi</text></g>
+    <rect x="40" y="162" width="190" height="28" rx="8" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="135" y="181" text-anchor="middle">3 falhas em 1 h</text>
+    <rect x="40" y="198" width="190" height="28" rx="8" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="135" y="217" text-anchor="middle">orçamento 70 %</text>
+    <rect x="40" y="234" width="190" height="28" rx="8" fill="#0e1b26" stroke="#38bdf8" stroke-width="1.6"/><text x="135" y="253" text-anchor="middle">orçamento 100 %</text>
+</g>
+  <g fill="none" stroke="#38bdf8" stroke-width="1.6" opacity="0.5">
+    <path d="M230,32 C330,32 340,140 420,140" marker-end="url(#svg-221b-ahc)"/>
+    <path d="M230,104 C330,104 340,140 420,140" marker-end="url(#svg-221b-ahc)"/>
+    <path d="M230,176 C330,176 340,140 420,140" marker-end="url(#svg-221b-ahc)"/>
+    <path d="M230,248 C330,248 340,140 420,140" marker-end="url(#svg-221b-ahc)"/>
+</g>
+  <rect x="420" y="100" width="190" height="80" rx="12" fill="#0e1622" stroke="#60a5fa" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="515" y="130" text-anchor="middle" fill="#60a5fa" font-family="Inter,sans-serif" font-weight="600" font-size="15">dedupe por chave</text>
+  <text x="515" y="152" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">janela de 30 min</text>
+  <g fill="none" stroke="#60a5fa" stroke-width="1.8" opacity="0.7"><path d="M610,140 L780,140" marker-end="url(#svg-221b-ah)"/></g>
+  <g filter="url(#svg-221b-glow)"><rect x="780" y="104" width="180" height="72" rx="14" fill="#0e1622" stroke="url(#svg-221b-grad)" stroke-width="2"/></g>
+  <text x="870" y="134" text-anchor="middle" fill="#60a5fa" font-family="Inter,sans-serif" font-weight="600" font-size="16">chat permitido</text>
+  <text x="870" y="156" text-anchor="middle" fill="#e5e7eb" font-family="Inter,sans-serif" font-size="12">ALLOWED_CHAT_ID</text>
+</svg></div>
+  <p class="text-xs text-neutral-500 mb-6">Legenda: sem <code>ALLOWED_CHAT_ID</code> definido, o próprio doctor avisa que os alertas no Telegram estão desligados. O alerta não substitui o log: ele diz que olhar, o journal diz o que houve.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+    <h4 class="font-bold text-emerald-400 mb-4">✓ Resposta certa ao alerta</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><strong>Ollama fora:</strong> cheque o serviço do Ollama (<code>systemctl</code>), não suba <code>ollama serve</code> num terminal.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><strong>RAM baixa:</strong> veja quem está residente com <code>/ollama status</code>; descarregar só o que é do v3.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><strong>Orçamento 70 %:</strong> <code>/usage</code> para ver qual tier ou agente puxou, e segure o premium até virar o mês.</span></li>
+</ul></div>
+  <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+    <h4 class="font-bold text-red-400 mb-4">✗ Reação que piora</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Reiniciar o serviço a cada alerta: lease morto e zumbi já são recuperados sozinhos pelo heartbeat de 30 min.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Descarregar o modelo grande para liberar RAM sem olhar de quem ele é: o v3 nunca descarrega modelo alheio, e você não deve fazer na mão o que ele evita de propósito.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Ignorar o alerta de 3 falhas da mesma tarefa em 1 h: é exatamente o caso que vira linha no <code>FALHAS.md</code>.</span></li>
+</ul></div></div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: achar o alerta no log</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> depois de receber um alerta no chat, encontrar no journal a linha que o originou.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>journalctl --user -u openpcbotv3 --since "1 hour ago" -o cat | grep -i alerta
+journalctl --user -u openpcbotv3 --since today -o cat | grep -i "&lt;palavra-do-alerta&gt;"</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> as linhas do log são JSON do pino, então cada uma traz o contexto completo do evento. Se o <code>grep</code> não achar nada e o alerta chegou, amplie a janela: o dedupe de 30 min pode ter suprimido as repetições, mas a primeira ocorrência está lá.</p>
+</div>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+<section id="topico-5" data-inema-topic="modulo-2-2#topico-5" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">💾 Backup noturno: VACUUM INTO, cifra e retenção 14</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-2-t5-p1">Todo o estado do v3 mora num arquivo SQLite: fila, memórias, custo, preferências. O cron <code>backup-noturno</code> roda às 4h15 e usa <code>VACUUM INTO</code>, que produz uma cópia consistente mesmo com o banco em uso (WAL). Depois cifra com <code>age</code> se <code>AGE_RECIPIENT</code> estiver definido, ou comprime com <code>gzip</code> quando não estiver, e mantém os 14 arquivos mais recentes em <code>store/backups/</code>.</p>
+  <div class="space-y-6 mb-6">
+  <div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">1</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Cópia consistente</h4>
+      <p class="text-sm text-neutral-400 mb-3">4h15, lane cron</p>
+      <p data-inema-block="m2-2-t5-p2" class="text-neutral-300 text-sm">O arquivo sai com carimbo de data e hora no nome, no formato <code>openpcbotv3-&lt;data-e-hora&gt;.db</code>. Nada é parado para isso: <code>VACUUM INTO</code> escreve um banco novo enquanto o atual segue recebendo escrita.</p>
+</div></div>
+<div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">2</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Cifra ou compressão</h4>
+      <p class="text-sm text-neutral-400 mb-3">Com age, ou gzip</p>
+      <p class="text-neutral-300 text-sm">Com <code>AGE_RECIPIENT</code> o resultado é <code>.db.age</code>; sem ele, <code>.db.gz</code>. O doctor tem a linha <code>age (backup cifrado)</code> justamente para avisar quando o binário não está instalado e o backup cai para gzip.</p>
+</div></div>
+<div class="flex items-start space-x-4">
+    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-500/20 grid place-items-center"><span class="text-blue-400 font-bold">3</span></div>
+    <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+      <h4 class="font-semibold text-white mb-2">Retenção de 14</h4>
+      <p class="text-sm text-neutral-400 mb-3">Os mais antigos somem</p>
+      <p class="text-neutral-300 text-sm">Depois de gravar, o backup lista os arquivos que começam com <code>openpcbotv3-</code>, ordena do mais novo para o mais velho e apaga o que passar de 14. Se quiser guardar um marco, copie para fora de <code>store/backups/</code>.</p>
+</div></div></div>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: conferir que existe backup de ontem</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> provar que o cron noturno está de fato gravando, antes de precisar do arquivo.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>ls -lht ~/projetos/openpcbotv3/store/backups/ | head -5
+npm run cli -- "/cron lista"</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> o arquivo mais recente deve ser da madrugada passada e terminar em <code>.age</code> ou <code>.gz</code>. A lista nunca passa de 14 itens. No <code>/cron lista</code>, <code>backup-noturno</code> precisa aparecer ligado; <code>/cron off backup-noturno</code> e <code>/cron on backup-noturno</code> desligam e religam.</p>
+</div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Restaurar é trocar o arquivo, com o serviço parado</h3>
+  <p data-inema-block="m2-2-t5-p3" class="text-neutral-300">Restaurar quer dizer decifrar ou descomprimir o arquivo escolhido e pôr o banco de volta no lugar apontado por <code>store/</code>, com o serviço parado (<code>systemctl --user stop openpcbotv3</code>) para ninguém escrever no meio. O repo documenta a geração do backup, não uma receita de restauração passo a passo; guarde uma cópia do banco atual antes de sobrescrever qualquer coisa.</p>
+</div>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+<section id="topico-6" data-inema-topic="modulo-2-2#topico-6" class="topic-section mb-16">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center space-x-4">
+      <span class="inline-grid place-items-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">🚨 Quando quebra: parar, reinstalar, registrar</h2>
+</div>
+    <button type="button" data-inema-doubt-toggle aria-pressed="false" title="Marcar dúvida neste tópico" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-dark-700 border border-dark-600 text-neutral-300 hover:bg-dark-600 transition-colors text-sm">
+      <span aria-hidden="true">?</span>
+      <span>Tenho dúvida</span>
+</button></div>
+  <p class="text-neutral-300 mb-6 leading-relaxed" data-inema-block="m2-2-t6-p1">A ordem importa. Primeiro conter: <code>/parar tudo &lt;motivo&gt;</code> no chat bloqueia novos trabalhos na hora e <code>/retomar</code> libera; o interruptor fica gravado na tabela <code>prefs</code>, então sobrevive a restart. Depois diagnosticar com <code>doctor</code> e journal. Só então reinstalar com <code>bash scripts/instalar-servico.sh</code>, que é build mais restart. E, antes da próxima tarefa, registrar uma linha no <code>FALHAS.md</code>.</p>
+  <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6" data-copy-box>
+  <h3 class="text-lg font-semibold text-blue-400 mb-2 flex items-center"><span class="mr-2">⌘</span> Copie e rode: o ciclo de recuperação</h3>
+  <p class="text-sm text-neutral-400 mb-3"><strong class="text-neutral-200">Objetivo:</strong> voltar de um serviço quebrado para um serviço saudável, na ordem que não perde informação.</p>
+  <pre class="bg-dark-700/50 rounded-lg p-4 overflow-x-auto text-sm font-mono text-neutral-300"><code>cd ~/projetos/openpcbotv3
+journalctl --user -u openpcbotv3 -n 50 --no-pager -o cat
+npm run doctor
+bash scripts/instalar-servico.sh
+npm run doctor -- --deep</code></pre>
+  <div class="flex justify-start mt-3"><button type="button" onclick="copiarBloco(this)" aria-label="Copiar o bloco de comandos" class="px-3 py-1.5 text-sm bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-colors">Copiar</button></div>
+  <p class="text-sm text-neutral-300 mt-4"><strong class="text-blue-400">Como verificar:</strong> o script imprime as primeiras linhas do <code>status</code> e o <code>MemoryMax</code> lido do systemd. O serviço precisa terminar em <code>active (running)</code>, e o <code>--deep</code> logo depois precisa fechar as quatro linhas de probe sem falha crítica. O restart é sempre com <code>systemctl --user</code>, sem sudo, e não encosta no v2.</p>
+</div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+    <h4 class="font-bold text-emerald-400 mb-4">✓ Garantias que já existem</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Unit com <code>Restart=on-failure</code> e <code>RestartSec=5</code>: queda isolada volta sozinha.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><code>MemoryHigh=1536M</code> e <code>MemoryMax=2G</code> no cgroup, mais <code>--max-old-space-size=1024</code> no node: o v3 não come a RAM da máquina.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Drain gracioso no <code>SIGTERM</code>: renova o lease enquanto espera e aborta só depois de 110 s.</span></li>
+</ul></div>
+  <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+    <h4 class="font-bold text-red-400 mb-4">✗ O que não fazer na coexistência</h4>
+    <ul class="space-y-3 text-neutral-300">
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Mudar a tag do papel <code>geral</code> só no v3: viram dois modelos grandes residentes e a máquina vai a OOM.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Descarregar um modelo que o v3 não carregou: o <code>/ollama descarregar</code> recusa de propósito.</span></li>
+      <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Ligar Slack ou WhatsApp antes do corte: o v2 é dono da sessão e do token.</span></li>
+</ul></div></div>
+  <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">✦</span> Uma linha por falha, antes da próxima tarefa</h3>
+  <p data-inema-block="m2-2-t6-p2" class="text-neutral-300">O <code>FALHAS.md</code> na raiz do repo é uma tabela: data, o que quebrou, a menor correção possível e se era problema de prompt ou de infraestrutura. Mais recente no topo, uma linha só, sem narrativa. A coluna que mais ensina é a da menor correção: se a resposta foi reescrever um módulo, provavelmente faltava só uma proteção, um teto ou uma validação.</p>
+</div>
+  <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+  <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">✦</span> Duas linhas reais do FALHAS.md</h3>
+  <p data-inema-block="m2-2-t6-p3" class="text-neutral-300">A primeira conversa do v3 falhou com <code>Ollama error 400</code> porque <code>keep_alive</code> estava como string <code>"-1"</code> no YAML; a correção foi uma só, deixar o número. E o doctor acusava dois <code>ollama serve</code> e porta ocupada com o serviço parado, porque <code>pgrep -f</code> contava o próprio <code>sh -c</code> e um <code>grep -c</code> sem resultado sai com código 1; a correção foi <code>pgrep -c -x</code> e um <code>|| true</code>. Duas linhas, dois consertos pequenos, nenhuma reescrita.</p>
+</div>
+  <div data-inema-check="modulo-2-2#q1" class="inema-check">
+  <p class="inema-check__q">Chegou o alerta de RAM baixa e o modelo grande residente é o mesmo que o v2 usa. O que fazer?</p>
+  <div class="inema-check__options space-y-2">
+    <button type="button" class="inema-check__option" data-inema-check-option="0">Descarregar o modelo pelo Ollama na mão, para liberar RAM imediatamente.</button>
+    <button type="button" class="inema-check__option" data-inema-check-option="1">Olhar o que está residente com /ollama status e nunca descarregar modelo que o v3 não carregou.</button>
+    <button type="button" class="inema-check__option" data-inema-check-option="2">Reiniciar o serviço do v3 até a RAM baixar.</button>
+</div>
+  <p class="inema-check-feedback mt-4 text-sm" role="status" aria-live="polite"></p>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.INEMA && typeof window.INEMA.check === 'function') {
+    window.INEMA.check('modulo-2-2#q1', {
+      correta: 1,
+      feedback: {
+        '0': 'Esse é justamente o movimento que o v3 evita: um modelo residente serve os dois bots, e tirar o do vizinho derruba o vizinho.',
+        '1': 'Isso. Um modelo grande residente para os dois, descarregar_alheios desligado, e o gestor recusa mexer no que não é dele.',
+        '2': 'Restart não libera o modelo, que está na RAM do Ollama, e ainda interrompe o que estava na fila.'
+      }
+    });
+  }
+});
+</script>
+  <div class="flex justify-start mt-6">
+    <button type="button" data-inema-read-toggle aria-pressed="false" class="inline-flex justify-start items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition-colors">
+      <span class="inema-read-icon" aria-hidden="true">○</span>
+      <span data-inema-read-label>Marcar como lido</span>
+</button></div></section>
+      <section class="mb-12">
+  <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+    <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do módulo</h2>
+    <div class="space-y-4 mb-8">
+      <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">doctor</strong><span class="text-neutral-400"> - lê config, RAM, modelos, CLIs e units sem mudar nada; --deep acrescenta 4 probes reais e precisa do serviço no ar</span></div></div>
+<div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Journal e dashboard</strong><span class="text-neutral-400"> - journalctl --user -u openpcbotv3 -f -o cat para o vivo; 127.0.0.1:3142 para o conjunto, atualizando a cada 10 s</span></div></div>
+<div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">/health, /status, /usage</strong><span class="text-neutral-400"> - saúde, trabalho e dinheiro; ok exige Ollama online, RAM ≥ 10 GB e heartbeat &lt; 90 min</span></div></div>
+<div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Alertas</strong><span class="text-neutral-400"> - 7 gatilhos com dedupe de 30 min por chave, entregues no chat permitido</span></div></div>
+<div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Backup noturno</strong><span class="text-neutral-400"> - 4h15, VACUUM INTO, age ou gzip, retenção 14 em store/backups/</span></div></div>
+<div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Quando quebra</strong><span class="text-neutral-400"> - /parar tudo, journal, doctor, instalar-servico.sh, e uma linha no FALHAS.md antes da próxima tarefa</span></div></div>
+</div>
+    <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+      <h3 class="font-semibold text-blue-400 mb-2">Próximo módulo:</h3>
+      <p class="text-neutral-300">3.1 - Comandos e conversa</p>
+</div>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <a href="modulo-2-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">Módulo anterior: Subir o v3</a>
+      <a href="index.html" class="flex-1 text-center px-6 py-3 bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg font-semibold hover:bg-blue-500/30 transition-colors">Voltar para a trilha</a>
+</div></div></section></div>
+    <nav data-inema-toc aria-label="Índice da página" class="hidden lg:block sticky top-24 self-start">
+  <p class="inema-toc-progress"><span data-inema-section-counter>Seção 1 de 6</span></p>
+  <ul class="space-y-1">
+    <li><a href="#topico-1">1. doctor e doctor --deep</a></li>
+<li><a href="#topico-2">2. Journal e dashboard</a></li>
+<li><a href="#topico-3">3. /health, /status, /usage</a></li>
+<li><a href="#topico-4">4. Alertas e dedupe</a></li>
+<li><a href="#topico-5">5. Backup noturno</a></li>
+<li><a href="#topico-6">6. Quando quebra</a></li>
+</ul>
+</nav>
+</article>
+</main>
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>openpcbot v3: seu Jarvis local - INEMA.CLUB - 2026</p>
+</div>
+  </footer>
+  <script>
+function toggleTopic(button) {
+  var panelId = button.getAttribute('aria-controls');
+  var explanation = panelId ? document.getElementById(panelId) : null;
+  if (!explanation) return;
+  var moduleCard = button.closest('[data-inema-module]') || button.closest('.module-shell') || document;
+  moduleCard.querySelectorAll('.topic-explanation.active').forEach(function (exp) {
+    if (exp !== explanation) {
+      exp.classList.remove('active');
+      var other = moduleCard.querySelector('[aria-controls="' + exp.id + '"]');
+      if (other) other.setAttribute('aria-expanded', 'false');
+    }
+  });
+  var next = !explanation.classList.contains('active');
+  explanation.classList.toggle('active', next);
+  button.setAttribute('aria-expanded', next ? 'true' : 'false');
+}
+function openModal(modalId) {
+  var modal = document.getElementById(modalId);
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    var close = modal.querySelector('[data-modal-close]');
+    if (close) close.focus();
+  }
+}
+function closeModal() {
+  document.querySelectorAll('.modal').forEach(function (modal) {
+    modal.classList.add('hidden');
+  });
+  document.body.style.overflow = 'auto';
+}
+function copiarBloco(btn) {
+  var box = btn.closest('[data-copy-box]');
+  var pre = box ? box.querySelector('pre') : null;
+  if (!pre) return;
+  var texto = pre.innerText;
+  function ok() { btn.textContent = 'Copiado'; setTimeout(function () { btn.textContent = 'Copiar'; }, 1800); }
+  function falha() { btn.textContent = 'Selecione e copie'; }
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(ok, falha);
+    else falha();
+  } catch (e) { falha(); }
+}
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+<script src="../../assets/learn.js"></script>
+<script>
+if (window.INEMA && typeof window.INEMA.init === 'function') {
+  window.INEMA.init();
+}
+document.addEventListener('click', function (e) {
+  var t = e.target;
+  if (!t || !t.closest) return;
+  var nav = t.closest('nav');
+  if (!nav) return;
+  var journey = t.closest('[data-inema-journey-open]');
+  if (journey && window.INEMA && INEMA.openJourney) {
+    e.preventDefault();
+    INEMA.openJourney();
+    return;
+  }
+  var toggle = t.closest('[data-inema-appearance-toggle]');
+  if (toggle) {
+    var targetSel = toggle.getAttribute('data-inema-appearance-toggle');
+    var panel = targetSel ? document.querySelector(targetSel) : document.querySelector('[data-inema-appearance]');
+    if (panel) {
+      var open = panel.getAttribute('data-open') !== 'true';
+      panel.setAttribute('data-open', open ? 'true' : 'false');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    return;
+  }
+  var pairs = [
+    ['data-inema-set-theme', 'theme'],
+    ['data-inema-set-font', 'font'],
+    ['data-inema-set-fontscale', 'fontScale'],
+    ['data-inema-set-linewidth', 'lineWidth'],
+    ['data-inema-set-leading', 'leading'],
+    ['data-inema-set-accent', 'accent']
+  ];
+  for (var i = 0; i < pairs.length; i++) {
+    var btn = t.closest('[' + pairs[i][0] + ']');
+    if (btn && window.INEMA && INEMA.setPref) {
+      var raw = btn.getAttribute(pairs[i][0]);
+      var key = pairs[i][1];
+      var value = key === 'fontScale' || key === 'lineWidth' ? parseInt(raw, 10) : (key === 'leading' ? parseFloat(raw) : raw);
+      INEMA.setPref(key, value);
+      return;
+    }
+  }
+  var theme = t.closest('#theme-toggle');
+  if (theme) {
+    var html = document.documentElement;
+    var next = html.classList.contains('dark') ? 'claro' : 'inema-dark';
+    if (window.INEMA && INEMA.setPref) {
+      INEMA.setPref('theme', next);
+    } else {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    }
+  }
+});
+</script>
+</body>
+</html>
