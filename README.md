@@ -34,3 +34,11 @@ PLANO-CURSO.md        plano tópico a tópico
 ## Manutenção
 
 Mudou o projeto? Atualize o módulo correspondente e rode `python3 scripts/verificar.py` antes do push. O manifesto embutido precisa ser idêntico em todas as páginas (o script confere).
+
+<!-- inema-backlink:v1 -->
+## Mais no INEMA.CLUB
+
+- [Ficha completa deste curso](https://www.inema.club/cursos/274-openpcbot-v3-seu-jarvis-local-instalar-usar-e-configurar/)
+- [Guia: como aprender inteligência artificial](https://www.inema.club/aprender-inteligencia-artificial/)
+- [Todos os cursos](https://www.inema.club/cursos/)
+<!-- /inema-backlink:v1 -->
